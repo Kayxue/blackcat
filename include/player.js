@@ -224,8 +224,7 @@ class Player {
     if (!this.disconnected && !force) this.connection.destroy();
     this.disconnected = true;
     this.client.players.delete(this.text.guildId);
-    const everyoneSplit = this.guild.name.split("@").join("@ ")
-    this.client.log(`${everyoneSplit} Queue ended`);
+    this.client.log(`${Discord.Util.removeMentions(this.guild.name)} Queue ended`);
   }
 
   /**
@@ -340,8 +339,7 @@ class Player {
    * @param {String} url YouTube video URL
    */
   async _getStream(url) {
-    const everyoneSplit = this.guild.name.split("@").join("@ ")
-    this.client.log(`${everyoneSplit} Getting stream`);
+    this.client.log(`${Discord.Util.removeMentions(this.guild.name)} Getting stream`);
     this.now = this.songList[0];
 
     let videoInfo = null;
@@ -360,9 +358,7 @@ class Player {
       } else {
         this.text.send("❌ ┃ 發生未知的錯誤");
       }
-      
-      const everyoneSplit = this.guild.name.split("@").join("@ ")
-      this.client.log(`${everyoneSplit} ${error.message}`);
+      this.client.log(`${Discord.Util.removeMentions(this.guild.name)} ${error.message}`);
       return this.skip();
     }
 
@@ -405,8 +401,7 @@ class Player {
    * @private
    */
   async _playStream() {
-    const everyoneSplit = this.guild.name.split("@").join("@ ")
-    this.client.log(`${everyoneSplit} Start playing stream`);
+    this.client.log(`${Discord.Util.removeMentions(this.guild.name)} Start playing stream`);
     this.audioPlayer.removeAllListeners();
     this.eventEmitter.removeAllListeners();
     let song = this.songList[0];
