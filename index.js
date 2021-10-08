@@ -210,8 +210,7 @@ client.on("guildCreate", async guild => {
       "發生問題?輸入`/support`!")
     .setColor("BLURPLE");
   guild.systemChannel.send(embed);
-  const everyoneSplit = guild.name.split("@").join("@ ")
-  client.log(`Joined ${everyoneSplit}`);
+  client.log(`Joined ${Discord.util.removeMentions(guild.name)}`);
 });
 
 client.on("guildDelete", guild => {
@@ -222,8 +221,7 @@ client.on("guildDelete", guild => {
     }],
     status: "dnd"
   });
-  const everyoneSplit = guild.name.split("@").join("@ ")
-  client.log(`Joined ${everyoneSplit}`);
+  client.log(`Leave ${Discord.util.removeMentions(guild.name)}`);
   let existingPlayer = client.players.get(guild.id);
   if (existingPlayer) client.players.delete(guild.id);
 });
