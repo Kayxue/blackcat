@@ -3094,6 +3094,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+undici@^4.7.0:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-4.7.1.tgz#e3aea016caa174fd0b05a01398f73084f34798d3"
+  integrity sha512-5Vub7YlWErSgv+7UE4yCyqRbKLdP+Xo92AR9XWG5BrQvLSMXLtYZa/RxYwYnsOpaLNHeivswkYKGxZOC3Dfw4g==
+
 universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
@@ -3229,12 +3234,12 @@ yamljs@0.3.0:
     argparse "^1.0.7"
     glob "^7.0.5"
 
-youtube-sr@^4.1.7:
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/youtube-sr/-/youtube-sr-4.1.7.tgz#a7cdff3e2ce3027170c96e0ca936bfba05955538"
-  integrity sha512-OKbm+561Fq5RlnUtJBmPhnyfS6Zon44zdPhY1v/Y9vpAHzqdfxomD43yc0ZQv6zNsVzSlAkGeWhoweNd6DUUjQ==
+youtube-sr@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/youtube-sr/-/youtube-sr-4.1.8.tgz#ab3192da5e04efb07f4599609a7ece9c9dfe3ddf"
+  integrity sha512-fcXSyBoGfxmPKT590F1TegC7f3iZFnQkM5sELWppdOJiGcRrXvN6vquVWWIYLakWwuWvUmtR7VzuoslsTMoCng==
   dependencies:
-    node-fetch "^2.6.1"
+    undici "^4.7.0"
 
 ytdl-core@^4.9.1:
   version "4.9.1"
