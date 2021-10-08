@@ -56,7 +56,10 @@ module.exports = {
         videos = await playlist.fetch();
       } catch (error) {
         console.error(error);
-        return message.editReply("❌ ┃ 沒有找到播放清單")
+        return message.editReply({
+          content: "❌ ┃ 沒有找到播放清單",
+          embeds: []
+        })
           .catch(console.error);
       }
     } else {
@@ -69,7 +72,10 @@ module.exports = {
         videos = await playlist.fetch();
       } catch (error) {
         console.error(error);
-        return message.editReply("❌ ┃ 沒有找到播放清單...")
+        return message.editReply({
+          content: "❌ ┃ 沒有找到播放清單",
+          embeds: []
+        })
           .catch(console.error);
       }
     }
