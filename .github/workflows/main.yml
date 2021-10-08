@@ -5,10 +5,6 @@ on:
     branches:
       - current
       - stable
-  pull_request:
-    branches:
-      - current
-      - stable
 
 jobs:
   update-lockfile:
