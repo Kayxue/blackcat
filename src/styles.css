@@ -1,0 +1,96 @@
+@media screen and (min-width: 600px) {
+  .mobile-break { display: none; }
+}
+
+html, body {
+  font-family: 'Noto Sans TC', sans-serif;
+  overflow-x: hidden;
+  color: white;
+}
+
+body {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+.bot-title {
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.float-on-hover {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+.float-on-hover:hover, .float-on-hover:focus, .float-on-hover:active {
+  -webkit-transform: translateY(-8px);
+  transform: translateY(-8px);
+}
+
+.shadow-btn {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.collapsible {
+  width: 100%;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+.mask {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
