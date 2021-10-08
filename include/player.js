@@ -224,7 +224,7 @@ class Player {
     if (!this.disconnected && !force) this.connection.destroy();
     this.disconnected = true;
     this.client.players.delete(this.text.guildId);
-    this.client.log(`${this.guild.name} Queue ended`);
+    this.client.log(`${Discord.Util.removeMentions(this.guild.name)} Queue ended`);
   }
 
   /**
@@ -339,7 +339,7 @@ class Player {
    * @param {String} url YouTube video URL
    */
   async _getStream(url) {
-    this.client.log(`${this.guild.name} Getting stream`);
+    this.client.log(`${Discord.Util.removeMentions(this.guild.name)} Getting stream`);
     this.now = this.songList[0];
 
     let videoInfo = null;
@@ -358,8 +358,7 @@ class Player {
       } else {
         this.text.send("❌ ┃ 發生未知的錯誤");
       }
-
-      this.client.log(`${this.guild.name} ${error.message}`);
+      this.client.log(`${Discord.Util.removeMentions(this.guild.name)} ${error.message}`);
       return this.skip();
     }
 
@@ -402,7 +401,7 @@ class Player {
    * @private
    */
   async _playStream() {
-    this.client.log(`${this.guild.name} Start playing stream`);
+    this.client.log(`${Discord.Util.removeMentions(this.guild.name)} Start playing stream`);
     this.audioPlayer.removeAllListeners();
     this.eventEmitter.removeAllListeners();
     let song = this.songList[0];

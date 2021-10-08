@@ -210,7 +210,7 @@ client.on("guildCreate", async guild => {
       "發生問題?輸入`/support`!")
     .setColor("BLURPLE");
   guild.systemChannel.send(embed);
-  client.log(`Joined ${guild.name}`);
+  client.log(`Joined ${Discord.util.removeMentions(guild.name)}`);
 });
 
 client.on("guildDelete", guild => {
@@ -221,7 +221,7 @@ client.on("guildDelete", guild => {
     }],
     status: "dnd"
   });
-  client.log(`Leave ${guild.name}`);
+  client.log(`Leave ${Discord.util.removeMentions(guild.name)}`);
   let existingPlayer = client.players.get(guild.id);
   if (existingPlayer) client.players.delete(guild.id);
 });
