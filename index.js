@@ -1,6 +1,5 @@
 require("dotenv").config();
 global.fetch = require("node-fetch");
-global.AbortController = require("abort-controller");
 
 const
   Discord = require("discord.js"),
@@ -210,7 +209,7 @@ client.on("guildCreate", async guild => {
       "發生問題?輸入`/support`!")
     .setColor("BLURPLE");
   guild.systemChannel.send(embed);
-  client.log(`Joined ${Discord.util.removeMentions(guild.name)}`);
+  client.log(`Joined ${Discord.Util.removeMentions(guild.name)}`);
 });
 
 client.on("guildDelete", guild => {
@@ -221,7 +220,7 @@ client.on("guildDelete", guild => {
     }],
     status: "dnd"
   });
-  client.log(`Leave ${Discord.util.removeMentions(guild.name)}`);
+  client.log(`Leave ${Discord.Util.removeMentions(guild.name)}`);
   let existingPlayer = client.players.get(guild.id);
   if (existingPlayer) client.players.delete(guild.id);
 });
