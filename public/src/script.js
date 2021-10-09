@@ -12,3 +12,20 @@ for (i = 0; i < coll.length; i++) {
     } 
   });
 }
+
+window.onscroll = function() {
+  navOff();
+};
+
+let nav = document.getElementById("navbar");
+let content = document.getElementById("wrapper");
+let offset = nav.offsetTop;
+function navOff() {
+   if (window.pageYOffset >= offset) {
+    nav.classList.add("nav-top");
+    content.classList.add("wrapper");
+  } else {
+    nav.classList.remove("nav-top");
+    content.classList.remove("wrapper");
+  }
+}
