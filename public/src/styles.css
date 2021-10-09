@@ -23,12 +23,14 @@ html, body {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 1000;
 }
 
 .header-content {
   padding: 50px 16px;
   text-align: center;
   background-color: #f3f4f5;
+  font-family: 'Pacifico', cursive;
 }
 
 a:link {
