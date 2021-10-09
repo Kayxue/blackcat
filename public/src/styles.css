@@ -8,9 +8,16 @@ html, body {
   color: white;
 }
 
-body {
+.wrapper {
   margin-left: 10px;
   margin-right: 10px;
+  padding-top: 80px;
+}
+
+.nav-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 a:link {
