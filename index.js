@@ -13,9 +13,9 @@ const
   io = require("@pm2/io"),
   SoundCloud = require("soundcloud-scraper"),
   RateLimit = require("express-rate-limit"),
-  { readdirSync, readFileSync } = require("node:fs"),
+  { readdirSync, readFileSync } = require("fs"),
   { DiscordTogether } = require("discord-together"),
-  { join } = require("node:path");
+  { join } = require("path");
 
 const PREFIX = process.env.PREFIX;
 let bootStart = Date.now();

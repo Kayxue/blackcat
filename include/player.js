@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const voice = require("@discordjs/voice");
 const ytdl = require("ytdl-core");
 const util = require("../util/Util");
-const EventEmitter = require("node:events");
+const EventEmitter = require("events");
 const { opus, FFmpeg, VolumeTransformer } = require("prism-media");
 
 /**
