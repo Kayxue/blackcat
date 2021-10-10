@@ -64,6 +64,7 @@ module.exports = {
           info: songInfo
         };
       } catch (error) {
+        console.error(error);
         message.client.log(error.message, "error");
         let errorMsg = null;
         if (error.message.includes("404") || error.message.includes("id")) {
@@ -71,11 +72,12 @@ module.exports = {
         } else if (error.message.includes("private") || error.message.includes("403")) {
           errorMsg = "❌ ┃ 無法播放私人影片";
         } else if (error.message.includes("429")) {
-          if (message.slash) message.slash.send("❌ ┃ 發生Youtube API錯誤，機器人將會自動重新啟動...");
-          else message.channel.send("❌ ┃ 發生Youtube API錯誤，機器人將會自動重新啟動...").catch(console.error);
+          message.followUp("❌ ┃ 發生Youtube API錯誤").catch(console.error);
 
-          if (process.env.HEROKU_API_KEY && process.env.HEROKU_APP_ID) require("heroku-restarter")(process.env["HEROKU_API_KEY"], process.env["HEROKU_APP_ID"]).restart();
-          else process.exit(1);
+          if (process.env.HEROKU_API_KEY && process.env.HEROKU_APP_ID) {
+            await message.followUp("❌ ┃ 重新啟動中...");
+            require("heroku-restarter")(process.env["HEROKU_API_KEY"], process.env["HEROKU_APP_ID"]).restart();
+          }
         } else {
           errorMsg = "❌ ┃ 發生了未知的錯誤，此錯誤已被紀錄";
         }
@@ -97,6 +99,7 @@ module.exports = {
           info: songInfo
         };
       } catch (error) {
+        console.error(error);
         message.client.log(error.message, "error");
         let errorMsg = null;
         if (error.message.includes("404") || error.message.includes("id")) {
@@ -104,11 +107,12 @@ module.exports = {
         } else if (error.message.includes("private") || error.message.includes("403")) {
           errorMsg = "❌ ┃ 無法播放私人影片";
         } else if (error.message.includes("429")) {
-          if (message.slash) message.slash.send("❌ ┃ 發生Youtube API錯誤，機器人將會自動重新啟動...");
-          else message.channel.send("❌ ┃ 發生Youtube API錯誤，機器人將會自動重新啟動...").catch(console.error);
+          message.followUp("❌ ┃ 發生Youtube API錯誤").catch(console.error);
 
-          if (process.env.HEROKU_API_KEY && process.env.HEROKU_APP_ID) require("heroku-restarter")(process.env["HEROKU_API_KEY"], process.env["HEROKU_APP_ID"]).restart();
-          else process.exit(1);
+          if (process.env.HEROKU_API_KEY && process.env.HEROKU_APP_ID) {
+            await message.followUp("❌ ┃ 重新啟動中...");
+            require("heroku-restarter")(process.env["HEROKU_API_KEY"], process.env["HEROKU_APP_ID"]).restart();
+          }
         } else {
           errorMsg = "❌ ┃ 發生了未知的錯誤，此錯誤已被紀錄";
         }
