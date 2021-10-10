@@ -4,8 +4,9 @@
   }
 }
 
-html, body {
-  font-family: 'Noto Sans TC', sans-serif;
+html,
+body {
+  font-family: 'cwTeXYen', 'Inter', sans-serif;
   overflow-x: hidden;
   color: white;
 }
@@ -31,6 +32,7 @@ html, body {
   text-align: center;
   background-color: #f3f4f5;
   font-family: 'Pacifico', cursive;
+  font-size: 2rem;
 }
 
 a:link {
@@ -49,10 +51,6 @@ a:active {
   text-decoration: none;
 }
 
-.bot-title {
-  font-family: 'Noto Sans TC', sans-serif;
-}
-
 .float-on-hover {
   display: inline-block;
   vertical-align: middle;
@@ -63,13 +61,15 @@ a:active {
   transition-timing-function: ease-out;
 }
 
-.float-on-hover:hover, .float-on-hover:focus, .float-on-hover:active {
+.float-on-hover:hover,
+.float-on-hover:focus,
+.float-on-hover:active {
   -webkit-transform: translateY(-8px);
   transform: translateY(-8px);
 }
 
 .shadow-btn {
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .collapsible {
@@ -83,7 +83,8 @@ a:active {
   font-size: 15px;
 }
 
-.active, .collapsible:hover {
+.active,
+.collapsible:hover {
   background-color: #555;
 }
 

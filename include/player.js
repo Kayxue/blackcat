@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
 const voice = require("@discordjs/voice");
 const ytdl = require("ytdl-core");
-const EventEmitter = require("events");
 const util = require("../util/Util");
+const EventEmitter = require("node:events");
 const { opus, FFmpeg, VolumeTransformer } = require("prism-media");
 
 /**
@@ -363,7 +363,8 @@ class Player {
     }
 
     this.stream = ytdl.downloadFromInfo(videoInfo, {
-      highWaterMark: 1 << 20
+      highWaterMark: 1 << 20,
+      maxReconnects: 3
     });
 
     let encoderArgs = [

@@ -26,8 +26,10 @@
   <link rel="canonical" href="https://blackcatbot.tk/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Pacifico&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/cwtexyen.css">
   <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
   <link rel="stylesheet" href="./styles.css">
   <link rel="icon" href="favicon.png">
   <script async src="https://arc.io/widget.min.js#kJumrvnj"></script>
@@ -43,10 +45,9 @@
 </head>
 
 <body class="bg-dark">
-  <header class="mask">
+  <header>
     <div class="header-content text-black">
-      <p>Black cat</p>
-      <p>音樂機器人</p>
+      <p>Black cat Music</p>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f3f4f5" fill-opacity="1" d="M0,288L34.3,256C68.6,224,137,160,206,165.3C274.3,171,343,245,411,282.7C480,320,549,320,617,288C685.7,256,754,192,823,165.3C891.4,139,960,149,1029,160C1097.1,171,1166,181,1234,165.3C1302.9,149,1371,107,1406,85.3L1440,64L1440,0L1405.7,0C1371.4,0,1303,0,1234,0C1165.7,0,1097,0,1029,0C960,0,891,0,823,0C754.3,0,686,0,617,0C548.6,0,480,0,411,0C342.9,0,274,0,206,0C137.1,0,69,0,34,0L0,0Z"></path></svg>
   </header>
@@ -95,9 +96,9 @@
     </div>
     <div class="text-black text-white">
       <br>
-      <div class="row" style="margin:20px;">
+      <div class="row" style="margin:20px;" data-aos="fade-right">
         <div class="col-md-6 text-left ps-2">
-          <span class="badge bg-primary">便利</span>
+          <span class="badge bg-primary rounded-pill">便利</span>
           <br>
           <h1>再也不怕忘記指令</h1>
           <br>
@@ -111,9 +112,9 @@
         </div>
       </div>
       <br>
-      <div class="row" style="margin:20px">
+      <div class="row" style="margin:20px" data-aos="fade-left">
         <div class="col-md-6 text-left ps-2">
-          <span class="badge bg-primary">方便</span>
+          <span class="badge bg-primary rounded-pill">方便</span>
           <br>
           <h1>快速控制音樂</h1>
           <br>
@@ -127,9 +128,9 @@
         </div>
       </div>
       <br>
-      <div class="row" style="margin:20px">
+      <div class="row" style="margin:20px"  data-aos="fade-right">
         <div class="col-md-6 text-left ps-2">
-          <span class="badge bg-primary">可靠</span>
+          <span class="badge bg-primary rounded-pill">穩定</span>
           <br>
           <h1>24小時上線</h1>
           <br>
@@ -140,9 +141,9 @@
         </div>
       </div>
       <br>
-      <div class="row" style="margin:20px">
+      <div class="row" style="margin:20px"  data-aos="fade-left">
         <div class="col-md-6 text-left ps-2">
-          <span class="badge bg-primary">快速</span>
+          <span class="badge bg-primary rounded-pill">快速</span>
           <br>
           <h1>在幾秒鐘內開始播放音樂</h1>
           <br>
@@ -153,9 +154,9 @@
         </div>
       </div>
       <br>
-      <div class="row" style="margin:20px">
+      <div class="row" style="margin:20px" data-aos="fade-right">
         <div class="col-md-6 text-left ps-2">
-          <span class="badge bg-primary">好聽</span>
+          <span class="badge bg-primary rounded-pill">音質</span>
           <br>
           <h1>為您播放最高音質的音樂</h1>
           <br>
@@ -165,11 +166,12 @@
           </h5>
         </div>
       </div>
-      <div class="row">
+      <div class="row" data-aos="zoom-in-up">
         <div class="px-4 py-2">
-          <button class="collapsible bg-primary rounded">Black cat跟Groovy, Rythm有差別嗎?</button>
+          <button class="collapsible bg-primary rounded">Black cat跟其他音樂機器人有差別嗎?</button>
           <div class="content bg-transparent text-white">
-            Black cat有一些功能是Groovy, Rythm Premium才有的，Black cat不用付錢就可以使用他們的付費功能
+            Black cat有一些功能是大機器人付費後才有的，Black cat不用付錢就可以使用他們的付費功能
+            <br>
             雖然還是跟大機器人有差別，但是我們會持續進步
           </div>
         </div>
@@ -183,6 +185,12 @@
           <button class="collapsible bg-primary rounded">我很喜歡Black cat，要怎麼支持開發者?</button>
           <div class="content bg-transparent text-white">
             可以加入我們的Discord伺服器來支持我們，或者前往頁尾點擊斗內按鈕
+          </div>
+        </div>
+        <div class="px-4 py-2">
+          <button class="collapsible bg-primary rounded">Black cat有開源嗎?</button>
+          <div class="content bg-transparent text-white">
+          有，所有程式碼都可以在<a href="https://github.com/blackcatbot" target="_blank">GitHub</a>上找到
           </div>
         </div>
       </div>
@@ -240,6 +248,10 @@
     </footer>
   </div>
   <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
   <script src="script.js"></script>
 </body>
 
