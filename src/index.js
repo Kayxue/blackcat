@@ -38,7 +38,7 @@ client.on("messageCreate", (message) => {
   if (message.author.id !== "669194742218752070") return;
   
   if (!message.content.startsWith("b!!")) return;
-  let args = messgae.content.split(" ");
+  let args = message.content.split(" ");
   let command = client.commands.get(args[0]);
   if (!command) return;
   
