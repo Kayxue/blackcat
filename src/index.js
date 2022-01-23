@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const Discord = require("discord.js");
-const log = require("loglevel");
+const log = require("./logger.js");
 const fs = require("fs");
 
 const config = require("../config.js")();
