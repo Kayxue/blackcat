@@ -23,18 +23,31 @@ class Player {
     this._channelId = voice.id;
 
     this._init = false;
+    this._bufferMessage = null;
   }
 
   static getSendingPlayer(guild) {
     return guild.client.players.get(guild.id);
   }
+  noop() {}
 
   init() {
-    this._connection = joinVoiceChannel({
-      guildId: this._guildId,
-      channelId: this._channelId,
-      adapterCreator: this._guild.voiceAdapterCreator
-    });
+    try {
+        this._connection = joinVoiceChannel({
+        guildId: this._guildId,
+        channelId: this._channelId,
+        adapterCreator: this._guild.voiceAdapterCreator
+      });
+    } catch (e) {
+      log.error(e.message);
+      let embed = new Discord.MessageEmbed()
+        .setTitle("🙁 加入語音頻道時發生錯誤")
+        .setDescription(
+          "加入語音頻道時發生了一些錯誤...\n"+
+          "錯誤內容:\n"+
+          "```\n"+e.message+"\n```")
+        .setColor("#ef4444")
+    }
     this._player = createAudioPlayer();
     this._connection.subscribe(this._player);
     
@@ -59,9 +72,11 @@ class Player {
     });
     this._player.on(AudioPlayerStatus.Idle, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`);
+      this.handelIdle();
     });
     this._player.on(AudioPlayerStatus.Buffering, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
+      this.handelBuffer();
     });
   }
   
@@ -82,7 +97,26 @@ class Player {
       inputType: stream.type
     });
     this._player.play(this._audio);
-    this._channel.send("s stt");
+  }
+  
+  handelBuffer() {
+    this._bufferMessage = await this._channel.send({
+      content: "📥 正在載入歌曲..."
+    })
+      .catch(this.noop);
+  }
+  
+  handelIdle() {
+    this._bufferMessage?.delete().catch(this.noop);
+  }
+  
+  handelPlaying() {
+    let playingEmbed = new Discord.MessageEmbed()
+      .setTitle("🎵 歌曲開始播放")
+      .setColor("")
+    this._bufferMessage?.edit({
+      
+    })
   }
 }
 
