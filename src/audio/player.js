@@ -79,3 +79,5 @@ class player {
     this._channel.send("s stt");
   }
 }
+
+module.exports = Player;
