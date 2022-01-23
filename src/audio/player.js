@@ -33,7 +33,7 @@ class Player {
     this._connection = joinVoiceChannel({
       guildId: this._guildId,
       channelId: this._channelId,
-      adapterCreator: this._guide.voiceAdapterCreator
+      adapterCreator: this._guild.voiceAdapterCreator
     });
     this._player = createAudioPlayer({
       behaviors: {
