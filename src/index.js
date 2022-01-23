@@ -9,9 +9,9 @@ const config = require("../config.js")();
 const client = new Discord.Client({
   intents: [
     Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
     Discord.Intents.FLAGS.GUILD_MESSAGES,
-    Discord.Intents.FLAGS.DIRECT_MESSAGES
+    Discord.Intents.FLAGS.GUILDS,
+    Discord.Intents.FLAGS.GUILD_VOICE_STATES
   ],
   allowedMentions: {
     parse: ["users"],
