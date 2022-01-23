@@ -35,13 +35,10 @@ class Player {
       channelId: this._channelId,
       adapterCreator: this._guild.voiceAdapterCreator
     });
-    this._player = createAudioPlayer({
-      behaviors: {
-        noSubscriber: NoSubscriberBehavior
-      }
-    });
+    this._player = createAudioPlayer();
     
     this._connection.on(VoiceConnectionStatus.Ready, () => {
+      this._connection.subscribe(this._player);
       log.info(`${this._guildId}:${this._channelId} 已進入預備狀態`);
     });
     this._connection.on(VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
@@ -56,6 +53,15 @@ class Player {
         log.warn(`${this._guildId}:${this._channelId} 無法重新連線`);
         this.connection.destroy();
       }
+    });
+    this._player.on(AudioPlayerStatus.Playing, () => {
+      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
+    });
+    this._player.on(AudioPlayerStatus.Idle, () => {
+      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`);
+    });
+    this._player.on(AudioPlayerStatus.Buffering, () => {
+      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
     });
   }
   
