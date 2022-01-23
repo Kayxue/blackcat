@@ -36,9 +36,9 @@ class Player {
       adapterCreator: this._guild.voiceAdapterCreator
     });
     this._player = createAudioPlayer();
+    this._connection.subscribe(this._player);
     
     this._connection.on(VoiceConnectionStatus.Ready, () => {
-      this._connection.subscribe(this._player);
       log.info(`${this._guildId}:${this._channelId} 已進入預備狀態`);
     });
     this._connection.on(VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
@@ -67,7 +67,7 @@ class Player {
   
   async play(track) {
     let url = track;
-    /*if (await play.validate(track) !== "yt_video") {
+    if (await play.validate(track) !== "yt_video") {
       try {
         url = await play.search(track, {
           limit: 1
@@ -76,12 +76,12 @@ class Player {
         this._channel.send(e.message);
         log.error(e.message);
       }
-    }*/
+    }
     let stream = await play.stream(url);
-    let audioResource = createAudioResource(stream.stream, {
+    this._audio = createAudioResource(stream.stream, {
       type: stream.type
     });
-    this._player.play(audioResource);
+    this._player.play(this._audio);
     this._channel.send("s stt");
   }
 }
