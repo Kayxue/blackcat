@@ -8,7 +8,6 @@ const config = require("../config.js")();
 
 const client = new Discord.Client({
   intents: [
-    Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     Discord.Intents.FLAGS.GUILD_MESSAGES,
     Discord.Intents.FLAGS.GUILDS,
     Discord.Intents.FLAGS.GUILD_VOICE_STATES
@@ -24,15 +23,15 @@ client.commands = new Discord.Collection();
 client.players = new Discord.Collection();
 client.logger = require("./logger.js");
 
+client.on("ready", () => {
+  log.info(`${client.user.username} 已上線`);
+});
+
 let commandFiles = fs.readdirSync(`./src/commands/`).filter(file => file.endsWith(".js"));
 for (let cmd of commandFiles) {
   let command = require(`./commands/${cmd}`);
   client.commands.set(command.name, command);
 }
-
-client.on("ready", () => {
-  log.info(`${client.user.username} 已上線`);
-});
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
