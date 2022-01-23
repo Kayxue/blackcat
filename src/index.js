@@ -26,7 +26,7 @@ client.logger = require("./logger.js");
 
 let commandFiles = fs.readdirSync(`./commands/`).filter(file => file.endsWith(".js"));
 for (let command of commandFiles) {
-  let command = require(`./commands/${file}`);
+  let command = require(`./src/commands/${file}`);
   client.commands.set(command.name, command);
 }
 
@@ -54,7 +54,7 @@ client.on("messageCreate", (message) => {
 if (config.enableApi) {
   let routeFiles = fs.readdirSync('./routes').filter(file => file.endsWith('.js'));
   for (let file of routeFiles) {
-    let route = require(`./routes/${file}`);
+    let route = require(`./src/routes/${file}`);
     route(http);
   }
   http.listen(config.apiPort);
