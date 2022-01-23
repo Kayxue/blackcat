@@ -13,7 +13,7 @@ const Discord = require("discord.js");
 const play = require("play-dl");
 const log = require("../logger.js");
 
-class player {
+class Player {
   constructor(event, guild, voice) {
     this._client = event.client;
     this._channel = event.channel;
