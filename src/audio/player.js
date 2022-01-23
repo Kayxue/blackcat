@@ -72,7 +72,7 @@ class Player {
       }
     }
     let stream = await play.stream(url);
-    let audioResource = voice.createAudioResource(stream.stream, {
+    let audioResource = createAudioResource(stream.stream, {
       type: stream.type
     });
     this._player.play(audioResource);
