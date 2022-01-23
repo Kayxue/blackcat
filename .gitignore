@@ -111,3 +111,6 @@ core*
 
 # Config file
 config.js
+
+# Snyk
+.dccache
