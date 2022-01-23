@@ -17,21 +17,20 @@ const client = new Discord.Client({
     repliedUser: false
   }
 });
-client.login(config.token);
 
 client.commands = new Discord.Collection();
 client.players = new Discord.Collection();
 client.logger = require("./logger.js");
-
-client.on("ready", () => {
-  log.info(`${client.user.username} 已上線`);
-});
 
 let commandFiles = fs.readdirSync(`./src/commands/`).filter(file => file.endsWith(".js"));
 for (let cmd of commandFiles) {
   let command = require(`./commands/${cmd}`);
   client.commands.set(command.name, command);
 }
+
+client.on("ready", () => {
+  log.info(`${client.user.username} 已上線`);
+});
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
@@ -46,6 +45,7 @@ client.on("messageCreate", (message) => {
   command.run(message, args);
 });
 
+client.login(config.token);
 
 /**
  * HTTP
