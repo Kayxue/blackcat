@@ -40,7 +40,9 @@ client.on("messageCreate", (message) => {
   if (!message.content.startsWith("b!!")) return;
   let args = message.content.split(" ");
   let command = client.commands.get(args[0]);
-  if (!command) return;
+  if (!command) {
+    log.error("Nof")
+  }
   
   args.shift();
   command.run(message, args);
