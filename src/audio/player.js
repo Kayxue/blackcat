@@ -67,7 +67,7 @@ class Player {
   
   async play(track) {
     let url = track;
-    if (await play.validate(track) !== "yt_video") {
+    /*if (await play.validate(track) !== "yt_video") {
       try {
         url = await play.search(track, {
           limit: 1
@@ -76,7 +76,7 @@ class Player {
         this._channel.send(e.message);
         log.error(e.message);
       }
-    }
+    }*/
     let stream = await play.stream(url);
     let audioResource = createAudioResource(stream.stream, {
       type: stream.type
