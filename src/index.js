@@ -39,7 +39,7 @@ client.on("messageCreate", (message) => {
   
   if (!message.content.startsWith("b!!")) return;
   let args = message.content.split(" ");
-  let command = client.commands.get(args[0]);
+  let command = client.commands.get(args[0].replace("b!!", ""));
   if (!command) return;
   
   args.shift();
