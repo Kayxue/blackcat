@@ -79,7 +79,7 @@ class Player {
     }
     let stream = await play.stream(url);
     this._audio = createAudioResource(stream.stream, {
-      type: stream.type
+      inputType: stream.type
     });
     this._player.play(this._audio);
     this._channel.send("s stt");
