@@ -26,7 +26,7 @@ client.logger = require("./logger.js");
 
 let commandFiles = fs.readdirSync(`./src/commands/`).filter(file => file.endsWith(".js"));
 for (let cmd of commandFiles) {
-  let command = require(`./src/commands/${cmd}`);
+  let command = require(`./commands/${cmd}`);
   client.commands.set(command.name, command);
 }
 
