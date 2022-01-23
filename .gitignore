@@ -108,3 +108,6 @@ public/dist/
 
 # Node.js core dump
 core*
+
+# Config file
+config.js
