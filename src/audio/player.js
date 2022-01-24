@@ -74,12 +74,15 @@ class Player {
         log.info(`${this._guildId}:${this._channelId} 重新連接成功`);
       } catch (error) {
         log.warn(`${this._guildId}:${this._channelId} 無法重新連線`);
+        let disconnecteEmbed = new Discord.MessageEmbed()
+          .setTitle("😕 我的語音連接斷開了")
+          .setColor(colors.danger);
+        this._channel.send({
+          embeds: [disconnecteEmbed]
+        })
+          .catch(this.noop);
         this._connection.destroy();
       }
-    });
-    this._player.on(AudioPlayerStatus.Playing, () => {
-      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
-      this.handelPlaying();
     });
     this._player.on(AudioPlayerStatus.Idle, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`);
@@ -89,19 +92,20 @@ class Player {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
     });
     this._init = true;
+    this._client.players.set(this._guildId, this);
   }
   
   /**
    * @param {String} track 
    */
   async play(track) {
-    let rawData, parsedData;
+    let rawData, parsedData, isPlaylist = false;
     if (play.yt_validate(track) !== "video" && !track.startsWith("https")) {
       try {
         let result = await play.search(track, {
           limit: 1
         });
-        rawData = result[0];
+        rawData = await play.video_info(result[0].url);
         if (!rawData) {
           return this._channel.send("Nothing found")
         }
@@ -110,7 +114,7 @@ class Player {
         this._channel.send(e.message);
         log.error(e.message);
       }
-    } else if (await play.validate(track) === "video") {
+    } else if (play.yt_validate(track) === "video") {
       try {
         rawData = await play.video_info(track);
         rawData.full = true;
@@ -119,24 +123,63 @@ class Player {
         log.error(e.message);
       }
     } else {
-      this._channel.send("Playlist");
-      return;
+      let videos;
+      isPlaylist = true;
+      try {
+        let playlist = await play.playlist_info(track);
+        videos = await playlist.all_videos();
+      } catch (e) {
+        this._channel.send(e.message);
+        log.error(e.message);
+      }
+      parsedData = [];
+      videos.forEach((video) => {
+        video.full = false;
+        parsedData.push({
+          title: video.title,
+          url: video.url,
+          duraction: video.duractionInSec,
+          duractionParsed: video.duractionRaw,
+          thumbnail: video.thumbnails.pop().url,
+          rawData: video
+        });
+      })
     }
-    parsedData = {
-      title: rawData.title,
-      url: rawData.url,
-      duraction: rawData.duractionInSec,
-      duractionParsed: rawData.duractionRaw,
-      thumbnail: rawData.thumbnails.pop().url,
+    if (!isPlaylist) parsedData = [{
+      title: rawData.video_details.title,
+      url: rawData.video_details.url,
+      duraction: rawData.video_details.durationInSec,
+      duractionParsed: rawData.video_details.durationRaw,
+      thumbnail: rawData.video_details.thumbnails.pop().url,
       rawData
-    }
-    
+    }];
+
     if (this._songs.length === 0) {
-      this._songs.push(parsedData);
+      this._songs.push(...parsedData);
       this.playStream();
     } else {
-      this._songs.push(parsedData);
+      this._songs.push(...parsedData);
     }
+
+    this._player.once(AudioPlayerStatus.Playing, () => {
+      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
+      this.handelPlaying();
+    });
+  }
+
+  skip() {
+    this._songs.shift();
+    this._player.stop();
+  }
+
+  pause() {
+    this._player.pause();
+    let pauseEmbed = new Discord.MessageEmbed()
+      .setTitle("⏸️ 暫停音樂")
+  }
+
+  unpause() {
+    this._player.unpause();
   }
   
   async playStream() {
@@ -173,6 +216,10 @@ class Player {
     });
     this._player.play(this._audio);
   }
+
+  get ping() {
+    return this._connection.ping;
+  }
   
   handelIdle() {
     this._noticeMessage?.delete().catch(this.noop);
@@ -185,13 +232,16 @@ class Player {
         embeds: [endEmbed]
       })
         .catch(this.noop);
+    } else {
+      this.playStream();
     }
   }
   
   async handelPlaying() {
     let playingEmbed = new Discord.MessageEmbed()
       .setTitle(`🎵 目前正在播放 ${this._audio.metadata.title}`)
-      .setURL(this._audio.url)
+      .setURL(this._audio.metadata.url)
+      .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
     this._noticeMessage = await this._channel.send({
       embeds: [playingEmbed]

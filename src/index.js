@@ -1,9 +1,10 @@
 require("dotenv").config();
 
 const Discord = require("discord.js");
-const log = require("./logger.js");
 const fs = require("fs");
 
+const log = require("./logger.js");
+const allowModify = require("./util/allowModify.js");
 const config = require("../config.js")();
 
 const client = new Discord.Client({
@@ -34,12 +35,16 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
-  if (message.author.id !== "669194742218752070") return;
+  if (!message.guild) return message.channel.send("❌ 你必須把我加到一個伺服器裡!");
+  if (!message.channel) return message.channel.send("❌ 無法取得頻道!");
+  if (message.author.id !== "669194742218752070") return message.channel.send("❌ 你不是測試人員!");
   
-  if (!message.content.startsWith("b!!")) return;
+  if (!message.content.startsWith(config.prefix)) return;
   let args = message.content.split(" ");
-  let command = client.commands.get(args[0].replace("b!!", ""));
+  let command = client.commands.get(args[0].replace(config.prefix, ""));
   if (!command) return;
+
+  message.allowModify = allowModify(message.member);
   
   args.shift();
   command.run(message, args);

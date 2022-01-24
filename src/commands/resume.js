@@ -1,17 +1,15 @@
 const Player = require("../audio/player.js")
 
 module.exports = {
-  name: "play",
-  run: function(event, args) {
-    let url = args[0];
+  name: "resume",
+  run: function(event) {
     let player;
     if (!Player.getSendingPlayer(event.guild)) {
-      player = new Player(event, event.guild, event.member.voice.channel);
-      player.init();
+      return event.channel.send("❌ 必須要有音樂正在播放");
     } else {
       player = Player.getSendingPlayer(event.guild);
       if (!event.allowModify) return event.channel.send("❌ 你必須加入一個語音頻道");
     }
-    player.play(url);
+    player.unpause();
   }
 }
