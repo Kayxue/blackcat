@@ -26,7 +26,7 @@ class Player {
     this._channelId = voice.id;
 
     this._init = false;
-    this._bufferMessage = null;
+    this._noticeMessage = null;
     this._nowplaying = null;
     this._songs = [];
   }
@@ -86,7 +86,6 @@ class Player {
     });
     this._player.on(AudioPlayerStatus.Buffering, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
-      this.handleBuffer();
     });
     this._init = true;
   }
@@ -175,7 +174,7 @@ class Player {
   }
   
   handelIdle() {
-    this._bufferMessage?.delete().catch(this.noop);
+    this._noticeMessage?.delete().catch(this.noop);
     
     this._songs.shift();
     if (this._songs.length <= 0) {
@@ -187,20 +186,13 @@ class Player {
         .catch(this.noop);
     }
   }
-
-  async handleBuffer() {
-    this._bufferMessage = await this._channel.send({
-      content: "🔍 載入歌曲中..."
-    })
-      .catch(this.noop);
-  }
   
   handelPlaying() {
     let playingEmbed = new Discord.MessageEmbed()
       .setTitle(`🎵 目前正在播放 ${this._audio.metadata.title}`)
       .setURL(this._audio.url)
       .setColor(colors.success);
-    this._bufferMessage = this._channel.send({
+    this._noticeMessage = await this._channel.send({
       embeds: [playingEmbed]
     })
       .catch(this.noop);
