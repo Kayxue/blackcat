@@ -101,6 +101,9 @@ class Player {
         rawData = await play.search(track, {
           limit: 1
         })[0];
+        if (!rawData) {
+          return this._channel.send("Nothing found")
+        }
         rawData.full = false;
       } catch (e) {
         this._channel.send(e.message);
