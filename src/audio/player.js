@@ -86,7 +86,7 @@ class Player {
     });
     this._player.on(AudioPlayerStatus.Buffering, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
-      this.handelBuffer();
+      this.handleBuffer();
     });
     this._init = true;
   }
