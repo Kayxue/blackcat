@@ -150,8 +150,9 @@ class Player {
       }
     }
     
+    let stream;
     try {
-      let stream = await play.stream(this._songs[0].url);
+      stream = await play.stream(this._songs[0].url);
     } catch (e) {
       log.error(e.message);
       let embed = new Discord.MessageEmbed()
