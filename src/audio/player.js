@@ -187,7 +187,7 @@ class Player {
     }
   }
   
-  handelPlaying() {
+  async handelPlaying() {
     let playingEmbed = new Discord.MessageEmbed()
       .setTitle(`🎵 目前正在播放 ${this._audio.metadata.title}`)
       .setURL(this._audio.url)
