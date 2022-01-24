@@ -46,7 +46,7 @@ class Player {
       });
     } catch (e) {
       log.error(e.message);
-      let embed = new Discord.MessageEmbed()
+      let errorEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 加入語音頻道時發生錯誤")
         .setDescription(
           "加入語音頻道時發生了一些錯誤...\n"+
@@ -54,8 +54,9 @@ class Player {
           "```\n"+e.message+"\n```")
         .setColor(colors.danger);
       this._channel.send({
-        embeds: [embed]
-      })
+        embeds: [errorEmbed]
+      });
+      return;
     }
     this._player = createAudioPlayer();
     this._connection.subscribe(this._player);
@@ -100,6 +101,7 @@ class Player {
         rawData = await play.search(track, {
           limit: 1
         })[0];
+        rawData.full = false;
       } catch (e) {
         this._channel.send(e.message);
         log.error(e.message);
@@ -107,6 +109,7 @@ class Player {
     } else if (await play.validate(track) === "video") {
       try {
         rawData = await play.video_info(track);
+        rawData.full = true;
       } catch (e) {
         this._channel.send(e.message);
         log.error(e.message);
@@ -120,18 +123,60 @@ class Player {
       url: rawData.url,
       duraction: rawData.duractionInSec,
       duractionParsed: rawData.duractionRaw,
-      thumbnail: rawData.thumbnails.pop().url
+      thumbnail: rawData.thumbnails.pop().url,
+      rawData
     }
-    let stream = await play.stream(url);
+    
+    if (this._songs.length === 0) {
+      this._songs.push(parsedData);
+      this.playStream();
+    } else {
+      this._songs.push(parsedData);
+    }
+  }
+  
+  async playStream() {
+    if (!this._songs[0]?.rawData.full) {
+      try {
+        this._songs[0].rawData = await play.video_info(track);
+        this._songs[0].rawData.full = true;
+      } catch (e) {
+        this._channel.send(e.message);
+        log.error(e.message);
+      }
+    }
+    
+    try {
+      let stream = await play.stream(this._songs[0].url);
+    } catch (e) {
+      log.error(e.message);
+      let embed = new Discord.MessageEmbed()
+        .setTitle("🙁 載入音樂時發生錯誤")
+        .setDescription(
+          "載入音樂時發生了一點小錯誤...\n"+
+          "錯誤內容:\n"+
+          "```\n"+e.message+"\n```")
+        .setColor(colors.danger);
+      this._channel.send({
+        embeds: [embed]
+      });
+      return;
+    }
     this._audio = createAudioResource(stream.stream, {
       inputType: stream.type,
-      metadata: parsedData
+      metadata: this._songs[0]
     });
     this._player.play(this._audio);
   }
   
   handelIdle() {
     this._bufferMessage?.delete().catch(this.noop);
+    
+    this._songs.shift();
+    if (this._songs.length <= 0) {
+      let endEmbed = new Discord.MessageEmbed()
+        .setTitle("👌 序列裡的歌曲播放完畢")
+    }
   }
 
   handleBuffer() {
@@ -143,9 +188,8 @@ class Player {
   
   handelPlaying() {
     let playingEmbed = new Discord.MessageEmbed()
-      .setTitle(`🎵 ${this._audio.metadata.title}`)
+      .setTitle(`🎵 目前正在播放 ${this._audio.metadata.title}`)
       .setURL(this._audio.url)
-      .setDescription("音樂即將開始播放")
       .setColor(colors.success);
     this._bufferMessage = this._channel.send({
       embeds: [playingEmbed]
