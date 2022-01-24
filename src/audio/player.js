@@ -98,9 +98,10 @@ class Player {
     let rawData, parsedData;
     if (play.yt_validate(track) !== "video" && !track.startsWith("https")) {
       try {
-        rawData = await play.search(track, {
+        let result = await play.search(track, {
           limit: 1
-        })[0];
+        });
+        rawData = result[0];
         if (!rawData) {
           return this._channel.send("Nothing found")
         }
