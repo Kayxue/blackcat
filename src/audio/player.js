@@ -142,7 +142,7 @@ class Player {
   async playStream() {
     if (!this._songs[0]?.rawData.full) {
       try {
-        this._songs[0].rawData = await play.video_info(track);
+        this._songs[0].rawData = await play.video_info(this._songs[0].url);
         this._songs[0].rawData.full = true;
       } catch (e) {
         this._channel.send(e.message);
