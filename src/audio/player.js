@@ -79,6 +79,7 @@ class Player {
     });
     this._player.on(AudioPlayerStatus.Playing, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
+      this.handelPlaying();
     });
     this._player.on(AudioPlayerStatus.Idle, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`);
