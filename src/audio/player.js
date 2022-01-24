@@ -175,11 +175,15 @@ class Player {
     this._songs.shift();
     if (this._songs.length <= 0) {
       let endEmbed = new Discord.MessageEmbed()
-        .setTitle("👌 序列裡的歌曲播放完畢")
+        .setTitle("👌 序列裡的歌曲播放完畢");
+      this._channel.send({
+        embeds: [endEmbed]
+      })
+        .catch(this.noop);
     }
   }
 
-  handleBuffer() {
+  async handleBuffer() {
     this._bufferMessage = await this._channel.send({
       content: "🔍 載入歌曲中..."
     })
