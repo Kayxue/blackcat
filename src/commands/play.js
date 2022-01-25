@@ -4,6 +4,9 @@ module.exports = {
   name: "play",
   run: function(event, args) {
     let url = args[0];
+    
+    if (!event.member.voice.channel) return event.channel.send("❓ 你必須加入一個語音頻道");
+    
     let player;
     if (!Player.getSendingPlayer(event.guild)) {
       player = new Player(event, event.guild, event.member.voice.channel);
