@@ -17,6 +17,6 @@ module.exports = {
     }
     event.channel.send({
       embeds: [pingEmbed]
-    }).catch(e => {});
+    }).catch(() => {});
   }
 }

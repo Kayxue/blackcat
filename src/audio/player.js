@@ -95,17 +95,22 @@ class Player {
     this._client.players.set(this._guildId, this);
   }
   
-  /**
-   * @param {String} track 
-   */
   async play(track) {
     let rawData, parsedData, isPlaylist = false;
+    
+    let searchEmbed = new Discord.MessageEmbed()
+      .setTitle(`🔍 正在搜尋 **${track}**`)
+      .setColor(colors.success);
+    let sent = this._channel.send({
+      embeds: [searchEmbed]
+    }).catch(this.noop);
+    
     if (play.yt_validate(track) !== "video" && !track.startsWith("https")) {
       try {
         let result = await play.search(track, {
           limit: 1
         });
-        rawData = await play.video_info(result[0].url);
+        rawData = await play.video_info(result[0]?.url);
         if (!rawData) {
           return this._channel.send("Nothing found")
         }
@@ -169,6 +174,12 @@ class Player {
 
   skip() {
     this._songs.shift();
+    let skipEmbed = new Discord.MessageEmbed()
+      .setTitle(`⏭️ 跳過歌曲 **${this._audio.metadata.title}**`)
+      .setColor(colors.success);
+    this._channel.send({
+      embeds: [skipEmbed]
+    }).catch(this.noop);
     this._player.stop();
   }
 
@@ -176,10 +187,42 @@ class Player {
     this._player.pause();
     let pauseEmbed = new Discord.MessageEmbed()
       .setTitle("⏸️ 暫停音樂")
+      .setColor(colors.success);
+    this._channel.send({
+      embeds: [pauseEmbed]
+    }).catch(this.noop);
   }
 
   unpause() {
     this._player.unpause();
+    let unpauseEmbed = new Discord.MessageEmbed()
+      .setTitle("▶️ 繼續播放音樂")
+      .setColor(colors.success);
+    this._channel.send({
+      embeds: [unpauseEmbed]
+    }).catch(this.noop);
+  }
+  
+  shuffle() {
+    let shuffled = [].concat(this._songs);
+    let currentIndex = array.length, temporaryValue, randomIndex;
+    
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      
+      temporaryValue = shuffled[currentIndex];
+      shuffled[currentIndex] = shuffled[randomIndex];
+      shuffled[randomIndex] = temporaryValue;
+    }
+    
+    let unpauseEmbed = new Discord.MessageEmbed()
+      .setTitle("🔀 重新排序音樂")
+      .setColor(colors.success);
+    this._channel.send({
+      embeds: [unpauseEmbed]
+    }).catch(this.noop);
+    this.songs = shuffled;
   }
   
   async playStream() {
@@ -188,8 +231,18 @@ class Player {
         this._songs[0].rawData = await play.video_info(this._songs[0].url);
         this._songs[0].rawData.full = true;
       } catch (e) {
-        this._channel.send(e.message);
         log.error(e.message);
+        let errorEmbed = new Discord.MessageEmbed()
+          .setTitle("🙁 載入音樂時發生錯誤")
+          .setDescription(
+            "載入音樂時發生了一點小錯誤...\n" +
+            "錯誤內容:\n" +
+            "```\n" + e.message + "\n```")
+          .setColor(colors.danger);
+        this._channel.send({
+          embeds: [errorEmbed]
+        }).catch(this.noop);
+        return;
       }
     }
     
@@ -198,7 +251,7 @@ class Player {
       stream = await play.stream(this._songs[0].url);
     } catch (e) {
       log.error(e.message);
-      let embed = new Discord.MessageEmbed()
+      let errorEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 載入音樂時發生錯誤")
         .setDescription(
           "載入音樂時發生了一點小錯誤...\n"+
@@ -206,8 +259,8 @@ class Player {
           "```\n"+e.message+"\n```")
         .setColor(colors.danger);
       this._channel.send({
-        embeds: [embed]
-      });
+        embeds: [errorEmbed]
+      }).catch(this.noop);
       return;
     }
     this._audio = createAudioResource(stream.stream, {
@@ -221,6 +274,18 @@ class Player {
     return this._connection.ping;
   }
   
+  get nowplaying() {
+    return this._audio.metadata;
+  }
+  
+  get playTime() {
+    return this._audio.playbackDuration / 1000;
+  }
+  
+  get songs() {
+    return this._songs;
+  }
+  
   handelIdle() {
     this._noticeMessage?.delete().catch(this.noop);
     
@@ -230,8 +295,7 @@ class Player {
         .setTitle("👌 序列裡的歌曲播放完畢");
       this._channel.send({
         embeds: [endEmbed]
-      })
-        .catch(this.noop);
+      }).catch(this.noop);
     } else {
       this.playStream();
     }
@@ -245,8 +309,7 @@ class Player {
       .setColor(colors.success);
     this._noticeMessage = await this._channel.send({
       embeds: [playingEmbed]
-    })
-      .catch(this.noop);
+    }).catch(this.noop);
   }
 }
 

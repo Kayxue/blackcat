@@ -16,7 +16,8 @@ const client = new Discord.Client({
   allowedMentions: {
     parse: ["users"],
     repliedUser: false
-  }
+  },
+  shards: "auto"
 });
 
 client.commands = new Discord.Collection();
@@ -32,6 +33,10 @@ for (let cmd of commandFiles) {
 client.on("ready", () => {
   log.info(`${client.user.username} 已上線`);
 });
+
+client.on("shardReady", (id) => {
+  log.info(`分片 ${id} 已上線`)
+})
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
