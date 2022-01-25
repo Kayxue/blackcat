@@ -1,4 +1,4 @@
-FROM node:14.16.1-slim
+FROM 16.13.2-slim
 
 WORKDIR /home
 COPY . .
