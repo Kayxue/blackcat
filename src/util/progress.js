@@ -3,12 +3,12 @@ module.exports = function(total, part) {
   let line = "─";
   let slider = "🔵";
   
-  if (current > total) {
+  if (part > total) {
     const bar = line.repeat(size + 1) + slider;
-    const percentage = (current / total) * 100;
+    const percentage = (part / total) * 100;
     return [bar, percentage];
   } else {
-    const percentage = current / total;
+    const percentage = part / total;
     const progress = Math.round((size * percentage));
     const emptyProgress = size - progress;
     const progressText = line.repeat(progress).replace(/.$/, slider);
