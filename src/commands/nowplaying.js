@@ -25,7 +25,7 @@ module.exports = {
       .setTitle("🎧 正在播放")
       .setDescription(
         `[${data.title}](${data.url})\n`+
-        `${progressbar[0]} \`${playtime}/${progressbar[1]}%\``)
+        `${progressbar[0]} \`${playtime}/${Math.round(progressbar[1])}%\``)
       .setColor(success);
     return event.channel.send({
       embeds: [nowEmbed]

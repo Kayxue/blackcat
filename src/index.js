@@ -45,8 +45,10 @@ client.on("messageCreate", (message) => {
   if (message.author.id !== "669194742218752070") return message.channel.send("❌ 你不是測試人員!");
   
   if (!message.content.startsWith(config.prefix)) return;
-  let args = message.content.split(" ");
-  let command = client.commands.get(args[0].replace(config.prefix, ""));
+  message.content.slice(config.prefix.length).trim().split(" ")
+  let command = 
+    client.commands.get(args[0].replace(config.prefix, "")) ||
+    client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0].replace(config.prefix, "")));
   if (!command) return;
 
   message.allowModify = allowModify(message.member);
