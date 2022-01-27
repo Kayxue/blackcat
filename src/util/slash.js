@@ -27,7 +27,7 @@ const slash = {
             commands,
         );
         loadSlash.succeed(
-            time + " " + chalk.red("斜綫指令") + " > " + `成功加載斜綫指令 (/)`,
+            time + " " + chalk.red("斜綫指令") + " > " + "成功加載斜綫指令 (/)",
         );
     },
 };
