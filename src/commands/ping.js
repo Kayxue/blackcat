@@ -1,22 +1,38 @@
-const { MessageEmbed } = require("discord.js");
-const { getSendingPlayer } = require("../audio/player.js");
+const {
+  MessageEmbed,
+  CommandInteraction
+} = require("discord.js");
+const {
+  getSendingPlayer
+} = require("../audio/PlayerManager.js");
+const {
+  SlashCommandBuilder
+} = require("@discordjs/builders");
 const colors = require("../color.json");
 
 module.exports = {
-  name: "ping",
-  run: function(event) {
+  data: new SlashCommandBuilder()
+    .setName("ping")
+    .setDescription("回傳機器人延遲"),
+  /**
+   * 
+   * @param {CommandInteraction} interaction 
+   * @param {*} event 
+   */
+  run: function (interaction, event) {
     let pingEmbed = new MessageEmbed()
       .setTitle("🏓 Ping!")
-      .addField("🔗 API", `**${Date.now() - event.createdTimestamp}** 毫秒`, true)
-      .addField("🌐 WebSocket", `**${event.client.ws.ping}** 毫秒`, true)
+      .addField("🔗 API", `**${Date.now() - interaction.createdTimestamp}** 毫秒`, true)
+      .addField("🌐 WebSocket", `**${interaction.client.ws.ping}** 毫秒`, true)
       .setColor(colors.success)
-    let player = getSendingPlayer(event.guild);
+      console.log()
+    let player = getSendingPlayer(interaction.guild.id);
     if (player) {
       pingEmbed.addField("🎶 音樂 - UDP", `**${player.ping.udp ?? "未知"}** 毫秒`)
       pingEmbed.addField("🎶 音樂 - WebSocket", `**${player.ping.ws ?? "未知"}** 毫秒`)
     }
-    event.channel.send({
+    interaction.reply({
       embeds: [pingEmbed]
-    }).catch(() => {});
+    }).catch(e => {});
   }
 }

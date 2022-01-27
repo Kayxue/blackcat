@@ -1,6 +1,9 @@
-const { GuildMember } = require("discord.js")
+const {
+    GuildMember
+} = require("discord.js")
 /**
  * 
  * @param {GuildMember} member 
  */
-module.exports = (member) => member.voice?.channel?.id === member.guild?.me.voice?.channel?.id;
+
+module.exports = (interaction) => interaction.member.voice?.channel?.id === interaction.member.guild?.me.voice?.channel?.id;

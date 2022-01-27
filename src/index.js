@@ -3,9 +3,12 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const fs = require("fs");
 
+const ora = require("ora");
 const log = require("./logger.js");
-const allowModify = require("./util/allowModify.js");
 const config = require("../config.js")();
+const chalk = require("chalk");
+
+log.info('正在啓動機器人客戶端');
 
 const client = new Discord.Client({
   intents: [
@@ -16,43 +19,31 @@ const client = new Discord.Client({
   allowedMentions: {
     parse: ["users"],
     repliedUser: false
-  },
-  shards: "auto"
+  }
 });
 
 client.commands = new Discord.Collection();
-client.players = new Discord.Collection();
+client.config = require("../config.js")
 client.logger = log;
 
 let commandFiles = fs.readdirSync(`./src/commands/`).filter(file => file.endsWith(".js"));
 for (let cmd of commandFiles) {
   let command = require(`./commands/${cmd}`);
-  client.commands.set(command.name, command);
+  client.commands.set(command.data.name, command);
 }
 
-client.on("ready", () => {
-  log.info(`${client.user.username} 已上線`);
-});
+// Read events
+const events = fs
+  .readdirSync("./src/events")
+  .filter((file) => file.endsWith(".js"));
 
-client.on("shardReady", (id) => {
-  log.info(`分片 ${id} 已上線`)
-})
-
-client.on("messageCreate", (message) => {
-  if (message.author.bot) return;
-  if (!message.guild) return message.channel.send("❌ 你必須把我加到一個伺服器裡!");
-  if (!message.channel) return message.channel.send("❌ 無法取得頻道!");
-  if (message.author.id !== "669194742218752070") return message.channel.send("❌ 你不是測試人員!");
-  
-  if (!message.content.startsWith(config.prefix)) return;
-  let args = message.content.split(" ");
-  let command = client.commands.get(args[0].replace(config.prefix, ""));
-  if (!command) return;
-
-  message.allowModify = allowModify(message.member);
-  
-  args.shift();
-  command.run(message, args);
+events.forEach((event) => {
+  const eventFile = require(`./events/${event}`);
+  if (eventFile.oneTime) {
+    client.once(eventFile.event, (...args) => eventFile.run(...args,client));
+  } else {
+    client.on(eventFile.event, (...args) => eventFile.run(...args,client));
+  }
 });
 
 client.login(config.token);
