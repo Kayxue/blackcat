@@ -18,7 +18,7 @@ module.exports = {
     event: "ready", // Name of the event
     oneTime: true, // If set to true the event will only be fired once until the client is restarted
     run: async (client) => {
-        const commands=client.commands.map(e => e.data.toJSON())
+        const commands=client.commands.map((e) => e.data.toJSON())
         await slash.register(client, commands);
 
         const username = chalk.blue(client.user.username)
