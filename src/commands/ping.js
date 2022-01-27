@@ -33,6 +33,6 @@ module.exports = {
     }
     interaction.reply({
       embeds: [pingEmbed]
-    }).catch(e => {});
+    }).catch((e) => {});
   }
 }
