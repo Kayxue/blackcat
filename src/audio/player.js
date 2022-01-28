@@ -112,7 +112,7 @@ class Player {
         });
         rawData = await play.video_info(result[0]?.url);
         if (!rawData) {
-          return this._channel.send("Nothing found")
+          return this._channel.send("Nothing found");
         }
         rawData.full = false;
       } catch (e) {
@@ -145,7 +145,7 @@ class Player {
           thumbnail: video.thumbnails.pop().url,
           rawData: video
         });
-      })
+      });
     }
     if (!isPlaylist) parsedData = [{
       title: rawData.video_details.title,

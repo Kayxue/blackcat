@@ -35,8 +35,8 @@ client.on("ready", () => {
 });
 
 client.on("shardReady", (id) => {
-  log.info(`分片 ${id} 已上線`)
-})
+  log.info(`分片 ${id} 已上線`);
+});
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
@@ -45,7 +45,7 @@ client.on("messageCreate", (message) => {
   if (message.author.id !== "669194742218752070") return message.channel.send("❌ 你不是測試人員!");
   
   if (!message.content.startsWith(config.prefix)) return;
-  message.content.slice(config.prefix.length).trim().split(" ")
+  message.content.slice(config.prefix.length).trim().split(" ");
   let command = 
     client.commands.get(args[0].replace(config.prefix, "")) ||
     client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0].replace(config.prefix, "")));

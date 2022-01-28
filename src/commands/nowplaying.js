@@ -17,7 +17,7 @@ module.exports = {
     let progressbar = progress(data.duraction, player.playTime);
     let playtime = new Date(player.playTime * 1000).toISOString();
     
-    if (player.playTime <= 0) playtime = "直播"
+    if (player.playTime <= 0) playtime = "直播";
     else if (player.playTime < 3600) playtime = playtime.substr(14, 5);
     else playtime = playtime.substr(11, 8);
     
@@ -32,4 +32,4 @@ module.exports = {
       embeds: [nowEmbed]
     });
   }
-}
+};
