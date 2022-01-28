@@ -24,7 +24,7 @@
   "homepage": "https://github.com/blackcatbot/blackcat#readme",
   "dependencies": {
     "@discordjs/opus": "^0.7.0",
-    "@discordjs/voice": "^0.7.5",
+    "@discordjs/voice": "^0.8.0",
     "bufferutil": "^4.0.6",
     "chalk": "^4.1.2",
     "discord.js": "^13.6.0",
