@@ -1,4 +1,4 @@
-const { GuildMember } = require("discord.js")
+const { GuildMember } = require("discord.js");
 /**
  * 
  * @param {GuildMember} member 

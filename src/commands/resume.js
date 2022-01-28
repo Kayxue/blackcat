@@ -1,4 +1,4 @@
-const Player = require("../audio/player.js")
+const Player = require("../audio/player.js");
 
 module.exports = {
   name: "resume",
@@ -12,4 +12,4 @@ module.exports = {
     }
     player.unpause();
   }
-}
+};

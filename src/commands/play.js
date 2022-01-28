@@ -1,4 +1,4 @@
-const Player = require("../audio/player.js")
+const Player = require("../audio/player.js");
 
 module.exports = {
   name: "play",
@@ -15,4 +15,4 @@ module.exports = {
     }
     player.play(args.join(" "));
   }
-}
+};

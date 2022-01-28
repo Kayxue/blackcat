@@ -28,7 +28,7 @@ module.exports = function () {
     // 是否要啟用網頁伺服器
     apiPort: process.env.PORT || 8080,
     // API伺服器監聽端口
-  }
+  };
 
 
 
@@ -78,4 +78,4 @@ module.exports = function () {
     log.info("成功讀取設定");
     return config;
   }
-}
+};

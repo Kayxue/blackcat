@@ -27,4 +27,4 @@ module.exports = {
     console.error(time+" "+chalk.red("錯誤")+" "+msg);
     if (stack) console.trace();
   }
-}
+};
