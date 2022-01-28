@@ -116,16 +116,14 @@ class Player {
         }
         rawData.full = false;
       } catch (e) {
-        this._channel.send(e.message);
-        log.error(e.message);
+        return this.handelYoutubeError(e);
       }
     } else if (play.yt_validate(track) === "video") {
       try {
         rawData = await play.video_info(track);
         rawData.full = true;
       } catch (e) {
-        this._channel.send(e.message);
-        log.error(e.message);
+        return this.handelPlaying(e);
       }
     } else {
       let videos;
@@ -134,8 +132,7 @@ class Player {
         let playlist = await play.playlist_info(track);
         videos = await playlist.all_videos();
       } catch (e) {
-        this._channel.send(e.message);
-        log.error(e.message);
+        return this.handelYoutubeError(e);
       }
       parsedData = [];
       videos.forEach((video) => {
@@ -286,13 +283,40 @@ class Player {
     return this._songs;
   }
   
+  handelYoutubeError(error) {
+    if (e.message.includes("confirm your age")) {
+      let invaildEmbed = new Discord.MessageEmbed()
+        .setTitle(`😱 我沒辦法取得你想播放的音樂，因為需要登入帳號`)
+        .setColor(colors.danger);
+      return this._channel.send({
+        embeds: [invaildEmbed]
+      });
+    } else if (e.message.includes("429")) {
+      let limitEmbed = new Discord.MessageEmbed()
+        .setTitle(`😱 現在無法取得這個音樂，請稍後再試`)
+        .setColor(colors.danger);
+      return this._channel.send({
+        embeds: [limitEmbed]
+      });
+    } else if (e.message.includes("private")) {
+      let privateEmbed = new Discord.MessageEmbed()
+        .setTitle(`😱 這是私人影片`)
+        .setColor(colors.danger);
+      return this._channel.send({
+        embeds: [limitEmbed]
+      });
+    }
+    log.error(e.message);
+  }
+  
   handelIdle() {
     this._noticeMessage?.delete().catch(this.noop);
     
     this._songs.shift();
     if (this._songs.length <= 0) {
       let endEmbed = new Discord.MessageEmbed()
-        .setTitle("👌 序列裡的歌曲播放完畢");
+        .setTitle("👌 序列裡的歌曲播放完畢")
+        .setColor(colors.success);
       this._channel.send({
         embeds: [endEmbed]
       }).catch(this.noop);
@@ -303,8 +327,7 @@ class Player {
   
   async handelPlaying() {
     let playingEmbed = new Discord.MessageEmbed()
-      .setTitle(`🎵 目前正在播放 ${this._audio.metadata.title}`)
-      .setURL(this._audio.metadata.url)
+      .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
     this._noticeMessage = await this._channel.send({

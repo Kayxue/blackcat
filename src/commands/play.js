@@ -3,8 +3,6 @@ const Player = require("../audio/player.js")
 module.exports = {
   name: "play",
   run: function(event, args) {
-    let url = args[0];
-    
     if (!event.member.voice.channel) return event.channel.send("❓ 你必須加入一個語音頻道");
     
     let player;
@@ -15,6 +13,6 @@ module.exports = {
       player = Player.getSendingPlayer(event.guild);
       if (!event.allowModify) return event.channel.send("❌ 你必須加入一個語音頻道");
     }
-    player.play(url);
+    player.play(args.join(" "));
   }
 }

@@ -26,6 +26,7 @@ module.exports = {
       .setDescription(
         `[${data.title}](${data.url})\n`+
         `${progressbar[0]} \`${playtime}/${Math.round(progressbar[1])}%\``)
+      .setThumbnail(data.thumbnail)
       .setColor(success);
     return event.channel.send({
       embeds: [nowEmbed]
