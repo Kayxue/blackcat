@@ -9,7 +9,8 @@
     "yarn": "<=1.22.17"
   },
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "setup:commit": "pip install -U commitizen"
   },
   "repository": {
     "type": "git",
@@ -33,5 +34,8 @@
     "play-dl": "^1.8.1",
     "utf-8-validate": "^5.0.8",
     "zlib-sync": "^0.1.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.7.0"
   }
 }
