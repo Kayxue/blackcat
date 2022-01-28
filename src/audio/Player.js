@@ -13,13 +13,13 @@ const colors = require("../color.json");
 
 class Player {
   /**
-   * @param {Discord.Message} event 
+   * @param {Discord.CommandInteraction} event 
    * @param {Discord.Guild} guild 
    * @param {Discord.VoiceChannel} voice 
    */
-  constructor(event, guild, voice) {
-    this._client = event.client;
-    this._channel = event.channel;
+  constructor(interaction, guild, voice) {
+    this._client = interaction.client;
+    this._channel = interaction.channel;
     this._guild = guild;
     this._guildId = guild.id;
     this._voiceChannel = voice;
@@ -28,6 +28,7 @@ class Player {
     this._init = false;
     this._noticeMessage = null;
     this._nowplaying = null;
+    this.interactionReplied = false;
     this._songs = [];
   }
 
@@ -39,7 +40,7 @@ class Player {
   init() {
     if (this._init) return;
     try {
-        this._connection = joinVoiceChannel({
+      this._connection = joinVoiceChannel({
         guildId: this._guildId,
         channelId: this._channelId,
         adapterCreator: this._guild.voiceAdapterCreator
@@ -64,7 +65,7 @@ class Player {
     this._connection.on(VoiceConnectionStatus.Ready, () => {
       log.info(`${this._guildId}:${this._channelId} 已進入預備狀態`);
     });
-    this._connection.on(VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
+    this._connection.on(VoiceConnectionStatus.Disconnected, async () => {
       log.warn(`${this._guildId}:${this._channelId} 語音斷開連結`);
       try {
         await Promise.race([
@@ -95,13 +96,13 @@ class Player {
     this._client.players.set(this._guildId, this);
   }
   
-  async play(track) {
+  async play(track, interaction) {
     let rawData, parsedData, isPlaylist = false;
     
     let searchEmbed = new Discord.MessageEmbed()
       .setTitle(`🔍 正在搜尋 **${track}**`)
       .setColor(colors.success);
-    let sent = this._channel.send({
+    interaction.reply({
       embeds: [searchEmbed]
     }).catch(this.noop);
     
@@ -123,7 +124,7 @@ class Player {
         rawData = await play.video_info(track);
         rawData.full = true;
       } catch (e) {
-        return this.handelPlaying(e);
+        return this.handelYoutubeError(e);
       }
     } else {
       let videos;
@@ -161,6 +162,13 @@ class Player {
       this.playStream();
     } else {
       this._songs.push(...parsedData);
+      let addedEmbed = new Discord.MessageEmbed()
+        .setTitle("✅ 已加入播放清單")
+        .setDescription(`播放清單內有 ${this._songs.length} 首歌曲`)
+        .setColor(colors.success);
+      interaction.editReply({
+        embeds: [addedEmbed]
+      });
     }
 
     this._player.once(AudioPlayerStatus.Playing, () => {
@@ -169,40 +177,40 @@ class Player {
     });
   }
 
-  skip() {
+  skip(interaction) {
     this._songs.shift();
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
-    this._channel.send({
+    this._player.stop();
+    interaction.reply({
       embeds: [skipEmbed]
     }).catch(this.noop);
-    this._player.stop();
   }
 
-  pause() {
-    this._player.pause();
+  pause(interaction) {
     let pauseEmbed = new Discord.MessageEmbed()
       .setTitle("⏸️ 暫停音樂")
       .setColor(colors.success);
-    this._channel.send({
+    this._player.pause();
+    interaction.reply({
       embeds: [pauseEmbed]
     }).catch(this.noop);
   }
 
-  unpause() {
-    this._player.unpause();
+  unpause(interaction) {
     let unpauseEmbed = new Discord.MessageEmbed()
       .setTitle("▶️ 繼續播放音樂")
       .setColor(colors.success);
-    this._channel.send({
+    this._player.unpause();
+    interaction.reply({
       embeds: [unpauseEmbed]
     }).catch(this.noop);
   }
   
-  shuffle() {
+  shuffle(interaction) {
     let shuffled = [].concat(this._songs);
-    let currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = this._songs.length, temporaryValue, randomIndex;
     
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -213,13 +221,13 @@ class Player {
       shuffled[randomIndex] = temporaryValue;
     }
     
-    let unpauseEmbed = new Discord.MessageEmbed()
+    let shuffleEmbed = new Discord.MessageEmbed()
       .setTitle("🔀 重新排序音樂")
       .setColor(colors.success);
-    this._channel.send({
-      embeds: [unpauseEmbed]
-    }).catch(this.noop);
     this.songs = shuffled;
+    interaction.reply({
+      embeds: [shuffleEmbed]
+    }).catch(this.noop);
   }
   
   async playStream() {
@@ -283,27 +291,27 @@ class Player {
     return this._songs;
   }
   
-  handelYoutubeError(error) {
+  handelYoutubeError(e) {
     if (e.message.includes("confirm your age")) {
       let invaildEmbed = new Discord.MessageEmbed()
-        .setTitle(`😱 我沒辦法取得你想播放的音樂，因為需要登入帳號`)
+        .setTitle("😱 我沒辦法取得你想播放的音樂，因為需要登入帳號")
         .setColor(colors.danger);
       return this._channel.send({
         embeds: [invaildEmbed]
       });
     } else if (e.message.includes("429")) {
       let limitEmbed = new Discord.MessageEmbed()
-        .setTitle(`😱 現在無法取得這個音樂，請稍後再試`)
+        .setTitle("😱 現在無法取得這個音樂，請稍後再試")
         .setColor(colors.danger);
       return this._channel.send({
         embeds: [limitEmbed]
       });
     } else if (e.message.includes("private")) {
       let privateEmbed = new Discord.MessageEmbed()
-        .setTitle(`😱 這是私人影片`)
+        .setTitle("😱 這是私人影片")
         .setColor(colors.danger);
       return this._channel.send({
-        embeds: [limitEmbed]
+        embeds: [privateEmbed]
       });
     }
     log.error(e.message);
