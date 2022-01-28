@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "setup:commit": "pip install -U commitizen"
+    "commit": "cz c",
+    "commit:setup": "pip install -U commitizen"
   },
   "repository": {
     "type": "git",
