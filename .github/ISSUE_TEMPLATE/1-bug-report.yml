@@ -9,7 +9,7 @@ body:
       placeholder: 現在機器人...
     validations:
       required: true
-      
+  
   - type: textarea
     id: desired-behavior
     attributes:
