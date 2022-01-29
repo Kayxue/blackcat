@@ -1,17 +1,27 @@
-const { MessageEmbed } = require("discord.js");
-const Player = require("../audio/player.js");
+const PlayerManager = require("../audio/PlayerManager.js");
 const progress = require("../util/progress.js");
-const { success } = require("../color.json");
+const allowModify = require("../util/allowModify.js");
+const {
+  SlashCommandBuilder
+} = require("@discordjs/builders");
+const {
+  MessageEmbed
+} = require("discord.js");
+const {
+  success
+} = require("../color.json");
 
 module.exports = {
-  name: "nowplaying",
-  run: function(event) {
+  data: new SlashCommandBuilder()
+    .setName("nowplaying")
+    .setDescription("暫停歌曲"),
+  run: function(interaction) {
     let player;
-    if (!Player.getSendingPlayer(event.guild)) {
+    if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
       return event.channel.send("❌ 必須要有音樂正在播放");
     } else {
-      player = Player.getSendingPlayer(event.guild);
-      if (!event.allowModify) return event.channel.send("❌ 你必須加入一個語音頻道");
+      player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
+      if (!allowModify(interaction)) return event.channel.send("❌ 你必須跟我在同一個語音頻道");
     }
     let data = player.nowplaying;
     let progressbar = progress(data.duraction, player.playTime);

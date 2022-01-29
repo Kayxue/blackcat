@@ -8,6 +8,7 @@ const {
 } = require("@discordjs/voice");
 const Discord = require("discord.js");
 const play = require("play-dl");
+const PlayerManager = require("./PlayerManager.js")
 const log = require("../logger.js");
 const colors = require("../color.json");
 
@@ -31,10 +32,7 @@ class Player {
     this.interactionReplied = false;
     this._songs = [];
   }
-
-  static getSendingPlayer(guild) {
-    return guild.client.players.get(guild.id);
-  }
+  
   noop() {}
 
   init() {
@@ -328,6 +326,7 @@ class Player {
       this._channel.send({
         embeds: [endEmbed]
       }).catch(this.noop);
+      PlayerManager.deleteSendingPlayer(this._client, this._guildId);
     } else {
       this.playStream();
     }

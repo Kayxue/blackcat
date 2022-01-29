@@ -29,29 +29,9 @@ module.exports = function () {
     apiPort: process.env.PORT || 8080,
     // API伺服器監聽端口
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
   // 請勿修改
+  // Do not modify
   let log = require("./src/logger.js");
   let invaild = false;
   if (typeof config.token !== "string") {
