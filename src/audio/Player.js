@@ -8,7 +8,7 @@ const {
 } = require("@discordjs/voice");
 const Discord = require("discord.js");
 const play = require("play-dl");
-const PlayerManager = require("./PlayerManager.js")
+const PlayerManager = require("./PlayerManager.js");
 const log = require("../logger.js");
 const colors = require("../color.json");
 
