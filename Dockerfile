@@ -1,4 +1,4 @@
-FROM node:lts-bullseye-slim
+FROM node:lts-bullseye
 
 RUN apt update && apt upgrade -y && \
   apt install python3 gcc make -y && \
