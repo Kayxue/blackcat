@@ -10,7 +10,7 @@ module.exports = {
     .setDescription("播放音樂")
     .addStringOption((option) =>
       option
-        .setName("songName")
+        .setName("songname")
         .setDescription("YouTube歌曲名稱或連結")
         .setRequired(true)
     ),
@@ -21,10 +21,10 @@ module.exports = {
     
     const permissionBot = interaction.member.voice?.channel.permissionsFor(interaction.guild.me);
     if (!permissionBot.has("CONNECT") || !permissionBot.has("SPEAK"))
-      return interaction.reply("❌ 我無法連線至語音頻道！")
+      return interaction.reply("❌ 我無法連線至語音頻道!")
         .catch(() => {});
     
-    const url = interaction.options.getString("songName");
+    const url = interaction.options.getString("songname");
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
       player = PlayerManager.createSendingPlayer(interaction);
@@ -36,7 +36,7 @@ module.exports = {
           .catch(() => {});
     }
     await interaction.deferReply()
-      .catch(() => {})
+      .catch(() => {});
     player.play(url, interaction);
   },
 };

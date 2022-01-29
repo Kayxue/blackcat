@@ -4,7 +4,6 @@ const Discord = require("discord.js");
 const fs = require("fs");
 
 const log = require("./logger.js");
-const allowModify = require("./util/allowModify.js");
 const config = require("../config.js")();
 
 const client = new Discord.Client({
@@ -51,15 +50,3 @@ client.on("shardReady", (id) => {
 
 
 client.login(config.token);
-
-/**
- * HTTP
- */
-if (config.enableApi) {
-  let routeFiles = fs.readdirSync('./routes').filter(file => file.endsWith('.js'));
-  for (let file of routeFiles) {
-    let route = require(`./src/routes/${file}`);
-    route(http);
-  }
-  http.listen(config.apiPort);
-}

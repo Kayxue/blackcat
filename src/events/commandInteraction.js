@@ -16,7 +16,7 @@ module.exports = {
     if (!command) {
       let notfoundEmbed = new MessageEmbed()
         .setTitle(`🤔 找不到名為${interaction.commandName}的指令`)
-        .setColor(danger)
+        .setColor(danger);
       return interaction.reply({
         embeds: [notfoundEmbed]
       }).catch(() => {});
@@ -34,6 +34,17 @@ module.exports = {
         .addField("🗨️ 指令內容", interaction.commandName)
         .setTimestamp()
         .setColor(danger);
+      if (interaction.replied) {
+        interaction.channel.send({
+          embeds: [errorEmbed]
+        }).catch(() => {});
+      } else {
+        interaction.reply({
+          embeds: [errorEmbed]
+        }).catch(() => {});
+      }
+
+      log.error(error.message);
     }
   },
 };

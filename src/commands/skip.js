@@ -1,15 +1,25 @@
-const Player = require("../audio/player.js");
+const PlayerManager = require("../audio/PlayerManager.js");
+const allowModify = require("../util/allowModify.js");
+const {
+  SlashCommandBuilder
+} = require("@discordjs/builders");
 
 module.exports = {
-  name: "skip",
-  run: function(event) {
+  data: new SlashCommandBuilder().setName("skip").setDescription("跳過歌曲"),
+  /**
+     *
+     * @param {CommandInteraction} interaction
+     * @returns
+     */
+  run: function (interaction) {
     let player;
-    if (!Player.getSendingPlayer(event.guild)) {
-      return event.channel.send("❌ 必須要有音樂正在播放");
+    if (!PlayerManager.getSendingPlayer(interaction.guild.id)) {
+      return interaction.reply("❌ 必須要有音樂正在播放");
     } else {
-      player = Player.getSendingPlayer(event.guild);
-      if (!event.allowModify) return event.channel.send("❌ 你必須加入一個語音頻道");
+      player = PlayerManager.getSendingPlayer(interaction.guild.id);
+      if (!allowModify(interaction))
+        return interaction.reply("❌ 你必須加入一個語音頻道");
     }
-    player.skip();
-  }
+    player.skip(interaction);
+  },
 };

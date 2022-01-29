@@ -18,10 +18,12 @@ module.exports = {
   run: function(interaction) {
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
-      return event.channel.send("❌ 必須要有音樂正在播放");
+      return interaction.reply("❌ 必須要有音樂正在播放")
+        .catch(() => {});
     } else {
       player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
-      if (!allowModify(interaction)) return event.channel.send("❌ 你必須跟我在同一個語音頻道");
+      if (!allowModify(interaction)) return interaction.reply("❌ 你必須跟我在同一個語音頻道")
+        .catch(() => {});
     }
     let data = player.nowplaying;
     let progressbar = progress(data.duraction, player.playTime);
@@ -38,8 +40,9 @@ module.exports = {
         `${progressbar[0]} \`${playtime}/${Math.round(progressbar[1])}%\``)
       .setThumbnail(data.thumbnail)
       .setColor(success);
-    return event.channel.send({
+    return interaction.reply({
       embeds: [nowEmbed]
-    });
+    })
+      .catch(() => {});
   }
 };

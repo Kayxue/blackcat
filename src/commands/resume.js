@@ -1,15 +1,24 @@
-const Player = require("../audio/player.js");
+const Player = require("../audio/PlayerManager.js");
+const allowModify = require("../util/allowModify.js");
+const {
+  SlashCommandBuilder
+} = require("@discordjs/builders");
 
 module.exports = {
-  name: "resume",
-  run: function(event) {
+  data: new SlashCommandBuilder()
+    .setName("resume")
+    .setDescription("重新開始歌曲"),
+
+  run: function (interaction) {
     let player;
-    if (!Player.getSendingPlayer(event.guild)) {
-      return event.channel.send("❌ 必須要有音樂正在播放");
+    console.log(interaction);
+    if (!Player.getSendingPlayer(interaction.guild.id)) {
+      return interaction.reply("❌ 必須要有音樂正在播放");
     } else {
-      player = Player.getSendingPlayer(event.guild);
-      if (!event.allowModify) return event.channel.send("❌ 你必須加入一個語音頻道");
+      player = Player.getSendingPlayer(interaction.guild.id);
+      if (!allowModify(interaction))
+        return interaction.reply("❌ 你必須加入一個語音頻道");
     }
-    player.unpause();
-  }
+    player.unpause(interaction);
+  },
 };
