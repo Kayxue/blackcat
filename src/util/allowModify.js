@@ -1,4 +1,3 @@
-const { GuildMember } = require("discord.js");
 /**
  * 
  * @param {GuildMember} member 
