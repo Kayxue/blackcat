@@ -3,7 +3,8 @@ FROM node:lts-alpine
 # Install node-gyp required deps
 RUN apk -U upgrade && \
   apk add python3 make gcc g++ && \
-  adduser -m -u 1100 -U catrunner
+  addgroup -S catrunner && \
+  adduser -S catrunner -G catrunner
 
 # Copy project
 COPY --chown=catrunner:catrunner . /home/catrunner/
