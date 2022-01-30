@@ -100,7 +100,7 @@ class Player {
     let searchEmbed = new Discord.MessageEmbed()
       .setTitle(`🔍 正在搜尋 **${track}**`)
       .setColor(colors.success);
-    interaction.reply({
+    interaction.editReply({
       embeds: [searchEmbed]
     }).catch(this.noop);
     
