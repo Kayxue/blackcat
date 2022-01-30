@@ -16,7 +16,7 @@ RUN npm install && npm install pm2
 
 # Remove node-gyp required deps
 USER root
-RUN apk del python make gcc g++ && \
+RUN apk del python3 make gcc g++ && \
   rm -rf /var/cache/apk/*
 USER catrunner
 
