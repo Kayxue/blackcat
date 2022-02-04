@@ -21,10 +21,16 @@ module.exports = {
   /**
    * 錯誤
    * @param {String} msg 訊息
-   * @param {Boolean} stack Stack trace
+   * @param {Error} stack Stack trace
    */
-  error: function(msg, stack=true) {
+  error: function(msg, error) {
     console.error(time+" "+chalk.red("錯誤")+" "+msg);
-    if (stack) console.trace();
+    if (error) {
+      let spilted = error.stack.split("\n"), prefixed = [];
+      for (let line of spilted) {
+        prefixed.push(time+" "+chalk.yellow("偵錯")+" "+line);
+      }
+      console.error(prefixed.join("\n"));
+    }
   }
 };
