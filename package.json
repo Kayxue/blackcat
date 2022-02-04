@@ -33,7 +33,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "libsodium-wrappers": "^0.7.9",
-    "play-dl": "^1.8.5",
+    "play-dl": "^1.8.6",
     "utf-8-validate": "^5.0.8",
     "zlib-sync": "^0.1.7"
   },
