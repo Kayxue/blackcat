@@ -8,7 +8,7 @@ module.exports = {
   run: async (_client, interaction) => {
     if (!interaction.isCommand()) return;
 
-    if (interaction.user.id !== "669194742218752070") return interaction.reply("📝 新版黑貓程式還在開發，現在只有開發者可以使用");
+    if (interaction.user.id !== "669194742218752070") return interaction.reply("📝 新版黑貓程式還在開發, 現在只有開發者可以使用");
     
     if (interaction.member.bot) return interaction.reply("🤖 請完成\"我不是機器人\"驗證");
     if (!interaction.guild) return interaction.reply("❌ 你必須把我加到一個伺服器裡!");
@@ -46,7 +46,7 @@ module.exports = {
         }).catch(() => {});
       }
 
-      log.error(error.message);
+      log.error(error.message, error);
     }
   },
 };
