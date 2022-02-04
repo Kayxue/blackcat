@@ -8,7 +8,6 @@ const {
 } = require("@discordjs/voice");
 const Discord = require("discord.js");
 const play = require("play-dl");
-const PlayerManager = require("./PlayerManager.js");
 const log = require("../logger.js");
 const colors = require("../color.json");
 
@@ -44,7 +43,7 @@ class Player {
         adapterCreator: this._guild.voiceAdapterCreator
       });
     } catch (e) {
-      log.error(e.message);
+      log.error(e.message, e);
       let errorEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 加入語音頻道時發生錯誤")
         .setDescription(
@@ -222,9 +221,20 @@ class Player {
     let shuffleEmbed = new Discord.MessageEmbed()
       .setTitle("🔀 重新排序音樂")
       .setColor(colors.success);
-    this.songs = shuffled;
+    this._songs = shuffled;
     interaction.reply({
       embeds: [shuffleEmbed]
+    }).catch(this.noop);
+  }
+
+  stop (interaction) {
+    let stopEmbed = new Discord.MessageEmbed()
+      .setTitle("⏹️ 停止播放音樂")
+      .setColor(colors.success);
+    this._songs = [];
+    this._player.stop();
+    interaction.reply({
+      embeds: [stopEmbed]
     }).catch(this.noop);
   }
   
@@ -234,7 +244,7 @@ class Player {
         this._songs[0].rawData = await play.video_info(this._songs[0].url);
         this._songs[0].rawData.full = true;
       } catch (e) {
-        log.error(e.message);
+        log.error(e.message, e);
         let errorEmbed = new Discord.MessageEmbed()
           .setTitle("🙁 載入音樂時發生錯誤")
           .setDescription(
@@ -253,7 +263,7 @@ class Player {
     try {
       stream = await play.stream(this._songs[0].url);
     } catch (e) {
-      log.error(e.message);
+      log.error(e.message, e);
       let errorEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 載入音樂時發生錯誤")
         .setDescription(
@@ -312,7 +322,7 @@ class Player {
         embeds: [privateEmbed]
       });
     }
-    log.error(e.message);
+    log.error(e.message, e);
   }
   
   handelIdle() {
@@ -326,7 +336,7 @@ class Player {
       this._channel.send({
         embeds: [endEmbed]
       }).catch(this.noop);
-      PlayerManager.deleteSendingPlayer(this._client, this._guildId);
+      this._client.players.delete(this._guildId);
     } else {
       this.playStream();
     }
