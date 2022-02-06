@@ -1,4 +1,4 @@
-name: '關閉沒人回應的請求'
+name: Close stale issues and PR
 on:
   schedule:
     - cron: '30 1 * * *'
