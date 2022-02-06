@@ -9,7 +9,7 @@ COPY --chown=catrunner:catrunner . /home/catrunner/
 WORKDIR /home/catrunner/
 
 USER catrunner
-RUN npm install && npm install pm2
+RUN yarn && npm i pm2 -g
 
 USER root
 RUN apk del python3 make gcc g++ git libtool autoconf automake && \
