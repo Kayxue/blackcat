@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 RUN apk -U upgrade && \
-  apk add python3 make gcc g++ libtool autoconf automake && \
+  apk add python3 make gcc g++ git libtool autoconf automake && \
   addgroup -S catrunner && \
   adduser -S catrunner -G catrunner
 
@@ -12,7 +12,7 @@ USER catrunner
 RUN npm install && npm install pm2
 
 USER root
-RUN apk del python3 make gcc g++ && \
+RUN apk del python3 make gcc g++ git libtool autoconf automake && \
   rm -rf /var/cache/apk/*
 USER catrunner
 
