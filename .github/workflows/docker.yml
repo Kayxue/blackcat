@@ -27,5 +27,5 @@ jobs:
           platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
           tags: ${{ secrets.DOCKER_USERNAME }}/blackcat:latest
           push: true
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/blackcat:action-cache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/blackcat:action-cache,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
