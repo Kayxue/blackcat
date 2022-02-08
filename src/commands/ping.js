@@ -13,10 +13,6 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("查看機器人訊息及語音延遲"),
-  /**
-   * 
-   * @param {CommandInteraction} interaction
-   */
   run: function (interaction) {
     let pingEmbed = new MessageEmbed()
       .setTitle("🏓 Ping!")

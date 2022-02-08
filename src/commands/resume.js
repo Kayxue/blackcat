@@ -8,7 +8,6 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("resume")
     .setDescription("重新開始歌曲"),
-
   run: function (interaction) {
     let player;
     console.log(interaction);

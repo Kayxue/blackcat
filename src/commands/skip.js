@@ -6,11 +6,6 @@ const {
 
 module.exports = {
   data: new SlashCommandBuilder().setName("skip").setDescription("跳過歌曲"),
-  /**
-     *
-     * @param {CommandInteraction} interaction
-     * @returns
-     */
   run: function (interaction) {
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.guild.id)) {
