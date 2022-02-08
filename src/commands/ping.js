@@ -2,12 +2,14 @@ const {
   MessageEmbed
 } = require("discord.js");
 const {
+  SlashCommandBuilder
+} = require("@discordjs/builders");
+const {
   getSendingPlayer
 } = require("../audio/PlayerManager.js");
 const {
-  SlashCommandBuilder
-} = require("@discordjs/builders");
-const colors = require("../color.json");
+  success
+} = require("../color.json");
 
 module.exports = {
   data: new SlashCommandBuilder()

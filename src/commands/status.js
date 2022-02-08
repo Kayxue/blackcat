@@ -2,12 +2,11 @@ const {
   MessageEmbed
 } = require("discord.js");
 const {
-  getSendingPlayer
-} = require("../audio/PlayerManager.js");
-const {
   SlashCommandBuilder
 } = require("@discordjs/builders");
-const colors = require("../color.json");
+const {
+  success
+} = require("../color.json");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -28,7 +27,7 @@ module.exports = {
       .addField("🕒 上線時間", `**${days}:${hours}:${minutes}:${seconds}**`, true)
       .addField("📒 程式版本", `Node.js:**${process.version.replace("v", "")}** Discord.js:**${require("discord.js/package.json").version} play-dl:${require("play-dl/package.json").version}`, true)
       .addField("👥 伺服器數量", `**${interaction.client.guilds.cache.size}** 個伺服器`, true)
-      .setColor(colors.success);
+      .setColor(success);
     interaction.reply({
       embeds: [statusEmbed]
     }).catch(() => {});
