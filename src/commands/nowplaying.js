@@ -8,7 +8,7 @@ const {
   MessageEmbed
 } = require("discord.js");
 const {
-  success
+  blurple
 } = require("../color.json");
 
 module.exports = {
@@ -39,7 +39,7 @@ module.exports = {
         `[${data.title}](${data.url})\n`+
         `${progressbar[0]} \`${playtime}/${Math.round(progressbar[1])}%\``)
       .setThumbnail(data.thumbnail)
-      .setColor(success);
+      .setColor(blurple);
     return interaction.reply({
       embeds: [nowEmbed]
     })

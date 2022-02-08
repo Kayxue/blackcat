@@ -8,7 +8,7 @@ const {
   getSendingPlayer
 } = require("../audio/PlayerManager.js");
 const {
-  success
+  blurple
 } = require("../color.json");
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
       .setTitle("🏓 Ping!")
       .addField("🔗 API", `**${Date.now() - interaction.createdTimestamp}** 毫秒`, true)
       .addField("🌐 WebSocket", `**${interaction.client.ws.ping}** 毫秒`, true)
-      .setColor(colors.success);
+      .setColor(blurple);
     let player = getSendingPlayer(interaction.client, interaction.guild.id);
     if (player) {
       pingEmbed.addField("🎶 音樂 - UDP", `**${player.ping.udp ?? "未知"}** 毫秒`);
