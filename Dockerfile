@@ -9,7 +9,7 @@ COPY --chown=catrunner:catrunner . /home/catrunner/
 WORKDIR /home/catrunner/
 
 USER catrunner
-RUN yarn && yarn add pm2
+RUN yarn install --production && yarn add pm2
 
 USER root
 RUN apk del python3 make gcc g++ git libtool autoconf automake && \
