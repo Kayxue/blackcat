@@ -26,7 +26,7 @@ module.exports = {
     let statusEmbed = new MessageEmbed()
       .setTitle("❓ 機器人狀態")
       .addField("🕒 上線時間", `**${days}:${hours}:${minutes}:${seconds}**`, true)
-      .addField("📒 程式版本", `Node.js:**${process.version}** Discord.js:**${require("discord.js/package.json").version} play-dl:${require("play-dl/package.json").version}`, true)
+      .addField("📒 程式版本", `Node.js:**${process.version.replace("v", "")}** Discord.js:**${require("discord.js/package.json").version} play-dl:${require("play-dl/package.json").version}`, true)
       .addField("👥 伺服器數量", `**${interaction.client.guilds.cache.size}** 個伺服器`, true)
       .setColor(colors.success);
     interaction.reply({
