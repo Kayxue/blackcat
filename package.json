@@ -32,7 +32,7 @@
     "dotenv": "^16.0.0",
     "erlpack": "git+https://github.com/discord/erlpack#master",
     "libsodium-wrappers": "^0.7.9",
-    "play-dl": "^1.8.6",
+    "play-dl": "^1.8.7",
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
