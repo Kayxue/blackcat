@@ -9,9 +9,11 @@ function createSendingPlayer(interaction) {
   return player;
 }
 
-export const getSendingPlayer = getSendingPlayer
-export const createSendingPlayer = createSendingPlayer
+export {
+  getSendingPlayer,
+  createSendingPlayer
+}
 export default {
   getSendingPlayer,
   createSendingPlayer
-};
+}

@@ -23,9 +23,11 @@ function error(msg, error) {
   }
 }
 
-export const info = info
-export const warn = warn
-export const error = error
+export {
+  info,
+  warn,
+  error
+}
 export default {
   info,
   warn,
