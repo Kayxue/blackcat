@@ -175,7 +175,6 @@ class Player {
   }
 
   skip(interaction) {
-    this._songs.shift();
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
@@ -329,7 +328,8 @@ class Player {
     this._noticeMessage?.delete().catch(this.noop);
     
     this._songs.shift();
-    if (this._songs.length <= 0) {
+    console.log(this._songs);
+    if (this._songs.length === 0) {
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
         .setColor(colors.success);
