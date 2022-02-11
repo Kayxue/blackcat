@@ -1,10 +1,15 @@
-export const danger = "#EF4444"
-export const warning = "#EAB308"
-export const success = "#3B82F6"
-export const blurple = "#5865F2"
+const danger = "#EF4444"
+const warning = "#EAB308"
+const success = "#3B82F6"
+const blurple = "#5865F2"
+
+export const danger = danger
+export const warning = warning
+export const success = success
+export const blurple = blurple
 export default {
-  "danger": "#EF4444",
-  "warning": "#EAB308",
-  "success": "#3B82F6",
-  "blurple": "#5865F2"
+  danger,
+  warning,
+  success,
+  blurple
 }
