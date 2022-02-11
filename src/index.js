@@ -29,7 +29,6 @@ client.logger = log;
 let commandFiles = fs.readdirSync("./src/commands/").filter(file => file.endsWith(".js"));
 commandFiles.forEach(async cmd => {
   let command = (await import(`./commands/${cmd}`)).default;
-  console.log(command)
   client.commands.set(command.data.name, command);
 });
 
