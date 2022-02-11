@@ -1,17 +1,9 @@
-const {
-  MessageEmbed
-} = require("discord.js");
-const {
-  SlashCommandBuilder
-} = require("@discordjs/builders");
-const {
-  getSendingPlayer
-} = require("../audio/PlayerManager.js");
-const {
-  blurple
-} = require("../color.json");
+import { MessageEmbed } from "discord.js";
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { getSendingPlayer } from "../audio/PlayerManager.js";
+import { blurple } from "../color.js";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("查看機器人訊息及語音延遲"),

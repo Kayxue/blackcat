@@ -1,7 +1,7 @@
-const slash = require("../util/slashRegister.js");
-const log = require("../logger.js");
+import slash from "../util/slashRegister.js";
+import log from "../logger.js";
 
-module.exports = {
+export default {
   event: "ready",
   once: false,
   run: async (client) => {

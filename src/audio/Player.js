@@ -1,17 +1,17 @@
-const {
+import {
   AudioPlayerStatus,
   createAudioPlayer,
   createAudioResource,
   entersState,
   joinVoiceChannel,
   VoiceConnectionStatus,
-} = require("@discordjs/voice");
-const Discord = require("discord.js");
-const play = require("play-dl");
-const log = require("../logger.js");
-const colors = require("../color.json");
+} from "@discordjs/voice";
+import Discord from "discord.js";
+import play from "play-dl";
+import log from "../logger.js";
+import colors from "../color.js";
 
-class Player {
+export default class Player {
   /**
    * @param {Discord.CommandInteraction} event 
    * @param {Discord.Guild} guild 
@@ -352,5 +352,3 @@ class Player {
     }).catch(this.noop);
   }
 }
-
-module.exports = Player;

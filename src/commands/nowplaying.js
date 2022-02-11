@@ -1,17 +1,11 @@
-const PlayerManager = require("../audio/PlayerManager.js");
-const progress = require("../util/progress.js");
-const allowModify = require("../util/allowModify.js");
-const {
-  SlashCommandBuilder
-} = require("@discordjs/builders");
-const {
-  MessageEmbed
-} = require("discord.js");
-const {
-  blurple
-} = require("../color.json");
+import PlayerManager from "../audio/PlayerManager.js";
+import progress from "../util/progress.js";
+import allowModify from "../util/allowModify.js";
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { MessageEmbed } from "discord.js";
+import { blurple } from "../color.js";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("nowplaying")
     .setDescription("暫停歌曲"),

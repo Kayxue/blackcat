@@ -1,14 +1,8 @@
-const {
-  MessageEmbed
-} = require("discord.js");
-const {
-  SlashCommandBuilder
-} = require("@discordjs/builders");
-const {
-  blurple
-} = require("../color.json");
+import { MessageEmbed } from "discord.js";
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { blurple } from "../color.js";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("status")
     .setDescription("查看機器人的狀態"),

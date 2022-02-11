@@ -1,9 +1,9 @@
-const chalk = require("chalk");
+import chalk from "chalk";
 
 let now = new Date();
 let time = chalk.dim(`${now.getMonth() + 1}/${now.getDate()} `) + chalk.cyan(`${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`);
 
-module.exports = {
+export default {
   /**
    * 資訊
    * @param {String} msg 訊息

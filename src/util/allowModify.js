@@ -1,1 +1,3 @@
-module.exports = (interaction) => interaction.member.voice?.channel?.id === interaction.member.guild?.me.voice?.channel?.id;
+export default (interaction) => {
+  return interaction.member.voice?.channel?.id === interaction.member.guild?.me.voice?.channel?.id;
+};

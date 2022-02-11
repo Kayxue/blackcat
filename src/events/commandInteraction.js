@@ -1,8 +1,8 @@
-const log = require("../logger.js");
-const { MessageEmbed } = require("discord.js");
-const { danger } = require("../color.json");
+import log from "../logger.js";
+import { MessageEmbed } from "discord.js";
+import { danger } from "../color.js";
 
-module.exports = {
+export default {
   event: "interactionCreate",
   once: false,
   run: async (_client, interaction) => {

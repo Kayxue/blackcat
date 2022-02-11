@@ -1,3 +1,5 @@
+import log from "./src/logger.js";
+
 /**
  * @typedef {Object} config 設定檔
  * @property {String} token Discord機器人Token
@@ -10,7 +12,7 @@
  * 黑貓設定文件
  * @return {config} 設定檔
  */
-module.exports = function () {
+export default function () {
   const config = {
     token: process.env.TOKEN || "TOKEN",
     // 範例: MTdqrd0vGDV1dcF0QPjom6OB.NQxUhj.I4JjFHIympR3mVF3UiUbbD5VVbi
@@ -32,7 +34,6 @@ module.exports = function () {
   
   // 請勿修改
   // Do not modify
-  let log = require("./src/logger.js");
   let invaild = false;
   if (typeof config.token !== "string") {
     log.error("`token`不是一個字串");

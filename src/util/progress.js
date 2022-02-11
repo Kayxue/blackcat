@@ -1,4 +1,4 @@
-module.exports = function(total, part) {
+export default function(total, part) {
   let size = 13;
   let line = "─";
   let slider = "🔵";

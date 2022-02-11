@@ -1,6 +1,6 @@
-const Player = require("./Player.js");
+import Player from "./Player.js";
 
-module.exports = {
+export default {
   getSendingPlayer(client, id) {
     return client.players.get(id);
   },

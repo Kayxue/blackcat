@@ -1,10 +1,8 @@
-const {
-  SlashCommandBuilder
-} = require("@discordjs/builders");
-const PlayerManager = require("../audio/PlayerManager.js");
-const allowModify = require("../util/allowModify.js");
+import PlayerManager from "../audio/PlayerManager.js";
+import allowModify from "../util/allowModify.js";
+import { SlashCommandBuilder } from "@discordjs/builders";
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName("play")
     .setDescription("播放音樂")

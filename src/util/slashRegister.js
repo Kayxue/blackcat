@@ -1,6 +1,6 @@
-const log = require("../logger.js");
+import log from "../logger.js";
 
-const slash = {
+export default {
   /**
      *
      * @param {Client} client
@@ -18,5 +18,3 @@ const slash = {
     log.info(`同步指令成功: ${registered.size}`);
   }
 };
-
-module.exports = slash;

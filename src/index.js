@@ -1,11 +1,13 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const Discord = require("discord.js");
-const fs = require("fs");
+import Discord from "discord.js";
+import fs from "node:fs";
 
-const log = require("./logger.js");
-const config = require("../config.js")();
+import log from "./logger.js";
+import configFile from "../config.js";
 
+const config = configFile();
 const client = new Discord.Client({
   intents: [
     Discord.Intents.FLAGS.GUILDS,
@@ -25,20 +27,21 @@ client.config = config;
 client.logger = log;
 
 let commandFiles = fs.readdirSync("./src/commands/").filter(file => file.endsWith(".js"));
-for (let cmd of commandFiles) {
-  let command = require(`./commands/${cmd}`);
+commandFiles.forEach(async cmd => {
+  let command = (await import(`./commands/${cmd}`)).default;
+  console.log(command)
   client.commands.set(command.data.name, command);
-}
+});
 
 const eventFiles = fs.readdirSync("./src/events").filter((file) => file.endsWith(".js"));
-for (let event of eventFiles) {
-  const eventFile = require(`./events/${event}`);
+eventFiles.forEach(async event => {
+  const eventFile = (await import(`./events/${event}`)).default;
   if (eventFile.once) {
     client.once(eventFile.event, (...args) => eventFile.run(client, ...args));
   } else {
     client.on(eventFile.event, (...args) => eventFile.run(client, ...args));
   }
-}
+});
 
 client.on("ready", () => {
   log.info(`${client.user.username} 已上線`);
