@@ -1,6 +1,6 @@
 import PlayerManager from "../audio/PlayerManager.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { blurple } from "../color.js";
+import { blurple, danger } from "../color.js";
 import {
   MessageEmbed,
   MessageButton,
@@ -111,6 +111,13 @@ export default {
           collector.stop();
       }
     })
-    collector.on("end")
+    collector.on("end", () => {
+      let endEmbed = new MessageEmbed()
+        .setTitle("💤 已關閉")
+        .setColor(danger);
+      interaction.editReply({
+        embeds: [endEmbed]
+      });
+    })
   },
 };
