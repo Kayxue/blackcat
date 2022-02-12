@@ -24,20 +24,20 @@ export default {
       embeds = [],
       currentPage = 0;
     while (songs.length) {
-      parsedSongs.push(songs.splice(0, 10))
+      parsedSongs.push(songs.splice(0, 10));
     }
     parsedSongs.forEach((songList, pageIndex) => {
       let embedPage = new MessageEmbed()
         .setTitle(`🎵 音樂序列 | 第${pageIndex + 1}/${parsedSongs.length}頁`)
-        .setColor(blurple)
+        .setColor(blurple);
       songList.forEach((song, songIndex) => {
         embedPage.addField({
           title: `[${pageIndex * 10 + songIndex + 1}] ${song.title}`,
           value: `${song.duractionParsed} / [YouTube](${song.url})`
-        })
-      })
+        });
+      });
       embeds.push(embedPage);
-    })
+    });
     let previousBtn = new MessageButton()
       .setCustomId("previous")
       .setemoji("◀️")
@@ -46,7 +46,7 @@ export default {
     let nextBtn = new MessageButton()
       .setCustomId("next")
       .setemoji("▶️")
-      .setStyle("PRIMARY")
+      .setStyle("PRIMARY");
     let closeBtn = new MessageButton()
       .setCustomId("close")
       .setemoji("❎")
@@ -57,13 +57,13 @@ export default {
     let buttons = new MessageActionRow()
       .setComponents(previousBtn, closeBtn, nextBtn);
 
-    let queueMessage
+    let queueMessage;
     try {
       queueMessage = await interaction.reply({
         embeds: [embeds[currentPage]],
         components: buttons
       });
-    } catch (e) { return }
+    } catch (e) { return; }
 
     let collector = new InteractionCollector(interaction.client, {
       componentType: "BUTTON",
@@ -94,6 +94,6 @@ export default {
           }).catch(() => {});
           break;
       }
-    })
+    });
   },
 };
