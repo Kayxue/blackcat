@@ -93,7 +93,24 @@ export default {
             components: [buttons]
           }).catch(() => {});
           break;
+        case "next":
+          currentPage += 1;
+          if (currentPage >= embeds.length) {
+            nextBtn.setDisabled(true);
+            currentPage = embeds.length;
+          }
+          buttons = new MessageActionRow()
+            .setComponents(previousBtn, closeBtn, nextBtn);
+
+          collected.update({
+            embeds: [embeds[currentPage]],
+            components: [buttons]
+          }).catch(() => {});
+          break;
+        case "close":
+          collector.stop();
       }
-    });
+    })
+    collector.on("end")
   },
 };
