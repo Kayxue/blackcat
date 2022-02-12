@@ -12,8 +12,8 @@ function createSendingPlayer(interaction) {
 export {
   getSendingPlayer,
   createSendingPlayer
-}
+};
 export default {
   getSendingPlayer,
   createSendingPlayer
-}
+};

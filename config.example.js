@@ -59,4 +59,4 @@ export default function () {
     log.info("成功讀取設定");
     return config;
   }
-};
+}

@@ -17,4 +17,4 @@ export default function(total, part) {
     const calculated = percentage * 100;
     return [bar, calculated];
   }
-};
+}

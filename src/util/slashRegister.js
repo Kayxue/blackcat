@@ -10,4 +10,4 @@ export default async (client, commands) => {
     return;
   }
   log.info(`同步指令成功: ${registered.size}`);
-}
+};

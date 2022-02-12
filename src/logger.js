@@ -27,9 +27,9 @@ export {
   info,
   warn,
   error
-}
+};
 export default {
   info,
   warn,
   error
-}
+};
