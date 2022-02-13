@@ -14,9 +14,10 @@ export default {
   },
   run: async function(interaction) {
     let player;
-    console.log(interaction);
-    if (!PlayerManager.getSendingPlayer(interaction.guild.id)) {
+    if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
       return interaction.reply("❌ 必須要有音樂正在播放");
+    } else {
+      player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
     }
     let songs = player.songs;
 
@@ -31,25 +32,24 @@ export default {
         .setTitle(`🎵 音樂序列 | 第${pageIndex + 1}/${parsedSongs.length}頁`)
         .setColor(blurple);
       songList.forEach((song, songIndex) => {
-        embedPage.addField({
-          title: `[${pageIndex * 10 + songIndex + 1}] ${song.title}`,
-          value: `${song.duractionParsed} / [YouTube](${song.url})`
-        });
+        embedPage.addField(
+          `[${pageIndex * 10 + songIndex + 1}] ${song.title}`,
+          `${song.duractionParsed ?? "未知的長度"} / [YouTube](${song.url})`);
       });
       embeds.push(embedPage);
     });
     let previousBtn = new MessageButton()
       .setCustomId("previous")
-      .setemoji("◀️")
+      .setEmoji("◀️")
       .setStyle("PRIMARY")
       .setDisabled(true);
     let nextBtn = new MessageButton()
       .setCustomId("next")
-      .setemoji("▶️")
+      .setEmoji("▶️")
       .setStyle("PRIMARY");
     let closeBtn = new MessageButton()
       .setCustomId("close")
-      .setemoji("❎")
+      .setEmoji("❎")
       .setStyle("DANGER");
 
     if (embeds.length - 1 === 0)
@@ -61,7 +61,7 @@ export default {
     try {
       queueMessage = await interaction.reply({
         embeds: [embeds[currentPage]],
-        components: buttons
+        components: [buttons]
       });
     } catch (e) { return; }
 
@@ -85,6 +85,7 @@ export default {
           previousBtn.setDisabled(true);
           currentPage = 1;
         }
+        nextBtn.setDisabled(false);
         buttons = new MessageActionRow()
           .setComponents(previousBtn, closeBtn, nextBtn);
 
@@ -99,6 +100,7 @@ export default {
           nextBtn.setDisabled(true);
           currentPage = embeds.length;
         }
+        previousBtn.setDisabled(false);
         buttons = new MessageActionRow()
           .setComponents(previousBtn, closeBtn, nextBtn);
 
@@ -108,6 +110,7 @@ export default {
         }).catch(() => {});
         break;
       case "close":
+        collected.deferReply();
         collector.stop();
       }
     });
@@ -116,8 +119,9 @@ export default {
         .setTitle("💤 已關閉")
         .setColor(danger);
       interaction.editReply({
-        embeds: [endEmbed]
-      });
+        embeds: [endEmbed],
+        components: []
+      }).catch(() => {});
     });
   },
 };
