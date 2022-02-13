@@ -20,6 +20,10 @@ export default function () {
     // process.env.<變數名稱>
     prefix: process.env.PREFIX || "PREFIX",
     // 指令前綴
+    slashGuild: process.env.SLASH_GUILD || "000000000000000000",
+    // 斜線指令伺服器ID，可用於開發測試
+    enableDev: false,
+    // 是否啟用開發測試模式
     enableApi: false,
     // 注意：此功能尚未支援
     // 是否要啟用API伺服器

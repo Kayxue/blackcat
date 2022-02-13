@@ -132,6 +132,13 @@ export default class Player {
       } catch (e) {
         return this.handelYoutubeError(e);
       }
+      let playlistEmbed = new Discord.MessageEmbed()
+        .setTitle(`🔍 已加入整個播放清單，共有 **${videos.length}** 首歌曲`)
+        .setColor(colors.success);
+      interaction.followUp({
+        embeds: [playlistEmbed]
+      });
+
       parsedData = [];
       videos.forEach((video) => {
         video.full = false;

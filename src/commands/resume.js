@@ -8,7 +8,6 @@ export default {
   },
   run: function (interaction) {
     let player;
-    console.log(interaction);
     if (!PlayerManager.getSendingPlayer(interaction.guild.id)) {
       return interaction.reply("❌ 必須要有音樂正在播放");
     } else {
