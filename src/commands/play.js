@@ -24,7 +24,7 @@ export default {
       return interaction.reply("❌ 我無法連線至語音頻道!")
         .catch(() => {});
     
-    const url = interaction.options.getString("songname");
+    const url = interaction.options.getString("name");
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
       player = PlayerManager.createSendingPlayer(interaction);
