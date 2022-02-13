@@ -42,13 +42,4 @@ eventFiles.forEach(async event => {
   }
 });
 
-client.on("ready", () => {
-  log.info(`${client.user.username} 已上線`);
-});
-
-client.on("shardReady", (id) => {
-  log.info(`分片 ${id} 已上線`);
-});
-
-
 client.login(config.token);
