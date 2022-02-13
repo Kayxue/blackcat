@@ -9,9 +9,10 @@ import {
 } from "discord.js";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("queue")
-    .setDescription("顯示播放序列"),
+  data: {
+    name: "queue",
+    description: "顯示播放序列"
+  },
   run: async function(interaction) {
     let player;
     console.log(interaction);

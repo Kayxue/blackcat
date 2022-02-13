@@ -3,9 +3,10 @@ import allowModify from "../util/allowModify.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("resume")
-    .setDescription("重新開始歌曲"),
+  data: {
+    name: "resume",
+    description: "繼續播放音樂"
+  },
   run: function (interaction) {
     let player;
     console.log(interaction);

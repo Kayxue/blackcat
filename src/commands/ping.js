@@ -4,9 +4,10 @@ import { getSendingPlayer } from "../audio/PlayerManager.js";
 import { blurple } from "../color.js";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("ping")
-    .setDescription("查看機器人訊息及語音延遲"),
+  data: {
+    name: "ping",
+    description: "查看機器人"
+  },
   run: function (interaction) {
     let pingEmbed = new MessageEmbed()
       .setTitle("🏓 Ping!")

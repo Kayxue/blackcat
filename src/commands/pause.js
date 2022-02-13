@@ -3,9 +3,10 @@ import allowModify from "../util/allowModify.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("pause")
-    .setDescription("暫停歌曲"),
+  data: {
+    name: "pause",
+    description: "暫停目前正在播放的音樂"
+  },
   run: function(interaction) {
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {

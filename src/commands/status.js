@@ -3,9 +3,10 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { blurple } from "../color.js";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("status")
-    .setDescription("查看機器人的狀態"),
+  data: {
+    name: "status",
+    description: "查看機器人的狀態"
+  },
   run: function (interaction) {
     let seconds = Math.floor(interaction.client.uptime / 1000);
     let minutes = Math.floor(seconds / 60);

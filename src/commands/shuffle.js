@@ -3,9 +3,10 @@ import allowModify from "../util/allowModify.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("shuffle")
-    .setDescription("打亂歌曲"),
+  data: {
+    name: "shuffle",
+    description: "打亂歌曲"
+  },
   run: function(interaction) {
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {

@@ -3,15 +3,18 @@ import allowModify from "../util/allowModify.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("播放音樂")
-    .addStringOption((option) =>
-      option
-        .setName("songname")
-        .setDescription("YouTube歌曲名稱或連結")
-        .setRequired(true)
-    ),
+  data: {
+    name: "play",
+    description: "播放音樂",
+    options: [
+      {
+        type: 3, //STRING
+        name: "name",
+        description: "YouTube上的音樂名稱/網址",
+        required: true
+      }
+    ]
+  },
   run: async function(interaction) {
     if (!interaction.member.voice?.channel)
       return interaction.reply("❌ 你必須加入一個語音頻道")

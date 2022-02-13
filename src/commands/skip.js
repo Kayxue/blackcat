@@ -3,7 +3,10 @@ import allowModify from "../util/allowModify.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default {
-  data: new SlashCommandBuilder().setName("skip").setDescription("跳過歌曲"),
+  data: {
+    name: "skip",
+    description: "跳過歌曲"
+  },
   run: function (interaction) {
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {

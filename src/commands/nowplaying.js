@@ -6,9 +6,10 @@ import { MessageEmbed } from "discord.js";
 import { blurple } from "../color.js";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("nowplaying")
-    .setDescription("暫停歌曲"),
+  data: {
+    name: "nowplaying",
+    description: "查看目前正在播放的音樂"
+  },
   run: function(interaction) {
     let player;
     if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {

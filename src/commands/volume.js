@@ -3,9 +3,10 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { danger } from "../color.js";
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("volume")
-    .setDescription("變更音量"),
+  data: {
+    name: "volume",
+    description: "調整音樂音量"
+  },
   run: function (interaction) {
     let volumeEmbed = new MessageEmbed()
       .setTitle("🙁 音量調整已被移除") 
