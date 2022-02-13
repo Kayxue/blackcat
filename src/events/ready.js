@@ -9,7 +9,8 @@ export default {
     let registered;
     log.info("正在同步指令...");
     try {
-      registered = await client.application?.commands.set(commands);
+      if (client.config.enableDev) log.info("開發者模式已開啟");
+      registered = await client.application?.commands.set(commands, client.config.enableDev ? client.config.slashGuild : undefined);
     } catch (e) {
       log.error(`同步指令時發生錯誤: ${e.message}`, e);
       return;
