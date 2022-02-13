@@ -1,5 +1,4 @@
 import { MessageEmbed } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import { danger } from "../color.js";
 
 export default {

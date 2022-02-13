@@ -1,5 +1,4 @@
 import { MessageEmbed } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import { getSendingPlayer } from "../audio/PlayerManager.js";
 import { blurple } from "../color.js";
 

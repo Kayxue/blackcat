@@ -1,6 +1,5 @@
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default {
   data: {

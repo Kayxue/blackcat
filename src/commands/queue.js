@@ -1,5 +1,4 @@
 import PlayerManager from "../audio/PlayerManager.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import { blurple, danger } from "../color.js";
 import {
   MessageEmbed,
@@ -80,38 +79,38 @@ export default {
         });
       }
       switch (collected.customId) {
-        case "previous":
-          currentPage -= 1;
-          if (currentPage <= 1) {
-            previousBtn.setDisabled(true);
-            currentPage = 1;
-          }
-          buttons = new MessageActionRow()
-            .setComponents(previousBtn, closeBtn, nextBtn);
+      case "previous":
+        currentPage -= 1;
+        if (currentPage <= 1) {
+          previousBtn.setDisabled(true);
+          currentPage = 1;
+        }
+        buttons = new MessageActionRow()
+          .setComponents(previousBtn, closeBtn, nextBtn);
 
-          collected.update({
-            embeds: [embeds[currentPage]],
-            components: [buttons]
-          }).catch(() => {});
-          break;
-        case "next":
-          currentPage += 1;
-          if (currentPage >= embeds.length) {
-            nextBtn.setDisabled(true);
-            currentPage = embeds.length;
-          }
-          buttons = new MessageActionRow()
-            .setComponents(previousBtn, closeBtn, nextBtn);
+        collected.update({
+          embeds: [embeds[currentPage]],
+          components: [buttons]
+        }).catch(() => {});
+        break;
+      case "next":
+        currentPage += 1;
+        if (currentPage >= embeds.length) {
+          nextBtn.setDisabled(true);
+          currentPage = embeds.length;
+        }
+        buttons = new MessageActionRow()
+          .setComponents(previousBtn, closeBtn, nextBtn);
 
-          collected.update({
-            embeds: [embeds[currentPage]],
-            components: [buttons]
-          }).catch(() => {});
-          break;
-        case "close":
-          collector.stop();
+        collected.update({
+          embeds: [embeds[currentPage]],
+          components: [buttons]
+        }).catch(() => {});
+        break;
+      case "close":
+        collector.stop();
       }
-    })
+    });
     collector.on("end", () => {
       let endEmbed = new MessageEmbed()
         .setTitle("💤 已關閉")
@@ -119,6 +118,6 @@ export default {
       interaction.editReply({
         embeds: [endEmbed]
       });
-    })
+    });
   },
 };

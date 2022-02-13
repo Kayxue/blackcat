@@ -1,7 +1,6 @@
 import PlayerManager from "../audio/PlayerManager.js";
 import progress from "../util/progress.js";
 import allowModify from "../util/allowModify.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import { MessageEmbed } from "discord.js";
 import { blurple } from "../color.js";
 
