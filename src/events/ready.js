@@ -5,7 +5,7 @@ export default {
   once: false,
   run: async (client) => {
     log.info(`${client.user.username} 已上線`);
-    let commands = client.commands.map((e) => e.data.toJSON());
+    let commands = client.commands.map((e) => e.data);
     let registered;
     log.info("正在同步指令...");
     try {
