@@ -28,11 +28,10 @@ export default class Player {
     this._init = false;
     this._noticeMessage = null;
     this._nowplaying = null;
-    this.interactionReplied = false;
     this._songs = [];
   }
-  
-  noop() {}
+
+  noop() { }
 
   init() {
     if (this._init) return;
@@ -47,9 +46,9 @@ export default class Player {
       let errorEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 加入語音頻道時發生錯誤")
         .setDescription(
-          "加入語音頻道時發生了一些錯誤...\n"+
-          "錯誤內容:\n"+
-          "```\n"+e.message+"\n```")
+          "加入語音頻道時發生了一些錯誤...\n" +
+          "錯誤內容:\n" +
+          "```\n" + e.message + "\n```")
         .setColor(colors.danger);
       this._channel.send({
         embeds: [errorEmbed]
@@ -58,7 +57,7 @@ export default class Player {
     }
     this._player = createAudioPlayer();
     this._connection.subscribe(this._player);
-    
+
     this._connection.on(VoiceConnectionStatus.Ready, () => {
       log.info(`${this._guildId}:${this._channelId} 已進入預備狀態`);
     });
@@ -92,17 +91,17 @@ export default class Player {
     this._init = true;
     this._client.players.set(this._guildId, this);
   }
-  
+
   async play(track, interaction) {
     let rawData, parsedData, isPlaylist = false;
-    
+
     let searchEmbed = new Discord.MessageEmbed()
       .setTitle(`🔍 正在搜尋 **${track}**`)
       .setColor(colors.success);
     interaction.editReply({
       embeds: [searchEmbed]
     }).catch(this.noop);
-    
+
     if (play.yt_validate(track) !== "video" && !track.startsWith("https")) {
       try {
         let result = await play.search(track, {
@@ -210,20 +209,20 @@ export default class Player {
       embeds: [unpauseEmbed]
     }).catch(this.noop);
   }
-  
+
   shuffle(interaction) {
     let shuffled = [].concat(this._songs);
     let currentIndex = this._songs.length, temporaryValue, randomIndex;
-    
+
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-      
+
       temporaryValue = shuffled[currentIndex];
       shuffled[currentIndex] = shuffled[randomIndex];
       shuffled[randomIndex] = temporaryValue;
     }
-    
+
     let shuffleEmbed = new Discord.MessageEmbed()
       .setTitle("🔀 重新排序音樂")
       .setColor(colors.success);
@@ -233,7 +232,7 @@ export default class Player {
     }).catch(this.noop);
   }
 
-  stop (interaction) {
+  stop(interaction) {
     let stopEmbed = new Discord.MessageEmbed()
       .setTitle("⏹️ 停止播放音樂")
       .setColor(colors.success);
@@ -243,7 +242,7 @@ export default class Player {
       embeds: [stopEmbed]
     }).catch(this.noop);
   }
-  
+
   async playStream() {
     if (!this._songs[0]?.rawData.full) {
       try {
@@ -264,7 +263,7 @@ export default class Player {
         return;
       }
     }
-    
+
     let stream;
     try {
       stream = await play.stream(this._songs[0].url);
@@ -273,9 +272,9 @@ export default class Player {
       let errorEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 載入音樂時發生錯誤")
         .setDescription(
-          "載入音樂時發生了一點小錯誤...\n"+
-          "錯誤內容:\n"+
-          "```\n"+e.message+"\n```")
+          "載入音樂時發生了一點小錯誤...\n" +
+          "錯誤內容:\n" +
+          "```\n" + e.message + "\n```")
         .setColor(colors.danger);
       this._channel.send({
         embeds: [errorEmbed]
@@ -284,7 +283,8 @@ export default class Player {
     }
     this._audio = createAudioResource(stream.stream, {
       inputType: stream.type,
-      metadata: this._songs[0]
+      metadata: this._songs[0],
+      inlineVolume: true
     });
     this._player.play(this._audio);
   }
@@ -292,19 +292,27 @@ export default class Player {
   get ping() {
     return this._connection.ping;
   }
-  
+
   get nowplaying() {
     return this._audio.metadata;
   }
-  
+
   get playTime() {
     return this._audio.playbackDuration / 1000;
   }
-  
+
   get songs() {
     return this._songs;
   }
-  
+
+  get volume() {
+    return this._audio?.volume.volumeLogarithmic;
+  }
+
+  set volume(volume) {
+    this._audio?.volume.setVolumeLogarithmic(volume);
+  }
+
   handelYoutubeError(e) {
     if (e.message.includes("confirm your age")) {
       let invaildEmbed = new Discord.MessageEmbed()
@@ -330,10 +338,10 @@ export default class Player {
     }
     log.error(e.message, e);
   }
-  
+
   handelIdle() {
     this._noticeMessage?.delete().catch(this.noop);
-    
+
     this._songs.shift();
     console.log(this._songs);
     if (this._songs.length === 0) {
@@ -348,7 +356,7 @@ export default class Player {
       this.playStream();
     }
   }
-  
+
   async handelPlaying() {
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)

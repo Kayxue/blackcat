@@ -23,15 +23,15 @@ export default {
     let progressbar = progress(data.duraction, player.playTime);
     let playtime = new Date(player.playTime * 1000).toISOString();
     
-    if (player.playTime <= 0) playtime = "直播";
-    else if (player.playTime < 3600) playtime = playtime.substr(14, 5);
+    if (data.duraction <= 0) playtime = "直播";
+    else if (data.duraction < 3600) playtime = playtime.substr(14, 5);
     else playtime = playtime.substr(11, 8);
     
     let nowEmbed = new MessageEmbed()
       .setTitle("🎧 正在播放")
       .setDescription(
         `[${data.title}](${data.url})\n`+
-        `${progressbar[0]} \`${playtime}/${Math.round(progressbar[1])}%\``)
+        `${progressbar[0]} \`${playtime}/${isFinite(Math.round(progressbar[1])) ? `${Math.round(progressbar[1])}%` : "無限"}\``)
       .setThumbnail(data.thumbnail)
       .setColor(blurple);
     return interaction.reply({
