@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import {
-  danger,
+  blurple,
   success
 } from "../color.js";
 
@@ -36,9 +36,20 @@ export default {
       }
 
       player.volume = interaction.options.getInteger("volume") / 100;
-      interaction.reply("🔊 音量設定為：" + player.volume * 100 + "%");
+      let volumeEmbed = new MessageEmbed()
+        .setTitle(`🔊 設定音量至 ${player.volume * 100}%`)
+        .setColor(success);
+      return interaction.reply({
+        embeds: [volumeEmbed]
+      });
     } else {
-      interaction.reply("🔊 目前音量：" + player.volume * 100 + "%");
+      player.volume = interaction.options.getInteger("volume") / 100;
+      let volumeEmbed = new MessageEmbed()
+        .setTitle(`🔊 設定音量 ${player.volume * 100}%`)
+        .setColor(blurple);
+      return interaction.reply({
+        embeds: [volumeEmbed]
+      });
     }
   }
 };
