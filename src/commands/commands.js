@@ -7,16 +7,16 @@ export default {
     description: "顯示所有指令",
   },
   run: function (interaction) {
-    let commands = interaction.client.commands
+    let commands = interaction.client.commands;
     
-    let formatted = commands.map((i) => `\`${i.name}\`: **${i.description}**`);
+    let formatted = commands.map((i) => `\`${i.data.name}\`: **${i.data.description}**`);
     let commandsEmbed = new MessageEmbed()
       .setTitle("🗒️ 指令清單")
       .setDescription(formatted.join("\n"))
-      .setColor(blurple)
+      .setColor(blurple);
     
     interaction.reply({
       embeds: [commandsEmbed]
     }).catch(() => {});
   }
-}
+};

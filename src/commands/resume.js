@@ -1,3 +1,5 @@
+import { MessageEmbed } from "discord.js";
+import { danger } from "../color.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 

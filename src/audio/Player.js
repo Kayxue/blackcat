@@ -5,9 +5,11 @@ import {
   entersState,
   joinVoiceChannel,
   VoiceConnectionStatus,
+  StreamType
 } from "@discordjs/voice";
 import Discord from "discord.js";
 import play from "play-dl";
+import prism from "prism-media";
 import allowModify from "../util/allowModify.js";
 import log from "../logger.js";
 import colors from "../color.js";
@@ -24,11 +26,23 @@ export default class Player {
     this._init = false;
     this._paused = false;
     this._muted = false;
+    this._loop = false;
+    this._repeat = false;
     this._volume = 0.7;
     this._noticeMessage = null;
     this._buttonCollector = null;
     this._nowplaying = null;
     this._songs = [];
+
+    this._engines = {
+      opusDecoder: null,
+      opusEncoder: null,
+      webmDemuxer: null,
+      ffmpeg: null,
+      volumeTransform: null
+    };
+    this._encoded = null;
+    this._raw = null;
   }
 
   noop() { }
@@ -245,6 +259,28 @@ export default class Player {
     }).catch(this.noop);
   }
 
+  loop(interaction) {
+    let loopEmbed = new Discord.MessageEmbed()
+      .setTitle("🔁 重複播放所有歌曲")
+      .setColor(colors.success);
+    this._loop = true;
+    this._repeat = false;
+    interaction.reply({
+      embeds: [loopEmbed]
+    }).catch(this.noop);
+  }
+
+  repeat(interaction) {
+    let repeatEmbed = new Discord.MessageEmbed()
+      .setTitle("🔂 重複播放目前的歌曲")
+      .setColor(colors.success);
+    this._loop = false;
+    this._repeat = true;
+    interaction.reply({
+      embeds: [repeatEmbed]
+    }).catch(this.noop);
+  }
+
   async playStream() {
     if (!this._songs[0]?.rawData.full) {
       try {
@@ -266,9 +302,8 @@ export default class Player {
       }
     }
 
-    let stream;
     try {
-      stream = await play.stream(this._songs[0].url);
+      this._raw = await play.stream(this._songs[0].url);
     } catch (e) {
       log.error(e.message, e);
       let errorEmbed = new Discord.MessageEmbed()
@@ -283,10 +318,70 @@ export default class Player {
       }).catch(this.noop);
       return;
     }
-    this._audio = createAudioResource(stream.stream, {
-      inputType: stream.type,
-      metadata: this._songs[0],
-      inlineVolume: true
+
+    log.info(`音樂格式: ${this._raw.type}`);
+
+    if (this._raw.type === "opus") {
+      this._engines.opusDecoder = new prism.opus.Decoder({
+        channels: 2,
+        frameSize: 960,
+        rate: 48000
+      });
+      this._engines.volumeTransform = new prism.VolumeTransformer({
+        volume: this._volume,
+        type: "s16le"
+      });
+      this._engines.opusEncoder = new prism.opus.Encoder({
+        channels: 2,
+        frameSize: 960,
+        rate: 48000
+      });
+      this._encoded = this._raw.stream
+        .pipe(this._engines.opusDecoder)
+        .pipe(this._engines.volumeTransform)
+        .pipe(this._engines.opusEncoder);
+    } else if (this._raw.type === "webm/opus") {
+      this._engines.webmDemuxer = new prism.opus.WebmDemuxer();
+      this._engines.opusDecoder = new prism.opus.Decoder({
+        channels: 2,
+        frameSize: 960,
+        rate: 48000
+      });
+      this._engines.volumeTransform = new prism.VolumeTransformer({
+        volume: this._volume,
+        type: "s16le"
+      });
+      this._engines.opusEncoder = new prism.opus.Encoder({
+        channels: 2,
+        frameSize: 960,
+        rate: 48000
+      });
+      this._encoded = this._raw.stream
+        .pipe(this._engines.webmDemuxer)
+        .pipe(this._engines.opusDecoder)
+        .pipe(this._engines.volumeTransform)
+        .pipe(this._engines.opusEncoder);
+    } else {
+      this._engines.ffmpeg = new prism.FFmpeg({
+        args: ["-analyzeduration", "0", "-loglevel", "0", "-f", "s16le", "-ar", "48000", "-ac", "2"]
+      });
+      this._engines.volumeTransform = new prism.VolumeTransformer({
+        volume: this._volume,
+        type: "s16le"
+      });
+      this._engines.opusEncoder = new prism.opus.Encoder({
+        channels: 2,
+        frameSize: 960,
+        rate: 48000
+      });
+      this._encoded = this._raw.stream
+        .pipe(this._engines.ffmpeg)
+        .pipe(this._engines.volumeTransform)
+        .pipe(this._engines.opusEncoder);
+    }
+    this._audio = createAudioResource(this._encoded, {
+      inputType: StreamType.Opus,
+      metadata: this._songs[0]
     });
     this._player.play(this._audio);
   }
@@ -364,7 +459,7 @@ export default class Player {
 
   set volume(volume) {
     this._muted = false;
-    this._audio?.volume.setVolumeLogarithmic(volume);
+    this._engines.volumeTransform.setVolumeLogarithmic(volume);
     this._volume = volume;
   }
 
@@ -397,7 +492,9 @@ export default class Player {
   handelIdle() {
     this._noticeMessage?.delete().catch(this.noop);
 
-    this._songs.shift();
+    let playedSong = this._songs.shift();
+    if (this._loop) this._songs.push(playedSong);
+    if (this._repeat) this._songs.unshift(playedSong);
     if (this._songs.length === 0) {
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
@@ -442,9 +539,11 @@ export default class Player {
     case "pause":
       if (this._paused) {
         this._player.unpause();
+        this._paused = false;
         interaction.reply("▶️ 繼續播放音樂").catch(this.noop);
       } else if (!this._paused) {
         this._player.pause();
+        this._paused = true;
         interaction.reply("⏸️ 暫停音樂").catch(this.noop);
       }
       break;
@@ -455,23 +554,23 @@ export default class Player {
     case "stop":
       this._songs = [];
       this._player.stop();
-      interaction.reply("⏹️ 停止了播放音樂").catch(this.noop);
+      interaction.reply("⏹️ 停止播放音樂").catch(this.noop);
       break;
     case "volup":
-      this.volume = this._volume + 10;
+      this.volume = this._volume + 0.1;
       interaction.reply("🔊 音量增加10%").catch(this.noop);
       break;
     case "voldown":
-      this.volume = this._volume - 10;
+      this.volume = this._volume - 0.1;
       interaction.reply("🔊 音量減少10%").catch(this.noop);
       break;
     case "mute":
       if (this._muted) {
-        this._audio.volume.setVolumeLogarithmic(this._volume);
+        this._engines.volumeTransform.setVolumeLogarithmic(this._volume);
         this._muted = false;
         interaction.reply(`🔊 音量恢復至${this._volume * 100}%`).catch(this.noop);
       } else {
-        this._audio.volume.setVolumeLogarithmic(0);
+        this._engines.volumeTransform.setVolumeLogarithmic(0);
         this._muted = true;
         interaction.reply("🔇 靜音").catch(this.noop);
       }
