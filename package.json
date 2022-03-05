@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "private": true,
   "engines": {
-    "node": "<=16",
-    "yarn": "<=1.22.17"
+    "node": ">=16",
+    "yarn": ">=1.22.17"
   },
   "type": "module",
   "sourceType": "module",
