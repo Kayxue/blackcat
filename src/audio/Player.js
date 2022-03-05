@@ -8,15 +8,11 @@ import {
 } from "@discordjs/voice";
 import Discord from "discord.js";
 import play from "play-dl";
+import allowModify from "../util/allowModify.js";
 import log from "../logger.js";
 import colors from "../color.js";
 
 export default class Player {
-  /**
-   * @param {Discord.CommandInteraction} event 
-   * @param {Discord.Guild} guild 
-   * @param {Discord.VoiceChannel} voice 
-   */
   constructor(interaction, guild, voice) {
     this._client = interaction.client;
     this._channel = interaction.channel;
@@ -358,12 +354,45 @@ export default class Player {
   }
 
   async handelPlaying() {
+    let musicButton = new Discord.MessageButton()
+      .setCustomId("pause")
+      .setEmoji("<:play:827734196243398668>")
+      .setStyle("SUCCESS")
+    let skipButton = new Discord.MessageButton()
+      .setCustomId("skip")
+      .setEmoji("<:skip:827734282318905355>")
+      .setStyle("SUCCESS")
+    let stopButton = new Discord.MessageButton()
+      .setCustomId("stop")
+      .setEmoji("<:stop:827734840891015189>")
+      .setStyle("DANGER");
+    
+    let volUpButton = new MessageButton()
+      .setCustomId("volup")
+      .setEmoji("<:vol_up:827734772889157722>")
+      .setStyle("PRIMARY");
+    let volDownButton = new MessageButton()
+      .setCustomId("voldown")
+      .setEmoji("<:vol_down:827734683340111913>")
+      .setStyle("PRIMARY");
+    let hintButton = new MessageButton()
+      .setCustomId("mute")
+      .setEmoji("<:mute:827734384606052392>")
+      .setStyle("PRIMARY");
+    
+    let rowOne = new Discord.MessageActionRow()
+      .addComponents(musicButton, skipButton, stopButton);
+    let rowTwo = new Discord.MessageActionRow()
+      .addComponents(volUpButton, volDownButton, hintButton);
+    
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
+    
     this._noticeMessage = await this._channel.send({
-      embeds: [playingEmbed]
+      embeds: [playingEmbed],
+      components: [rowOne, rowTwo]
     }).catch(this.noop);
   }
 }
