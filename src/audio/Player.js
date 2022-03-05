@@ -23,13 +23,15 @@ export default class Player {
 
     this._init = false;
     this._paused = false;
+    this._muted = false;
+    this._volume = 0.7;
     this._noticeMessage = null;
     this._buttonCollector = null;
     this._nowplaying = null;
     this._songs = [];
   }
 
-  noop() {}
+  noop() { }
 
   init() {
     if (this._init) return;
@@ -288,7 +290,7 @@ export default class Player {
     });
     this._player.play(this._audio);
   }
-  
+
   updateNoticeEmbed() {
     let musicButton = new Discord.MessageButton()
       .setCustomId("pause")
@@ -302,31 +304,38 @@ export default class Player {
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
       .setStyle("DANGER");
-    
-    let volUpButton = new MessageButton()
+
+    let volUpButton = new Discord.MessageButton()
       .setCustomId("volup")
       .setEmoji("<:vol_up:827734772889157722>")
       .setStyle("PRIMARY");
-    let volDownButton = new MessageButton()
+    let volDownButton = new Discord.MessageButton()
       .setCustomId("voldown")
       .setEmoji("<:vol_down:827734683340111913>")
       .setStyle("PRIMARY");
-    let hintButton = new MessageButton()
+    let hintButton = new Discord.MessageButton()
       .setCustomId("mute")
       .setEmoji("<:mute:827734384606052392>")
       .setStyle("PRIMARY");
-    
+
     if (this._songs.length <= 1) skipButton.setDisabled(true);
-    
+    if (this._volume >= 100 || this._muted) volUpButton.setDisabled(true);
+    if (this._volume <= 0 || this._muted) volDownButton.setDisabled(true);
+
     let rowOne = new Discord.MessageActionRow()
       .addComponents(musicButton, skipButton, stopButton);
     let rowTwo = new Discord.MessageActionRow()
       .addComponents(volUpButton, volDownButton, hintButton);
-    
+
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
+
+    this._noticeMessage?.edit({
+      embeds: [playingEmbed],
+      components: [rowOne, rowTwo]
+    }).catch(this.noop);
   }
 
   get ping() {
@@ -348,13 +357,15 @@ export default class Player {
   get volume() {
     return this._audio?.volume.volumeLogarithmic;
   }
-  
+
   get pauseState() {
     return this._paused;
   }
 
   set volume(volume) {
+    this._muted = false;
     this._audio?.volume.setVolumeLogarithmic(volume);
+    this._volume = volume;
   }
 
   handelYoutubeError(e) {
@@ -387,7 +398,6 @@ export default class Player {
     this._noticeMessage?.delete().catch(this.noop);
 
     this._songs.shift();
-    console.log(this._songs);
     if (this._songs.length === 0) {
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
@@ -396,59 +406,30 @@ export default class Player {
         embeds: [endEmbed]
       }).catch(this.noop);
       this._client.players.delete(this._guildId);
+      this._connection.destroy();
     } else {
       this.playStream();
     }
   }
 
   async handelPlaying() {
-    let musicButton = new Discord.MessageButton()
-      .setCustomId("pause")
-      .setEmoji("<:pause:827737900359745586>")
-      .setStyle("SUCCESS");
-    let skipButton = new Discord.MessageButton()
-      .setCustomId("skip")
-      .setEmoji("<:skip:827734282318905355>")
-      .setStyle("SUCCESS");
-    let stopButton = new Discord.MessageButton()
-      .setCustomId("stop")
-      .setEmoji("<:stop:827734840891015189>")
-      .setStyle("DANGER");
-    
-    let volUpButton = new MessageButton()
-      .setCustomId("volup")
-      .setEmoji("<:vol_up:827734772889157722>")
-      .setStyle("PRIMARY");
-    let volDownButton = new MessageButton()
-      .setCustomId("voldown")
-      .setEmoji("<:vol_down:827734683340111913>")
-      .setStyle("PRIMARY");
-    let hintButton = new MessageButton()
-      .setCustomId("mute")
-      .setEmoji("<:mute:827734384606052392>")
-      .setStyle("PRIMARY");
-    
-    let rowOne = new Discord.MessageActionRow()
-      .addComponents(musicButton, skipButton, stopButton);
-    let rowTwo = new Discord.MessageActionRow()
-      .addComponents(volUpButton, volDownButton, hintButton);
-    
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
-    
+
     this._noticeMessage = await this._channel.send({
-      embeds: [playingEmbed],
-      components: [rowOne, rowTwo]
+      embeds: [playingEmbed]
     }).catch(this.noop);
     this._buttonCollector = this._noticeMessage?.createMessageComponentCollector({
       componentType: "BUTTON"
     });
-    
-    this._buttonCollector?.on("collect", this.handelButtonClick);
+
+    this.updateNoticeEmbed();
+
+    this._buttonCollector?.on("collect", (interaction) => this.handelButtonClick(interaction));
   }
-  
+
   handelButtonClick(interaction) {
     if (!allowModify(interaction)) {
       return interaction.reply({
@@ -456,28 +437,48 @@ export default class Player {
         ephemeral: true
       }).catch(this.noop);
     }
-    
-    switch(interaction.customId) {
-      case "pause":
-        if (this._paused) {
-          this._player.unpause();
-          interaction.reply("▶️ 繼續播放音樂").catch(this.noop);
-        } else if (!this._paused) {
-          this._player.pause();
-          interaction.reply("⏸️ 暫停音樂").catch(this.noop);
-        }
-        break;
-      case "skip":
-        this._player.stop();
-        interaction.reply("⏭️ 跳過歌曲").catch(this.noop);
-        break;
-      case "stop":
-        this._songs = [];
-        this._player.stop();
-        interaction.reply("⏹️ 停止了播放音樂").catch(this.noop);
-        break;
-      default:
-        interaction.reply("❌ 發生了億點點的錯誤");
+
+    switch (interaction.customId) {
+    case "pause":
+      if (this._paused) {
+        this._player.unpause();
+        interaction.reply("▶️ 繼續播放音樂").catch(this.noop);
+      } else if (!this._paused) {
+        this._player.pause();
+        interaction.reply("⏸️ 暫停音樂").catch(this.noop);
+      }
+      break;
+    case "skip":
+      this._player.stop();
+      interaction.reply("⏭️ 跳過歌曲").catch(this.noop);
+      break;
+    case "stop":
+      this._songs = [];
+      this._player.stop();
+      interaction.reply("⏹️ 停止了播放音樂").catch(this.noop);
+      break;
+    case "volup":
+      this.volume = this._volume + 10;
+      interaction.reply("🔊 音量增加10%").catch(this.noop);
+      break;
+    case "voldown":
+      this.volume = this._volume - 10;
+      interaction.reply("🔊 音量減少10%").catch(this.noop);
+      break;
+    case "mute":
+      if (this._muted) {
+        this._audio.volume.setVolumeLogarithmic(this._volume);
+        this._muted = false;
+        interaction.reply(`🔊 音量恢復至${this._volume * 100}%`).catch(this.noop);
+      } else {
+        this._audio.volume.setVolumeLogarithmic(0);
+        this._muted = true;
+        interaction.reply("🔇 靜音").catch(this.noop);
+      }
+      break;
+    default:
+      interaction.reply("❌ 發生了億點點的錯誤");
     }
+    this.updateNoticeEmbed();
   }
 }
