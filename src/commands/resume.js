@@ -15,6 +15,15 @@ export default {
       if (!allowModify(interaction))
         return interaction.reply("❌ 你必須加入一個語音頻道");
     }
+    if (!player.paused) {
+      let pausedEmbed = new MessageEmbed()
+        .setTitle("▶️ 音樂已經在播放了")
+        .setDescription("輸入`/pause`來暫停音樂")
+        .setColor(danger);
+      return interaction.reply({
+        embeds: [pausedEmbed]
+      }).catch(() => {});
+    }
     player.unpause(interaction);
   },
 };
