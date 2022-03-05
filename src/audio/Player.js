@@ -357,11 +357,11 @@ export default class Player {
     let musicButton = new Discord.MessageButton()
       .setCustomId("pause")
       .setEmoji("<:play:827734196243398668>")
-      .setStyle("SUCCESS")
+      .setStyle("SUCCESS");
     let skipButton = new Discord.MessageButton()
       .setCustomId("skip")
       .setEmoji("<:skip:827734282318905355>")
-      .setStyle("SUCCESS")
+      .setStyle("SUCCESS");
     let stopButton = new Discord.MessageButton()
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
