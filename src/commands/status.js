@@ -16,7 +16,7 @@ export default {
     minutes %= 60;
     hours %= 24;
     
-    let shardGuilds = client.shard.fetchClientValues("guilds.cache.size");
+    let shardGuilds = interaction.client.shard.fetchClientValues("guilds.cache.size");
     let allGuilds = shardGuilds.reduce((acc, guildCount) => acc + guildCount, 0);
     
     let statusEmbed = new MessageEmbed()
