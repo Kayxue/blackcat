@@ -16,15 +16,11 @@ export default {
     minutes %= 60;
     hours %= 24;
     
-    let shardGuilds = interaction.client.shard.fetchClientValues("guilds.cache.size");
-    let allGuilds = shardGuilds.reduce((acc, guildCount) => acc + guildCount, 0);
-    
     let statusEmbed = new MessageEmbed()
       .setTitle("❓ 機器人狀態")
       .addField("🕒 上線時間", `**${days}:${hours}:${minutes}:${seconds}**`, true)
       .addField("📒 程式版本", `Node.js:**${process.version.replace("v", "")}** Discord.js:**${version}`, true)
       .addField("👥 分片伺服器數量", `**${interaction.client.guilds.cache.size}** 個伺服器`, true)
-      .addField("👥 總伺服器數量", `**${allGuilds}** 個伺服器`, true)
       .setColor(blurple);
     interaction.reply({
       embeds: [statusEmbed]
