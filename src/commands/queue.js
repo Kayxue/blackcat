@@ -118,7 +118,7 @@ export default {
       let endEmbed = new MessageEmbed()
         .setTitle("💤 已關閉")
         .setColor(danger);
-      interaction.editReply({
+      interaction.update({
         embeds: [endEmbed],
         components: []
       }).catch(() => {});
