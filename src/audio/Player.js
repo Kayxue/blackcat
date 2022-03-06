@@ -95,6 +95,9 @@ export default class Player {
         this._connection.destroy();
       }
     });
+    this._player.once(AudioPlayerStatus.Playing, () => {
+      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
+    });
     this._player.on(AudioPlayerStatus.Idle, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`);
       this.handelIdle();
@@ -189,11 +192,6 @@ export default class Player {
         embeds: [addedEmbed]
       });
     }
-
-    this._player.once(AudioPlayerStatus.Playing, () => {
-      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
-      this.handelPlaying();
-    });
   }
 
   skip(interaction) {
@@ -215,6 +213,7 @@ export default class Player {
     interaction.reply({
       embeds: [pauseEmbed]
     }).catch(this.noop);
+    this.updateNoticeEmbed();
   }
 
   unpause(interaction) {
@@ -226,6 +225,7 @@ export default class Player {
     interaction.reply({
       embeds: [unpauseEmbed]
     }).catch(this.noop);
+    this.updateNoticeEmbed();
   }
 
   shuffle(interaction) {
@@ -386,6 +386,22 @@ export default class Player {
       metadata: this._songs[0]
     });
     this._player.play(this._audio);
+    
+    let playingEmbed = new Discord.MessageEmbed()
+      .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
+      .setThumbnail(this._audio.metadata.thumbnail)
+      .setColor(colors.success);
+
+    this._noticeMessage = await this._channel.send({
+      embeds: [playingEmbed]
+    }).catch(this.noop);
+    this._buttonCollector = this._noticeMessage?.createMessageComponentCollector({
+      componentType: "BUTTON"
+    });
+
+    this.updateNoticeEmbed();
+
+    this._buttonCollector?.on("collect", (interaction) => this.handelButtonClick(interaction));
   }
 
   updateNoticeEmbed() {
@@ -497,6 +513,8 @@ export default class Player {
     let playedSong = this._songs.shift();
     if (this._loop) this._songs.push(playedSong);
     if (this._repeat) this._songs.unshift(playedSong);
+    this._noticeMessage?.delete().catch(() => {});
+    this._noticeMessage = null;
     if (this._songs.length === 0) {
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
@@ -509,24 +527,6 @@ export default class Player {
     } else {
       this.playStream();
     }
-  }
-
-  async handelPlaying() {
-    let playingEmbed = new Discord.MessageEmbed()
-      .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
-      .setThumbnail(this._audio.metadata.thumbnail)
-      .setColor(colors.success);
-
-    this._noticeMessage = await this._channel.send({
-      embeds: [playingEmbed]
-    }).catch(this.noop);
-    this._buttonCollector = this._noticeMessage?.createMessageComponentCollector({
-      componentType: "BUTTON"
-    });
-
-    this.updateNoticeEmbed();
-
-    this._buttonCollector?.on("collect", (interaction) => this.handelButtonClick(interaction));
   }
 
   handelButtonClick(interaction) {
