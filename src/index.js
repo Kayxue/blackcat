@@ -11,14 +11,20 @@ const config = configFile();
 const client = new Discord.Client({
   intents: [
     Discord.Intents.FLAGS.GUILDS,
-    Discord.Intents.FLAGS.GUILD_MESSAGES,
     Discord.Intents.FLAGS.GUILD_VOICE_STATES
   ],
   allowedMentions: {
     parse: ["users"],
     repliedUser: false
   },
-  shards: "auto"
+  shards: "auto",
+  presence: {
+    status: "idle",
+    activities: [{
+      name: "載入中... 請稍等",
+      type: "COMPETING"
+    }]
+  }
 });
 
 client.commands = new Discord.Collection();

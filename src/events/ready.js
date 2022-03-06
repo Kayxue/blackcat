@@ -17,9 +17,16 @@ export default {
     }
     log.info(`同步指令成功: ${registered.size}`);
     
+    client.user.setPresence({
+      status: "dnd",
+      activities: [{
+        name: "/help | 黑貓測試版",
+        type: "LISTENING"
+      }]
+    });
     setInterval(() => {
       client.user.setPresence({
-        status: "idle",
+        status: "dnd",
         activities: [{
           name: "/help | 黑貓測試版",
           type: "LISTENING"
