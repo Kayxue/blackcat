@@ -140,7 +140,9 @@ export default class Player {
       let videos;
       isPlaylist = true;
       try {
-        let playlist = await play.playlist_info(track);
+        let playlist = await play.playlist_info(track, {
+          incomplete: true
+        });
         videos = await playlist.all_videos();
       } catch (e) {
         return this.handelYoutubeError(e);
