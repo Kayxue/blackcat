@@ -256,6 +256,7 @@ export default class Player {
       .setColor(colors.success);
     this._songs = [];
     this._player.stop();
+    this._connection.destroy();
     interaction.reply({
       embeds: [stopEmbed]
     }).catch(this.noop);
@@ -557,6 +558,7 @@ export default class Player {
       this._songs = [];
       this._player.stop();
       interaction.reply("⏹️ 停止播放音樂").catch(this.noop);
+      this._connection.destroy();
       break;
     case "volup":
       this.volume = this._volume + 0.1;
