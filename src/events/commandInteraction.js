@@ -8,7 +8,6 @@ export default {
   run: async (_client, interaction) => {
     if (!interaction.isCommand()) return;
     
-    if (interaction.member.bot) return interaction.reply("🤖 請完成\"我不是機器人\"驗證");
     if (!interaction.guild) return interaction.reply("❌ 你必須把我加到一個伺服器裡!");
     if (!interaction.channel) return interaction.reply("❌ 無法取得文字頻道");
     const command = interaction.client.commands.get(interaction.commandName);
