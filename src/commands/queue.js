@@ -110,7 +110,6 @@ export default {
         }).catch(() => {});
         break;
       case "close":
-        collected.deferReply();
         collector.stop();
       }
     });
