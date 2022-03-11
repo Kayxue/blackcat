@@ -10,7 +10,7 @@ import {
 import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
-import VolumeTransformer from "./core/VolumeTransformer.js";
+import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
 import log from "../logger.js";
 import colors from "../color.js";
