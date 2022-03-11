@@ -10,6 +10,7 @@ import {
 import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
+import VolumeTransformer from "./core/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
 import log from "../logger.js";
 import colors from "../color.js";
@@ -290,19 +291,17 @@ export default class Player {
         this._songs[0].rawData = await play.video_info(this._songs[0].url);
         this._songs[0].rawData.full = true;
       } catch (e) {
-        log.error(e.message, e);
-        let errorEmbed = new Discord.MessageEmbed()
-          .setTitle("🙁 載入音樂時發生錯誤")
-          .setDescription(
-            "載入音樂時發生了一點小錯誤...\n" +
-            "錯誤內容:\n" +
-            "```\n" + e.message + "\n```")
-          .setColor(colors.danger);
-        this._channel.send({
-          embeds: [errorEmbed]
-        }).catch(this.noop);
-        return;
+        this.handelYoutubeError(e);
       }
+
+      this._songs[0] = {
+        title: this._songs[0].rawData.title,
+        url: this._songs[0].rawData.url,
+        duraction: this._songs[0].rawData.duractionInSec,
+        duractionParsed: this._songs[0].rawData.duractionRaw,
+        thumbnail: this._songs[0].rawData.thumbnails.pop().url,
+        rawData: this._songs[0].rawData
+      };
     }
 
     try {
@@ -322,17 +321,14 @@ export default class Player {
       return;
     }
 
-    log.info(`音樂格式: ${this._raw.type}`);
-
     if (this._raw.type === "opus") {
       this._engines.opusDecoder = new prism.opus.Decoder({
         channels: 2,
         frameSize: 960,
         rate: 48000
       });
-      this._engines.volumeTransform = new prism.VolumeTransformer({
-        volume: this._volume,
-        type: "s16le"
+      this._engines.volumeTransform = new VolumeTransformer({
+        volume: this._volume
       });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
@@ -350,9 +346,8 @@ export default class Player {
         frameSize: 960,
         rate: 48000
       });
-      this._engines.volumeTransform = new prism.VolumeTransformer({
-        volume: this._volume,
-        type: "s16le"
+      this._engines.volumeTransform = new VolumeTransformer({
+        volume: this._volume
       });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
@@ -433,7 +428,7 @@ export default class Player {
       .setStyle("PRIMARY");
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
-    if (this._volume >= 100 || this._muted) volUpButton.setDisabled(true);
+    if (this._volume >= 1 || this._muted) volUpButton.setDisabled(true);
     if (this._volume <= 0 || this._muted) volDownButton.setDisabled(true);
 
     let rowOne = new Discord.MessageActionRow()
@@ -469,7 +464,7 @@ export default class Player {
   }
 
   get volume() {
-    return this._audio?.volume.volumeLogarithmic;
+    return this._engines.volumeTransform?.volume;
   }
 
   get pauseState() {
@@ -478,8 +473,14 @@ export default class Player {
 
   set volume(volume) {
     this._muted = false;
-    this._engines.volumeTransform.setVolumeLogarithmic(volume);
-    this._volume = volume;
+    if (volume >= 1) {
+      this._volume = 100;
+    } else if (volume <= 0) {
+      this._volume = 0;
+    } else {
+      this._volume = volume;
+    }
+    this._engines.volumeTransform.setVolume(Math.round(this._volume * 100) / 100);
   }
 
   handelYoutubeError(e) {
@@ -517,6 +518,15 @@ export default class Player {
     this._noticeMessage?.delete().catch(() => {});
     this._noticeMessage = null;
     if (this._songs.length === 0) {
+      try {
+        this._encoded?.destroy();
+        this._engines.volumeTransform?.destroy();
+        this._engines.opusDecoder?.destroy();
+        this._engines.opusEncoder?.destroy();
+        this._engines.webmDemuxer?.destroy();
+        this._engines.ffmpeg?.destroy();
+      // eslint-disable-next-line no-empty
+      } catch {}
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
         .setColor(colors.success);
@@ -538,50 +548,69 @@ export default class Player {
       }).catch(this.noop);
     }
 
+    let replyMessage = "";
     switch (interaction.customId) {
     case "pause":
       if (this._paused) {
         this._player.unpause();
         this._paused = false;
-        interaction.reply("▶️ 繼續播放音樂").catch(this.noop);
+        replyMessage = "▶️ 繼續播放音樂";
       } else if (!this._paused) {
         this._player.pause();
         this._paused = true;
-        interaction.reply("⏸️ 暫停音樂").catch(this.noop);
+        replyMessage = "⏸️ 暫停播放音樂";
       }
       break;
     case "skip":
       this._player.stop();
-      interaction.reply("⏭️ 跳過歌曲").catch(this.noop);
+      replyMessage = "⏭️ 跳過音樂";
       break;
     case "stop":
       this._songs = [];
       this._player.stop();
-      interaction.reply("⏹️ 停止播放音樂").catch(this.noop);
+      replyMessage = "⏹️ 停止播放音樂";
       this._connection.destroy();
+      this._client.players.delete(this._guildId);
       break;
     case "volup":
       this.volume = this._volume + 0.1;
-      interaction.reply("🔊 音量增加10%").catch(this.noop);
+      replyMessage = `🔊 音量增加10%, 目前音量為 ${this._volume}`;
       break;
     case "voldown":
       this.volume = this._volume - 0.1;
-      interaction.reply("🔊 音量減少10%").catch(this.noop);
+      replyMessage = `🔊 音量減少10%, 目前音量為 ${this._volume}`;
       break;
     case "mute":
       if (this._muted) {
-        this._engines.volumeTransform.setVolumeLogarithmic(this._volume);
+        this._engines.volumeTransform.setVolume(this._volume);
         this._muted = false;
-        interaction.reply(`🔊 音量恢復至${this._volume * 100}%`).catch(this.noop);
+        replyMessage = `🔊 音量恢復至${this._volume * 100}%`;
       } else {
-        this._engines.volumeTransform.setVolumeLogarithmic(0);
+        this._engines.volumeTransform.setVolume(0);
         this._muted = true;
-        interaction.reply("🔇 靜音").catch(this.noop);
+        replyMessage = "🔇 靜音音樂";
       }
       break;
     default:
       interaction.reply("❌ 發生了億點點的錯誤");
+      return;
     }
+    let clickEmbed = new Discord.MessageEmbed()
+      .setTitle(replyMessage)
+      .setAuthor({
+        name: interaction.user.username,
+        iconURL: interaction.user.avatarURL({
+          dynamic: true
+        })
+      })
+      .setColor(colors.success);
+    interaction.reply({
+      embeds: [clickEmbed]
+    }).catch(this.noop);
+    setTimeout(() => {
+      interaction.deleteReply().catch(this.noop);
+    }, 30000);
+
     this.updateNoticeEmbed();
   }
 }

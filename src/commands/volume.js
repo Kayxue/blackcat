@@ -43,9 +43,8 @@ export default {
         embeds: [volumeEmbed]
       });
     } else {
-      player.volume = interaction.options.getInteger("volume") / 100;
       let volumeEmbed = new MessageEmbed()
-        .setTitle(`🔊 設定音量 ${player.volume * 100}%`)
+        .setTitle(`🔊 目前音量 ${player.volume * 100}%`)
         .setColor(blurple);
       return interaction.reply({
         embeds: [volumeEmbed]
