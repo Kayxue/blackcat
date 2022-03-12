@@ -474,7 +474,7 @@ export default class Player {
   set volume(volume) {
     this._muted = false;
     if (volume >= 1) {
-      this._volume = 100;
+      this._volume = 1;
     } else if (volume <= 0) {
       this._volume = 0;
     } else {
