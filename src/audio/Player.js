@@ -304,7 +304,7 @@ export default class Player {
         duraction: this._songs[0].rawData.duractionInSec,
         duractionParsed: this._songs[0].rawData.duractionRaw,
         thumbnail: this._songs[0].rawData.thumbnails.pop().url,
-        queuer: interaction.user.username,
+        queuer: this._songs[0].queuer,
         rawData: this._songs[0].rawData
       };
     }
