@@ -596,7 +596,7 @@ export default class Player {
       return;
     }
     let clickEmbed = new Discord.MessageEmbed()
-      .setTitle(replyMessage)
+      .addField(replyMessage, "\u200b")
       .setAuthor({
         name: interaction.user.username,
         iconURL: interaction.user.avatarURL({
