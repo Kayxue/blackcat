@@ -35,7 +35,7 @@
     "erlpack": "git+https://github.com/discord/erlpack#master",
     "ffmpeg-static": "^5.0.0",
     "libsodium-wrappers": "^0.7.9",
-    "play-dl": "^1.8.9",
+    "play-dl": "^1.9.0",
     "prism-media": "^1.3.2",
     "zlib-sync": "^0.1.7"
   },
