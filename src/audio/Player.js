@@ -48,7 +48,7 @@ export default class Player {
 
   noop() { }
 
-  init() {
+  async init() {
     if (this._init) return;
     try {
       this._connection = joinVoiceChannel({
@@ -71,18 +71,6 @@ export default class Player {
       return;
     }
 
-    if (this._voiceChannel.type === "GUILD_STAGE_VOICE") {
-      try {
-        this._guild.me.voice.setSuppressed(false);
-      } catch(e) {
-        let notSpeakerEmbed = new Discord.MessageEmbed()
-          .setTitle("🙁 我無法變成演講者，可能會無法聽到音樂")
-          .setColor(colors.danger);
-        this._channel.send({
-          embeds: [notSpeakerEmbed]
-        }).catch(this.noop);
-      }
-    }
     this._player = createAudioPlayer();
     this._connection.subscribe(this._player);
 
@@ -119,6 +107,21 @@ export default class Player {
     this._player.on(AudioPlayerStatus.Buffering, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
     });
+    
+    if (this._voiceChannel.type === "GUILD_STAGE_VOICE") {
+      await entersState(this._connection, VoiceConnectionStatus.Ready);
+      try {
+        this._guild.me.voice.setSuppressed(false);
+      } catch(e) {
+        let notSpeakerEmbed = new Discord.MessageEmbed()
+          .setTitle("🙁 我無法變成演講者，可能會無法聽到音樂")
+          .setColor(colors.danger);
+        this._channel.send({
+          embeds: [notSpeakerEmbed]
+        }).catch(this.noop);
+      }
+    }
+
     this._init = true;
     this._client.players.set(this._guildId, this);
   }
@@ -280,9 +283,14 @@ export default class Player {
 
   loop(interaction) {
     let loopEmbed = new Discord.MessageEmbed()
-      .setTitle("🔁 重複播放所有歌曲")
       .setColor(colors.success);
-    this._loop = true;
+    if (!this._loop) {
+      this._loop = true;
+      loopEmbed.setTitle("🔁 重複播放所有歌曲");
+    } else {
+      this._loop = false;
+      loopEmbed.setTitle("▶ 取消重複播放所有歌曲");
+    }
     this._repeat = false;
     interaction.reply({
       embeds: [loopEmbed]
@@ -294,8 +302,14 @@ export default class Player {
     let repeatEmbed = new Discord.MessageEmbed()
       .setTitle("🔂 重複播放目前的歌曲")
       .setColor(colors.success);
+    if (!this._repeat) {
+      this._repeat = true;
+      repeatEmbed.setTitle("🔁 重複播放目前的歌曲");
+    } else {
+      this._repeat = false;
+      repeatEmbed.setTitle("▶ 取消重複播放目前的歌曲");
+    }
     this._loop = false;
-    this._repeat = true;
     interaction.reply({
       embeds: [repeatEmbed]
     }).catch(this.noop);
@@ -424,15 +438,15 @@ export default class Player {
     let volDownButton = new Discord.MessageButton()
       .setCustomId("voldown")
       .setEmoji("<:vol_down:827734683340111913>")
-      .setStyle("SECONDARY");
+      .setStyle("SUCCESS");
     let volUpButton = new Discord.MessageButton()
       .setCustomId("volup")
       .setEmoji("<:vol_up:827734772889157722>")
-      .setStyle("SECONDARY");
+      .setStyle("SUCCESS");
     let hintButton = new Discord.MessageButton()
       .setCustomId("mute")
       .setEmoji("<:mute:827734384606052392>")
-      .setStyle("SECONDARY");
+      .setStyle("SUCCESS");
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
     if (this._volume >= 1 || this._muted) volUpButton.setDisabled(true);
@@ -441,14 +455,17 @@ export default class Player {
     let rowOne = new Discord.MessageActionRow()
       .addComponents(musicButton, skipButton, stopButton);
     let rowTwo = new Discord.MessageActionRow()
-      .addComponents(volDownButton, volUpButton, hintButton);
-
-    
+      .addComponents(volDownButton, volUpButton, hintButton);    
     
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
+    if (this._muted) playingEmbed.addField("🔇 靜音", "開啟", true);
+    else playingEmbed.addField("🔊 音量", `${this._volume * 100}%`, true);
+    if (this._loop) playingEmbed.addField("🔁 循環播放", "開啟", true);
+    if (this._repeat) playingEmbed.addField("🔂 重複播放", "開啟", true);
+    playingEmbed.addField("👥 點歌者", this._audio.metadata.queuer, true);
 
     this._noticeMessage?.edit({
       embeds: [playingEmbed],
