@@ -357,7 +357,7 @@ export default class Player {
       this._engines.ffmpeg = new prism.FFmpeg({
         args: ["-analyzeduration", "0", "-loglevel", "0", "-f", "s16le", "-ar", "48000", "-ac", "2"]
       });
-      this._engines.volumeTransform = new prism.VolumeTransformer({
+      this._engines.volumeTransform = new VolumeTransformer({
         volume: this._volume,
         type: "s16le"
       });
