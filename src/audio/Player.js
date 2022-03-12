@@ -167,6 +167,7 @@ export default class Player {
           duraction: video.duractionInSec,
           duractionParsed: video.duractionRaw,
           thumbnail: video.thumbnails.pop().url,
+          queuer: interaction.user.username,
           rawData: video
         });
       });
@@ -177,6 +178,7 @@ export default class Player {
       duraction: rawData.video_details.durationInSec,
       duractionParsed: rawData.video_details.durationRaw,
       thumbnail: rawData.video_details.thumbnails.pop().url,
+      queuer: interaction.user.username,
       rawData
     }];
 
@@ -272,6 +274,7 @@ export default class Player {
     interaction.reply({
       embeds: [loopEmbed]
     }).catch(this.noop);
+    this.updateNoticeEmbed();
   }
 
   repeat(interaction) {
@@ -283,6 +286,7 @@ export default class Player {
     interaction.reply({
       embeds: [repeatEmbed]
     }).catch(this.noop);
+    this.updateNoticeEmbed();
   }
 
   async playStream() {
@@ -300,6 +304,7 @@ export default class Player {
         duraction: this._songs[0].rawData.duractionInSec,
         duractionParsed: this._songs[0].rawData.duractionRaw,
         thumbnail: this._songs[0].rawData.thumbnails.pop().url,
+        queuer: interaction.user.username,
         rawData: this._songs[0].rawData
       };
     }
@@ -307,18 +312,7 @@ export default class Player {
     try {
       this._raw = await play.stream(this._songs[0].url);
     } catch (e) {
-      log.error(e.message, e);
-      let errorEmbed = new Discord.MessageEmbed()
-        .setTitle("🙁 載入音樂時發生錯誤")
-        .setDescription(
-          "載入音樂時發生了一點小錯誤...\n" +
-          "錯誤內容:\n" +
-          "```\n" + e.message + "\n```")
-        .setColor(colors.danger);
-      this._channel.send({
-        embeds: [errorEmbed]
-      }).catch(this.noop);
-      return;
+      this.handelYoutubeError(e);
     }
 
     if (this._raw.type === "opus") {
@@ -404,28 +398,28 @@ export default class Player {
     let musicButton = new Discord.MessageButton()
       .setCustomId("pause")
       .setEmoji(this._paused ? "<:play:827734196243398668>" : "<:pause:827737900359745586>")
-      .setStyle("SUCCESS");
+      .setStyle("PRIMARY");
     let skipButton = new Discord.MessageButton()
       .setCustomId("skip")
       .setEmoji("<:skip:827734282318905355>")
-      .setStyle("SUCCESS");
+      .setStyle("PRIMARY");
     let stopButton = new Discord.MessageButton()
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
       .setStyle("DANGER");
 
-    let volUpButton = new Discord.MessageButton()
-      .setCustomId("volup")
-      .setEmoji("<:vol_up:827734772889157722>")
-      .setStyle("PRIMARY");
     let volDownButton = new Discord.MessageButton()
       .setCustomId("voldown")
       .setEmoji("<:vol_down:827734683340111913>")
-      .setStyle("PRIMARY");
+      .setStyle("SECONDARY");
+    let volUpButton = new Discord.MessageButton()
+      .setCustomId("volup")
+      .setEmoji("<:vol_up:827734772889157722>")
+      .setStyle("SECONDARY");
     let hintButton = new Discord.MessageButton()
       .setCustomId("mute")
       .setEmoji("<:mute:827734384606052392>")
-      .setStyle("PRIMARY");
+      .setStyle("SECONDARY");
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
     if (this._volume >= 1 || this._muted) volUpButton.setDisabled(true);
@@ -434,7 +428,7 @@ export default class Player {
     let rowOne = new Discord.MessageActionRow()
       .addComponents(musicButton, skipButton, stopButton);
     let rowTwo = new Discord.MessageActionRow()
-      .addComponents(volUpButton, volDownButton, hintButton);
+      .addComponents(volDownButton, volUpButton, hintButton);
 
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
@@ -481,6 +475,8 @@ export default class Player {
       this._volume = volume;
     }
     this._engines.volumeTransform.setVolume(Math.round(this._volume * 100) / 100);
+    
+    this.updateNoticeEmbed();
   }
 
   handelYoutubeError(e) {
