@@ -296,14 +296,15 @@ export default class Player {
         this._songs[0].rawData.full = true;
       } catch (e) {
         this.handelYoutubeError(e);
+        return;
       }
 
       this._songs[0] = {
-        title: this._songs[0].rawData.title,
-        url: this._songs[0].rawData.url,
-        duraction: this._songs[0].rawData.duractionInSec,
-        duractionParsed: this._songs[0].rawData.duractionRaw,
-        thumbnail: this._songs[0].rawData.thumbnails.pop().url,
+        title: this._songs[0].rawData.video_details.title,
+        url: this._songs[0].rawData.video_details.url,
+        duraction: this._songs[0].rawData.video_details.duractionInSec,
+        duractionParsed: this._songs[0].rawData.video_details.duractionRaw,
+        thumbnail: this._songs[0].rawData.video_details.thumbnails.pop().url,
         queuer: this._songs[0].queuer,
         rawData: this._songs[0].rawData
       };
@@ -429,6 +430,8 @@ export default class Player {
     let rowTwo = new Discord.MessageActionRow()
       .addComponents(volDownButton, volUpButton, hintButton);
 
+    
+    
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
       .setThumbnail(this._audio.metadata.thumbnail)
