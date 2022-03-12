@@ -28,7 +28,7 @@ export default {
       client.user.setPresence({
         status: "dnd",
         activities: [{
-          name: "/help | 黑貓測試版",
+          name: "/help | catmusic.ml",
           type: "LISTENING"
         }]
       });
