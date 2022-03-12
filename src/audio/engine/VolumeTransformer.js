@@ -9,7 +9,7 @@ class VolumeTransformer extends Transform {
     this._bits = 16;
     this._bytes = this._bits / 8;
     this._extremum = Math.pow(2, this._bits - 1);
-    this.volume = typeof options.volume === "undefined" ? 1 : options.volume;
+    this._volume = typeof options.volume === "undefined" ? 1 : options.volume;
     this._chunk = Buffer.alloc(0);
   }
 
@@ -18,7 +18,7 @@ class VolumeTransformer extends Transform {
 
   _transform(chunk, encoding, done) {
     // If the volume is 1, act like a passthrough stream
-    if (this.volume === 1) {
+    if (this._volume === 1) {
       this.push(chunk);
       return done();
     }
@@ -31,7 +31,7 @@ class VolumeTransformer extends Transform {
     const complete = Math.floor(chunk.length / _bytes) * _bytes;
 
     for (let i = 0; i < complete; i += _bytes) {
-      const int = Math.min(_extremum - 1, Math.max(-_extremum, Math.floor(this.volume * this._readInt(chunk, i))));
+      const int = Math.min(_extremum - 1, Math.max(-_extremum, Math.floor(this._volume * this._readInt(chunk, i))));
       this._writeInt(chunk, int, i);
     }
 
@@ -46,11 +46,11 @@ class VolumeTransformer extends Transform {
   }
   
   setVolume(volume) {
-    this.volume = volume;
+    this._volume = volume;
   }
   
   get volume() {
-    return this.volume;
+    return this._volume;
   }
 }
 
