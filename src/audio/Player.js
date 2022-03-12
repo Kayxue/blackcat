@@ -378,9 +378,8 @@ export default class Player {
     this._player.play(this._audio);
     
     let playingEmbed = new Discord.MessageEmbed()
-      .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
-      .setThumbnail(this._audio.metadata.thumbnail)
-      .setColor(colors.success);
+      .setTitle("🕒 載入中...")
+      .setColor(colors.warning);
 
     this._noticeMessage = await this._channel.send({
       embeds: [playingEmbed]
