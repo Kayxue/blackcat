@@ -19,8 +19,7 @@ export default {
       return interaction.reply("❌ 你必須加入一個語音頻道")
         .catch(() => {});
     
-    const permissionBot = interaction.member.voice?.channel.permissionsFor(interaction.guild.me);
-    if (!permissionBot.has("CONNECT") || !permissionBot.has("SPEAK"))
+    if (!interaction.member.voice.channel.joinable)
       return interaction.reply("❌ 我無法連線至語音頻道!")
         .catch(() => {});
     
@@ -32,7 +31,7 @@ export default {
     } else {
       player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
       if (!allowModify(interaction))
-        return interaction.reply("❌ 你必須加入一個語音頻道")
+        return interaction.reply("❌ 你必須跟我在同一個頻道")
           .catch(() => {});
     }
     await interaction.deferReply()

@@ -71,6 +71,10 @@ export default class Player {
       return;
     }
 
+    if (this._voiceChannel.type === "GUILD_STAGE_VOICE") {
+      this.setSpeaker();
+    }
+
     this._player = createAudioPlayer();
     this._connection.subscribe(this._player);
 
@@ -107,23 +111,23 @@ export default class Player {
     this._player.on(AudioPlayerStatus.Buffering, () => {
       log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
     });
-    
-    if (this._voiceChannel.type === "GUILD_STAGE_VOICE") {
-      await entersState(this._connection, VoiceConnectionStatus.Ready);
-      try {
-        this._guild.me.voice.setSuppressed(false);
-      } catch(e) {
-        let notSpeakerEmbed = new Discord.MessageEmbed()
-          .setTitle("🙁 我無法變成演講者，可能會無法聽到音樂")
-          .setColor(colors.danger);
-        this._channel.send({
-          embeds: [notSpeakerEmbed]
-        }).catch(this.noop);
-      }
-    }
 
     this._init = true;
     this._client.players.set(this._guildId, this);
+  }
+
+  async setSpeaker() {
+    await entersState(this._connection, VoiceConnectionStatus.Ready);
+    try {
+      this._guild.me.voice.setSuppressed(false);
+    } catch(e) {
+      let notSpeakerEmbed = new Discord.MessageEmbed()
+        .setTitle("🙁 我無法變成演講者，可能會無法聽到音樂")
+        .setColor(colors.danger);
+      this._channel.send({
+        embeds: [notSpeakerEmbed]
+      }).catch(this.noop);
+    }
   }
 
   async play(track, interaction) {
