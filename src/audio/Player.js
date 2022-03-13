@@ -287,6 +287,7 @@ export default class Player {
     this._player.stop();
     try {
       this._connection.destroy();
+    // eslint-disable-next-line no-empty
     } catch (e) {}
   }
 
@@ -575,6 +576,7 @@ export default class Player {
       this._client.players.delete(this._guildId);
       try {
         this._connection.destroy();
+      // eslint-disable-next-line no-empty
       } catch (e) {}
     } else {
       this.playStream();
