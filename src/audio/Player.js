@@ -282,12 +282,12 @@ export default class Player {
       interaction.reply({
         embeds: [stopEmbed]
       }).catch(this.noop);
-    } else {
-      this._guildDeleted = true;
     }
     this._songs = [];
     this._player.stop();
-    this._connection.destroy();
+    try {
+      this._connection.destroy();
+    } catch (e) {}
   }
 
   loop(interaction) {
@@ -573,9 +573,9 @@ export default class Player {
         }).catch(this.noop);
       }
       this._client.players.delete(this._guildId);
-      if (this._connection.state !== VoiceConnectionStatus.Destroyed) {
+      try {
         this._connection.destroy();
-      }
+      } catch (e) {}
     } else {
       this.playStream();
     }
