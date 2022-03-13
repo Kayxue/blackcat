@@ -4,8 +4,9 @@ export default {
   event: "guildDelete",
   once: false,
   run: (guild) => {
-    if (PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
-      let player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
+    if (PlayerManager.getSendingPlayer(guild.client, guild.id)) {
+      let player = PlayerManager.getSendingPlayer(guild.client, guild.id);
+      player.stop(null, true);
     }
   },
 };
