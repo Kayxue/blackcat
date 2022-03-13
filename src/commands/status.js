@@ -23,7 +23,7 @@ export default {
     
     let statusEmbed = new MessageEmbed()
       .setTitle("❓ 機器人狀態")
-      .addField("🕒 上線時間", `**${days}天${hours}時${minutes}分$**`, true)
+      .addField("🕒 上線時間", `**${days}天${hours}時${minutes}分**`, true)
       .addField("📒 程式版本", `Node.js:**${process.version.replace("v", "")}** Discord.js:**${version}**`, true)
       .addField("\u200b", "\u200b")
       .addField("❄ 分片", `**${interaction.guild.shardId}/${interaction.client.shard.count}**`, true)
