@@ -29,6 +29,7 @@ export default class Player {
     this._muted = false;
     this._loop = false;
     this._repeat = false;
+    this._guildDeleted = false;
     this._volume = 0.7;
     this._noticeMessage = null;
     this._buttonCollector = null;
@@ -273,16 +274,20 @@ export default class Player {
     }).catch(this.noop);
   }
 
-  stop(interaction) {
+  stop(interaction, force = false) {
     let stopEmbed = new Discord.MessageEmbed()
       .setTitle("⏹️ 停止播放音樂")
       .setColor(colors.success);
+    if (!force) {
+      interaction.reply({
+        embeds: [stopEmbed]
+      }).catch(this.noop);
+    } else {
+      this._guildDeleted = true;
+    }
     this._songs = [];
     this._player.stop();
     this._connection.destroy();
-    interaction.reply({
-      embeds: [stopEmbed]
-    }).catch(this.noop);
   }
 
   loop(interaction) {
@@ -562,11 +567,15 @@ export default class Player {
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
         .setColor(colors.success);
-      this._channel.send({
-        embeds: [endEmbed]
-      }).catch(this.noop);
+      if (!this._guildDeleted) {
+        this._channel.send({
+          embeds: [endEmbed]
+        }).catch(this.noop);
+      }
       this._client.players.delete(this._guildId);
-      this._connection.destroy();
+      if (this._connection.state !== VoiceConnectionStatus.Destroyed) {
+        this._connection.destroy();
+      }
     } else {
       this.playStream();
     }
