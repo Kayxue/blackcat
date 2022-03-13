@@ -28,7 +28,7 @@ export default {
       if (!allowModify(interaction))
         return interaction.reply("❌ 你必須加入一個語音頻道");
     }
-    if (interaction.options.getInteger("volume")) {
+    if (typeof interaction.options.getInteger("volume") !== "undefined") {
       if (interaction.options.getInteger("volume") > 200) {
         return interaction.reply("❌ 音量不能大於 200");
       } else if (interaction.options.getInteger("volume") < 0) {
