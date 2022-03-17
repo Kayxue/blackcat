@@ -26,7 +26,7 @@ export default {
       .addField("🕒 上線時間", `**${days}天${hours}時${minutes}分**`, true)
       .addField("📒 程式版本", `Node.js:**${process.version.replace("v", "")}** Discord.js:**${version}**`, true)
       .addField("\u200b", "\u200b")
-      .addField("❄ 分片", `**${interaction.guild.shardId}/${interaction.client.shard.count}**`, true)
+      .addField("❄ 分片", `**${interaction.guild.shardId + 1}/${interaction.client.shard.count}**`, true)
       .addField("👥 分片伺服器數量", `**${interaction.client.guilds.cache.size}** 個伺服器`, true)
       .addField("🔊 分片音樂播放器數量", `**${interaction.client.players.size}** 個播放器`, true)
       .addField("\u200b", "\u200b")
