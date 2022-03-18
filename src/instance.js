@@ -48,3 +48,10 @@ eventFiles.forEach(async event => {
 });
 
 client.login(config.token);
+
+process.on("message", (message) => {
+  if (message.type === "shardId") {
+    client.shardId = message.value;
+    log.info(`分片已接收到ID ${message.value}`);
+  }
+});

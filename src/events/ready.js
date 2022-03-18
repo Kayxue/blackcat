@@ -1,4 +1,5 @@
 import log from "../logger.js";
+import shardName from "../shardName.js";
 
 export default {
   event: "ready",
@@ -20,7 +21,7 @@ export default {
     client.user.setPresence({
       status: "dnd",
       activities: [{
-        name: "/help | catmusic.ml",
+        name: "/help | ... | catmusic.ml",
         type: "LISTENING"
       }]
     });
@@ -28,10 +29,10 @@ export default {
       client.user.setPresence({
         status: "dnd",
         activities: [{
-          name: "/help | catmusic.ml",
+          name: `/help | 分片${shardName[client.shardId]} | catmusic.ml`,
           type: "LISTENING"
         }]
       });
-    }, 60_000);
+    }, 20_000);
   },
 };
