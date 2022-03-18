@@ -1,6 +1,5 @@
 import PlayerManager from "../audio/PlayerManager.js";
 import progress from "../util/progress.js";
-import allowModify from "../util/allowModify.js";
 import { MessageEmbed } from "discord.js";
 import { blurple } from "../color.js";
 
@@ -16,8 +15,6 @@ export default {
         .catch(() => {});
     } else {
       player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
-      if (!allowModify(interaction)) return interaction.reply("❌ 你必須跟我在同一個語音頻道")
-        .catch(() => {});
     }
     let data = player.nowplaying;
     let progressbar = progress(data.duraction, player.playTime);
