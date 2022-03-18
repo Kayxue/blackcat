@@ -1,5 +1,6 @@
 import log from "../logger.js";
-import { MessageEmbed } from "discord.js";
+import PlayerManager from "../audio/PlayerManager.js";
+import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
 import { danger } from "../color.js";
 
 export default {
@@ -8,7 +9,25 @@ export default {
   run: async (_client, interaction) => {
     if (!interaction.isCommand()) return;
     
-    if (!interaction.guild) return interaction.reply("❌ 你必須把我加到一個伺服器裡!");
+    if (!interaction.guild) {
+      let guildEmbed = new MessageEmbed()
+        .setTitle("❌ 你必須把我邀請進一個伺服器裡！")
+        .setDescription(
+          "你沒辦法在私訊中使用黑貓，必須要在一個伺服器裡使用黑貓。\n"+
+          "您可以點擊底下的按鈕來邀請黑貓進伺服器")
+        .setColor(danger);
+      let inviteButton = new MessageButton()
+        .setLabel("邀請黑貓")
+        .setStyle("LINK")
+        .setURL("https://discord.com/oauth2/authorize?client_id=848006097197334568&permissions=415776501073&scope=applications.commands%20bot");
+      let buttonRow = new MessageActionRow()
+        .addComponents(inviteButton);
+      return interaction.reply({
+        embeds: [guildEmbed],
+        components: [buttonRow]
+      })
+        .catch(() => {});
+    }
     if (!interaction.channel) return interaction.reply("❌ 無法取得文字頻道");
     const command = interaction.client.commands.get(interaction.commandName);
   
@@ -19,6 +38,12 @@ export default {
       return interaction.reply({
         embeds: [notfoundEmbed]
       }).catch(() => {});
+    }
+
+    if (PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
+      if (!interaction.guild.me.voice.channel) return;
+      let player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
+      player.stop(null, true);
     }
 
     try {
