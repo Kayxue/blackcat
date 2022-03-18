@@ -500,7 +500,7 @@ export default class Player {
   }
 
   get volume() {
-    return this._engines.volumeTransform?.volume;
+    return this._engines.volumeTransform.volume;
   }
 
   get pauseState() {
@@ -516,7 +516,7 @@ export default class Player {
     } else {
       this._volume = volume;
     }
-    this._engines.volumeTransform.setVolume(Math.round(this._volume * 100) / 100);
+    this._engines.volumeTransform.setVolume(volume);
     
     this.updateNoticeEmbed();
   }
@@ -616,12 +616,12 @@ export default class Player {
       this._client.players.delete(this._guildId);
       break;
     case "volup":
-      this.volume = this._volume + 0.1;
-      replyMessage = `🔊 音量增加10%, 目前音量為 ${this._volume}`;
+      this.volume = parseFloat((this._volume + 0.1).toFixed(10));
+      replyMessage = `🔊 音量增加10%, 目前音量為 ${this._volume * 100}%`;
       break;
     case "voldown":
-      this.volume = this._volume - 0.1;
-      replyMessage = `🔊 音量減少10%, 目前音量為 ${this._volume}`;
+      this.volume = parseFloat((this._volume - 0.1).toFixed(10));
+      replyMessage = `🔊 音量減少10%, 目前音量為 ${this._volume * 100}%`;
       break;
     case "mute":
       if (this._muted) {
