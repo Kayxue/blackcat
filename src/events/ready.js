@@ -29,7 +29,7 @@ export default {
       client.user.setPresence({
         status: "dnd",
         activities: [{
-          name: `/help | 分片${shardName[client.shardId]} | catmusic.ml`,
+          name: `/help | 分片:${shardName[client.shardId]} | catmusic.ml`,
           type: "LISTENING"
         }]
       });
