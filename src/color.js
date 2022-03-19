@@ -1,6 +1,6 @@
 const danger = "#EF4444";
 const warning = "#EAB308";
-const success = "#3B82F6";
+const success = "#57F287";
 const blurple = "#5865F2";
 
 export {
