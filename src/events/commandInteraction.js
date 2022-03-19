@@ -41,7 +41,7 @@ export default {
     }
 
     if (PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
-      if (!interaction.guild.me.voice.channel) return;
+      if (interaction.guild.me.voice.channel) return;
       let player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
       player.stop(null, true);
     }
