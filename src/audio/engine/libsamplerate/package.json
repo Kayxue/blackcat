@@ -44,20 +44,4 @@
         "url": "https://github.com/dmooney65/node-libsamplerate/issues"
     },
     "homepage": "https://github.com/dmooney65/node-libsamplerate#readme",
-    "devDependencies": {
-        "audio-generator": "^2.1.2",
-        "mocha": "^5.2.0",
-        "nyc": "^13.0.1",
-        "sinon": "^6.3.3"
-    },
-    "nyc": {
-        "extension": [
-          ".js"
-        ],
-        "exclude": [
-          "example.js",
-          "waveheader.js",
-          "test/*.js"
-        ]
-    }
 }
