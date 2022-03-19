@@ -338,7 +338,7 @@ export default class Player {
     if (!this._nightcore) {
       this._nightcore = true;
       nightcoreEmbed.setTitle("🌌 Nightcore!");
-      nightcoreEmbed.setDescription("Nightcore音效只會在非直播的音樂中使用");
+      nightcoreEmbed.setDescription("變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用");
     } else {
       this._nightcore = false;
       nightcoreEmbed.setTitle("🌅 已關閉Nightcore音效");
