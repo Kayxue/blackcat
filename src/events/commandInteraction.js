@@ -1,5 +1,4 @@
 import log from "../logger.js";
-import PlayerManager from "../audio/PlayerManager.js";
 import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
 import { danger } from "../color.js";
 
