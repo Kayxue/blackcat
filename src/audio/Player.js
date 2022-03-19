@@ -14,6 +14,7 @@ import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
 import log from "../logger.js";
 import colors from "../color.js";
+import SampleRate from "./engine/libsamplerate/index.js";
 
 export default class Player {
   constructor(interaction, guild, voice) {
@@ -29,6 +30,7 @@ export default class Player {
     this._muted = false;
     this._loop = false;
     this._repeat = false;
+    this._nightcore = false;
     this._guildDeleted = false;
     this._volume = 0.7;
     this._noticeMessage = null;
@@ -41,7 +43,8 @@ export default class Player {
       opusEncoder: null,
       webmDemuxer: null,
       ffmpeg: null,
-      volumeTransform: null
+      volumeTransform: null,
+      libsamplerate: null
     };
     this._encoded = null;
     this._raw = null;
@@ -215,6 +218,8 @@ export default class Player {
       interaction.editReply({
         embeds: [addedEmbed]
       });
+
+      this.updateNoticeEmbed();
     }
   }
 
@@ -327,6 +332,22 @@ export default class Player {
     this.updateNoticeEmbed();
   }
 
+  nightcore(interaction) {
+    let nightcoreEmbed = new Discord.MessageEmbed()
+      .setColor(colors.success);
+    if (!this._nightcore) {
+      this._nightcore = true;
+      nightcoreEmbed.setTitle("🌌 Nightcore!");
+      nightcoreEmbed.setDescription("Nightcore音效只會在非直播的音樂中使用");
+    } else {
+      this._nightcore = false;
+      nightcoreEmbed.setTitle("🌅 已關閉Nightcore音效");
+    }
+    interaction.reply({
+      embeds: [nightcoreEmbed]
+    }).catch(this.noop);
+  }
+
   async playStream() {
     if (!this._songs[0]?.rawData.full) {
       try {
@@ -363,15 +384,31 @@ export default class Player {
       this._engines.volumeTransform = new VolumeTransformer({
         volume: this._volume
       });
+      if (this._nightcore) this._engines.libsamplerate = new SampleRate({
+        type: SampleRate.SRC_SINC_FASTEST,
+        channels: 2,
+        fromRate: 48000,
+        fromDepth: 16,
+        toRate: 48000 / 1.15,
+        toDepth: 16
+      });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
         frameSize: 960,
         rate: 48000
       });
-      this._encoded = this._raw.stream
-        .pipe(this._engines.opusDecoder)
-        .pipe(this._engines.volumeTransform)
-        .pipe(this._engines.opusEncoder);
+      if (this.nightcore && this._engines.libsamplerate) {
+        this._encoded = this._raw.stream
+          .pipe(this._engines.opusDecoder)
+          .pipe(this._engines.volumeTransform)
+          .pipe(this._engines.libsamplerate)
+          .pipe(this._engines.opusEncoder);
+      } else {
+        this._encoded = this._raw.stream
+          .pipe(this._engines.opusDecoder)
+          .pipe(this._engines.volumeTransform)
+          .pipe(this._engines.opusEncoder);
+      }
     } else if (this._raw.type === "webm/opus") {
       this._engines.webmDemuxer = new prism.opus.WebmDemuxer();
       this._engines.opusDecoder = new prism.opus.Decoder({
@@ -564,6 +601,7 @@ export default class Player {
         this._engines.opusEncoder?.destroy();
         this._engines.webmDemuxer?.destroy();
         this._engines.ffmpeg?.destroy();
+        this._engines.libsamplerate?.destroy();
       // eslint-disable-next-line no-empty
       } catch {}
       let endEmbed = new Discord.MessageEmbed()

@@ -25,6 +25,7 @@
     "url": "https://github.com/blackcatbot/blackcat/issues"
   },
   "homepage": "https://catmusic.ml",
+  "workspaces": ["src/audio/engine/libsamplerate"],
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
     "@discordjs/opus": "^0.7.0",
