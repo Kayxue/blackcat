@@ -31,7 +31,8 @@ export default {
         activities: [{
           name: `/help | 分片:${shardName[client.shardId]} | catmusic.ml`,
           type: "LISTENING"
-        }]
+        }],
+        shardId: client.shardId
       });
     }, 20_000);
   },
