@@ -1283,6 +1283,13 @@ node-fetch@^2.6.1, node-fetch@^2.6.5:
   dependencies:
     whatwg-url "^5.0.0"
 
+node-libsamplerate@./src/audio/engine/libsamplerate/:
+  version "1.0.0"
+  dependencies:
+    bindings "^1.3.0"
+    cmake-js "^4.0.0"
+    node-addon-api "^1.4.0"
+
 nopt@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/nopt/-/nopt-5.0.0.tgz"
