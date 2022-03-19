@@ -285,6 +285,7 @@ export default class Player {
     }
     this._songs = [];
     this._player.stop();
+    this._client.players.delete(this._guildId);
     try {
       this._connection.destroy();
     // eslint-disable-next-line no-empty
