@@ -1,6 +1,6 @@
 <h3 align="center">Black cat</h3>
 <p align="center">
-  <img src="https://catmusic.ml/favicon.png" />
+  <img src="https://catmusic.ml/favicon.png" width="70" height="70" />
 </p>
 
 ![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=flat-square&logo=node.js&logoColor=white)
