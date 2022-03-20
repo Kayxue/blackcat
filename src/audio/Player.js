@@ -103,6 +103,8 @@ export default class Player {
         })
           .catch(this.noop);
         this._connection.destroy();
+        this._player.stop();
+        this._client.players.delete(this._guildId);
       }
     });
     this._player.once(AudioPlayerStatus.Playing, () => {
