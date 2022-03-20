@@ -399,7 +399,7 @@ export default class Player {
         frameSize: 960,
         rate: 48000
       });
-      if (this.nightcore && this._engines.libsamplerate) {
+      if (this._nightcore && this._engines.libsamplerate) {
         this._encoded = this._raw.stream
           .pipe(this._engines.opusDecoder)
           .pipe(this._engines.volumeTransform)
@@ -606,6 +606,14 @@ export default class Player {
         this._engines.libsamplerate?.destroy();
       // eslint-disable-next-line no-empty
       } catch {}
+      this._engines = {
+        opusDecoder: null,
+        opusEncoder: null,
+        webmDemuxer: null,
+        ffmpeg: null,
+        volumeTransform: null,
+        libsamplerate: null
+      };
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
         .setColor(colors.success);
