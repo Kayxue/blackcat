@@ -10,8 +10,7 @@
     "build": "cmake-js build",
     "rebuild:dev": "cmake-js rebuild --debug",
     "rebuild": "cmake-js rebuild",
-    "clean": "node-gyp clean",
-    "preinstall": "yarn add node-addon-api"
+    "clean": "node-gyp clean"
   },
   "dependencies": {
     "bindings": "^1.3.0",
