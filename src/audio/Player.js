@@ -10,11 +10,11 @@ import {
 import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
+import SampleRate from "node-libsamplerate";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
 import log from "../logger.js";
 import colors from "../color.js";
-import SampleRate from "./engine/libsamplerate/index.js";
 
 export default class Player {
   constructor(interaction, guild, voice) {
@@ -421,16 +421,33 @@ export default class Player {
       this._engines.volumeTransform = new VolumeTransformer({
         volume: this._volume
       });
+      if (this._nightcore) this._engines.libsamplerate = new SampleRate({
+        type: SampleRate.SRC_SINC_FASTEST,
+        channels: 2,
+        fromRate: 48000,
+        fromDepth: 16,
+        toRate: 48000 / 1.15,
+        toDepth: 16
+      });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
         frameSize: 960,
         rate: 48000
       });
-      this._encoded = this._raw.stream
-        .pipe(this._engines.webmDemuxer)
-        .pipe(this._engines.opusDecoder)
-        .pipe(this._engines.volumeTransform)
-        .pipe(this._engines.opusEncoder);
+      if (this._nightcore && this._engines.libsamplerate) {
+        this._encoded = this._raw.stream
+          .pipe(this._engines.webmDemuxer)
+          .pipe(this._engines.opusDecoder)
+          .pipe(this._engines.volumeTransform)
+          .pipe(this._engines.libsamplerate)
+          .pipe(this._engines.opusEncoder);
+      } else {
+        this._encoded = this._raw.stream
+          .pipe(this._engines.webmDemuxer)
+          .pipe(this._engines.opusDecoder)
+          .pipe(this._engines.volumeTransform)
+          .pipe(this._engines.opusEncoder);
+      }
     } else {
       this._engines.ffmpeg = new prism.FFmpeg({
         args: ["-analyzeduration", "0", "-loglevel", "0", "-f", "s16le", "-ar", "48000", "-ac", "2"]
