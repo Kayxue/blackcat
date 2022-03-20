@@ -693,7 +693,7 @@ export default class Player {
     }).catch(this.noop);
     setTimeout(() => {
       interaction.deleteReply().catch(this.noop);
-    }, 30000);
+    }, 15_000);
 
     this.updateNoticeEmbed();
   }
