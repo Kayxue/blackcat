@@ -3,7 +3,7 @@
   <img src="https://catmusic.ml/favicon.png" width="70" height="70" />
 </p>
 
-![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=flat-square&logo=node.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=flat&logo=node.js&logoColor=white)
 [![codebeat badge](https://codebeat.co/badges/92ee76a9-f812-4a55-beb5-c02375a441c6)](https://codebeat.co/projects/github-com-blackcatbot-blackcat-rewrite)
 
 ## 功能
