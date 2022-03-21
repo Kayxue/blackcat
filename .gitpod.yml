@@ -1,13 +1,11 @@
 tasks:
   - name: Install Node.js dependencies
-    init: yarn install
+    init: bash setup.sh
   - name: Build docker image
     init: docker build -t blackcat:gitpod .
 
 vscode:
   extensions:
-    - manuth.eslint-language-service
     - enkia.tokyo-night
     - PKief.material-icon-theme
     - ms-azuretools.vscode-docker
-    - exiasr.hadolint
