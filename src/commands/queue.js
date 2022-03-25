@@ -73,7 +73,7 @@ export default {
     });
     collector.on("collect", (collected) => {
       if (collected.user.id !== interaction.user.id) {
-        return collected.reply({
+        return collected.followUp({
           content: "😐 這個按鈕不是給你點的",
           ephemeral: true
         });
