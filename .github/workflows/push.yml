@@ -2,7 +2,8 @@ name: Build
 
 on:
   push:
-    branches: [ rewrite ]
+    tags:
+      - *
 
 jobs:
   build:
@@ -10,6 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get the version
+        id: git_tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -25,5 +29,10 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
-          tags: ${{ secrets.DOCKER_USERNAME }}/blackcat:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/blackcat:${{ steps.git_tag.outputs.VERSION }}
           push: true
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          title: "Release ${{ steps.git_tag.outputs.VERSION }}"
