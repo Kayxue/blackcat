@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake && \
+RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake bash && \
   addgroup -S catrunner && \
   adduser -S catrunner -G catrunner
 
