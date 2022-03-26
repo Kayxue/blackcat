@@ -27,33 +27,24 @@ export default function () {
     enableApi: false,
     // 注意：此功能尚未支援
     // 是否要啟用API伺服器
-    // 啟用此功能必須要將enableWeb設為true
-    // 除非網頁應用程式有在其他伺服器上運行
-    enableWeb: false,
-    // 注意：此功能尚未支援
-    // 是否要啟用網頁伺服器
     apiPort: process.env.PORT || 8080,
     // API伺服器監聽端口
   };
-  
+
   // 請勿修改
   // Do not modify
   let invaild = false;
   if (typeof config.token !== "string") {
     log.error("`token`不是一個字串");
-    invaild=true;
+    invaild = true;
   }
   if (typeof config.enableApi !== "boolean") {
     log.error("`enableApi`不是一個布林值(true/false)");
-    invaild=true;
-  }
-  if (typeof config.enableWeb !== "boolean") {
-    log.error("`enableWeb`不是一個布林值(true/false)");
-    invaild=true;
+    invaild = true;
   }
   if (typeof config.apiPort !== "number") {
     log.error("`apiPort`不是一個數字");
-    invaild=true;
+    invaild = true;
   }
 
   if (invaild) {
