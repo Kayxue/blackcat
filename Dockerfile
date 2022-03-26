@@ -8,7 +8,7 @@ COPY --chown=catrunner:catrunner . /home/catrunner/
 WORKDIR /home/catrunner/
 
 USER catrunner
-RUN yarn install && bash setup.sh && yarn cache clean
+RUN yarn install && yarn cache clean
 
 USER root
 RUN apk del python3 make gcc g++ git libtool autoconf automake cmake
