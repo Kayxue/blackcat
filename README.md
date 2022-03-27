@@ -57,6 +57,7 @@
 | ItzMiracleOwO | 聯合創辦人/貢獻者 |
 | KayXue | 開發者 |
 
+![Repobeats](https://repobeats.axiom.co/api/embed/a6bd28c74d122a98b8db7d45fd5ca39ad0e8b12e.svg)
 
 > Black cat source code
 > Licensed under Apache 2.0
