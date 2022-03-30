@@ -1,13 +1,19 @@
-if ! command -v cmake &> /dev/null
+if $1 == "--gitpod"
 then
-    echo "cmake could not be found"
-    if $1 == "--install"
-    then
-        echo "Installing cmake"
-        sudo apt-get install cmake
-    else
-        exit 1
-    fi
+  sudo apt-get install cmake
+  sudo apt-get remove ninja-build
+else
+  if ! command -v cmake &> /dev/null
+  then
+      echo "cmake could not be found"
+      if $1 == "--install"
+      then
+          echo "Installing cmake"
+          sudo apt-get install cmake
+      else
+          exit 1
+      fi
+  fi
 fi
 
 cd src/audio/engine/libsamplerate
