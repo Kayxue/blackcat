@@ -12,5 +12,5 @@ fi
 
 cd src/audio/engine/libsamplerate
 yarn install
-npx cmake-js compile
+yarn build
 cd ../../../../
