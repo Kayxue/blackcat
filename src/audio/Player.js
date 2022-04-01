@@ -5,7 +5,7 @@ import {
   entersState,
   joinVoiceChannel,
   VoiceConnectionStatus,
-  StreamType
+  StreamType,
 } from "@discordjs/voice";
 import Discord from "discord.js";
 import play from "play-dl";
@@ -44,13 +44,13 @@ export default class Player {
       webmDemuxer: null,
       ffmpeg: null,
       volumeTransform: null,
-      libsamplerate: null
+      libsamplerate: null,
     };
     this._encoded = null;
     this._raw = null;
   }
 
-  noop() { }
+  noop() {}
 
   async init() {
     if (this._init) return;
@@ -58,7 +58,7 @@ export default class Player {
       this._connection = joinVoiceChannel({
         guildId: this._guildId,
         channelId: this._channelId,
-        adapterCreator: this._guild.voiceAdapterCreator
+        adapterCreator: this._guild.voiceAdapterCreator,
       });
     } catch (e) {
       log.error(e.message, e);
@@ -66,11 +66,14 @@ export default class Player {
         .setTitle("🙁 加入語音頻道時發生錯誤")
         .setDescription(
           "加入語音頻道時發生了一些錯誤...\n" +
-          "錯誤內容:\n" +
-          "```\n" + e.message + "\n```")
+            "錯誤內容:\n" +
+            "```\n" +
+            e.message +
+            "\n```"
+        )
         .setColor(colors.danger);
       this._channel.send({
-        embeds: [errorEmbed]
+        embeds: [errorEmbed],
       });
       return;
     }
@@ -89,8 +92,16 @@ export default class Player {
       log.warn(`${this._guildId}:${this._channelId} 語音斷開連結`);
       try {
         await Promise.race([
-          entersState(this._connection, VoiceConnectionStatus.Signalling, 5_000),
-          entersState(this._connection, VoiceConnectionStatus.Connecting, 5_000),
+          entersState(
+            this._connection,
+            VoiceConnectionStatus.Signalling,
+            5_000
+          ),
+          entersState(
+            this._connection,
+            VoiceConnectionStatus.Connecting,
+            5_000
+          ),
         ]);
         log.info(`${this._guildId}:${this._channelId} 重新連接成功`);
       } catch (error) {
@@ -98,9 +109,10 @@ export default class Player {
         let disconnecteEmbed = new Discord.MessageEmbed()
           .setTitle("😕 我的語音連接斷開了")
           .setColor(colors.danger);
-        this._channel.send({
-          embeds: [disconnecteEmbed]
-        })
+        this._channel
+          .send({
+            embeds: [disconnecteEmbed],
+          })
           .catch(this.noop);
         this.stop(null, true);
       }
@@ -124,30 +136,36 @@ export default class Player {
     await entersState(this._connection, VoiceConnectionStatus.Ready);
     try {
       this._guild.me.voice.setSuppressed(false);
-    } catch(e) {
+    } catch (e) {
       let notSpeakerEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 我無法變成演講者，可能會無法聽到音樂")
         .setColor(colors.danger);
-      this._channel.send({
-        embeds: [notSpeakerEmbed]
-      }).catch(this.noop);
+      this._channel
+        .send({
+          embeds: [notSpeakerEmbed],
+        })
+        .catch(this.noop);
     }
   }
 
   async play(track, interaction) {
-    let rawData, parsedData, isPlaylist = false;
+    let rawData,
+      parsedData,
+      isPlaylist = false;
 
     let searchEmbed = new Discord.MessageEmbed()
       .setTitle(`🔍 正在搜尋 **${track}**`)
       .setColor(colors.success);
-    interaction.editReply({
-      embeds: [searchEmbed]
-    }).catch(this.noop);
+    interaction
+      .editReply({
+        embeds: [searchEmbed],
+      })
+      .catch(this.noop);
 
     if (play.yt_validate(track) !== "video" && !track.startsWith("https")) {
       try {
         let result = await play.search(track, {
-          limit: 1
+          limit: 1,
         });
         rawData = await play.video_info(result[0]?.url);
         if (!rawData) {
@@ -169,7 +187,7 @@ export default class Player {
       isPlaylist = true;
       try {
         let playlist = await play.playlist_info(track, {
-          incomplete: true
+          incomplete: true,
         });
         videos = await playlist.all_videos();
       } catch (e) {
@@ -179,7 +197,7 @@ export default class Player {
         .setTitle(`🔍 已加入整個播放清單，共有 **${videos.length}** 首歌曲`)
         .setColor(colors.success);
       interaction.followUp({
-        embeds: [playlistEmbed]
+        embeds: [playlistEmbed],
       });
 
       parsedData = [];
@@ -192,19 +210,22 @@ export default class Player {
           duractionParsed: video.duractionRaw,
           thumbnail: video.thumbnails.pop().url,
           queuer: interaction.user.username,
-          rawData: video
+          rawData: video,
         });
       });
     }
-    if (!isPlaylist) parsedData = [{
-      title: rawData.video_details.title,
-      url: rawData.video_details.url,
-      duraction: rawData.video_details.durationInSec,
-      duractionParsed: rawData.video_details.durationRaw,
-      thumbnail: rawData.video_details.thumbnails.pop().url,
-      queuer: interaction.user.username,
-      rawData
-    }];
+    if (!isPlaylist)
+      parsedData = [
+        {
+          title: rawData.video_details.title,
+          url: rawData.video_details.url,
+          duraction: rawData.video_details.durationInSec,
+          duractionParsed: rawData.video_details.durationRaw,
+          thumbnail: rawData.video_details.thumbnails.pop().url,
+          queuer: interaction.user.username,
+          rawData,
+        },
+      ];
 
     if (this._songs.length === 0) {
       this._songs.push(...parsedData);
@@ -216,7 +237,7 @@ export default class Player {
         .setDescription(`播放清單內有 ${this._songs.length} 首歌曲`)
         .setColor(colors.success);
       interaction.editReply({
-        embeds: [addedEmbed]
+        embeds: [addedEmbed],
       });
 
       this.updateNoticeEmbed();
@@ -228,9 +249,11 @@ export default class Player {
       .setTitle(`⏭️ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
     this._player.stop();
-    interaction.reply({
-      embeds: [skipEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [skipEmbed],
+      })
+      .catch(this.noop);
   }
 
   pause(interaction) {
@@ -239,9 +262,11 @@ export default class Player {
       .setColor(colors.success);
     this._paused = true;
     this._player.pause();
-    interaction.reply({
-      embeds: [pauseEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [pauseEmbed],
+      })
+      .catch(this.noop);
     this.updateNoticeEmbed();
   }
 
@@ -251,15 +276,19 @@ export default class Player {
       .setColor(colors.success);
     this._paused = false;
     this._player.unpause();
-    interaction.reply({
-      embeds: [unpauseEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [unpauseEmbed],
+      })
+      .catch(this.noop);
     this.updateNoticeEmbed();
   }
 
   shuffle(interaction) {
     let shuffled = [].concat(this._songs);
-    let currentIndex = this._songs.length, temporaryValue, randomIndex;
+    let currentIndex = this._songs.length,
+      temporaryValue,
+      randomIndex;
 
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -274,9 +303,11 @@ export default class Player {
       .setTitle("🔀 重新排序音樂")
       .setColor(colors.success);
     this._songs = shuffled;
-    interaction.reply({
-      embeds: [shuffleEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [shuffleEmbed],
+      })
+      .catch(this.noop);
   }
 
   stop(interaction, force = false) {
@@ -284,22 +315,23 @@ export default class Player {
       .setTitle("⏹️ 停止播放音樂")
       .setColor(colors.success);
     if (!force) {
-      interaction.reply({
-        embeds: [stopEmbed]
-      }).catch(this.noop);
+      interaction
+        .reply({
+          embeds: [stopEmbed],
+        })
+        .catch(this.noop);
     }
     this._songs = [];
     this._player.stop();
     this._client.players.delete(this._guildId);
     try {
       this._connection.destroy();
-    // eslint-disable-next-line no-empty
+      // eslint-disable-next-line no-empty
     } catch (e) {}
   }
 
   loop(interaction) {
-    let loopEmbed = new Discord.MessageEmbed()
-      .setColor(colors.success);
+    let loopEmbed = new Discord.MessageEmbed().setColor(colors.success);
     if (!this._loop) {
       this._loop = true;
       loopEmbed.setTitle("🔁 重複播放所有歌曲");
@@ -308,9 +340,11 @@ export default class Player {
       loopEmbed.setTitle("▶ 取消重複播放所有歌曲");
     }
     this._repeat = false;
-    interaction.reply({
-      embeds: [loopEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [loopEmbed],
+      })
+      .catch(this.noop);
     this.updateNoticeEmbed();
   }
 
@@ -326,26 +360,31 @@ export default class Player {
       repeatEmbed.setTitle("▶ 取消重複播放目前的歌曲");
     }
     this._loop = false;
-    interaction.reply({
-      embeds: [repeatEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [repeatEmbed],
+      })
+      .catch(this.noop);
     this.updateNoticeEmbed();
   }
 
   nightcore(interaction) {
-    let nightcoreEmbed = new Discord.MessageEmbed()
-      .setColor(colors.success);
+    let nightcoreEmbed = new Discord.MessageEmbed().setColor(colors.success);
     if (!this._nightcore) {
       this._nightcore = true;
       nightcoreEmbed.setTitle("🌌 Nightcore!");
-      nightcoreEmbed.setDescription("變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用");
+      nightcoreEmbed.setDescription(
+        "變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用"
+      );
     } else {
       this._nightcore = false;
       nightcoreEmbed.setTitle("🌅 已關閉Nightcore音效");
     }
-    interaction.reply({
-      embeds: [nightcoreEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [nightcoreEmbed],
+      })
+      .catch(this.noop);
   }
 
   async playStream() {
@@ -365,7 +404,7 @@ export default class Player {
         duractionParsed: this._songs[0].rawData.video_details.duractionRaw,
         thumbnail: this._songs[0].rawData.video_details.thumbnails.pop().url,
         queuer: this._songs[0].queuer,
-        rawData: this._songs[0].rawData
+        rawData: this._songs[0].rawData,
       };
     }
 
@@ -379,23 +418,24 @@ export default class Player {
       this._engines.opusDecoder = new prism.opus.Decoder({
         channels: 2,
         frameSize: 960,
-        rate: 48000
+        rate: 48000,
       });
       this._engines.volumeTransform = new VolumeTransformer({
-        volume: this._volume
+        volume: this._volume,
       });
-      if (this._nightcore) this._engines.libsamplerate = new SampleRate({
-        type: SampleRate.SRC_SINC_FASTEST,
-        channels: 2,
-        fromRate: 48000,
-        fromDepth: 16,
-        toRate: 48000 / 1.15,
-        toDepth: 16
-      });
+      if (this._nightcore)
+        this._engines.libsamplerate = new SampleRate({
+          type: SampleRate.SRC_SINC_FASTEST,
+          channels: 2,
+          fromRate: 48000,
+          fromDepth: 16,
+          toRate: 48000 / 1.15,
+          toDepth: 16,
+        });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
         frameSize: 960,
-        rate: 48000
+        rate: 48000,
       });
       if (this._nightcore && this._engines.libsamplerate) {
         this._encoded = this._raw.stream
@@ -414,23 +454,24 @@ export default class Player {
       this._engines.opusDecoder = new prism.opus.Decoder({
         channels: 2,
         frameSize: 960,
-        rate: 48000
+        rate: 48000,
       });
       this._engines.volumeTransform = new VolumeTransformer({
-        volume: this._volume
+        volume: this._volume,
       });
-      if (this._nightcore) this._engines.libsamplerate = new SampleRate({
-        type: SampleRate.SRC_SINC_FASTEST,
-        channels: 2,
-        fromRate: 48000,
-        fromDepth: 16,
-        toRate: 48000 / 1.15,
-        toDepth: 16
-      });
+      if (this._nightcore)
+        this._engines.libsamplerate = new SampleRate({
+          type: SampleRate.SRC_SINC_FASTEST,
+          channels: 2,
+          fromRate: 48000,
+          fromDepth: 16,
+          toRate: 48000 / 1.15,
+          toDepth: 16,
+        });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
         frameSize: 960,
-        rate: 48000
+        rate: 48000,
       });
       if (this._nightcore && this._engines.libsamplerate) {
         this._encoded = this._raw.stream
@@ -448,16 +489,27 @@ export default class Player {
       }
     } else {
       this._engines.ffmpeg = new prism.FFmpeg({
-        args: ["-analyzeduration", "0", "-loglevel", "0", "-f", "s16le", "-ar", "48000", "-ac", "2"]
+        args: [
+          "-analyzeduration",
+          "0",
+          "-loglevel",
+          "0",
+          "-f",
+          "s16le",
+          "-ar",
+          "48000",
+          "-ac",
+          "2",
+        ],
       });
       this._engines.volumeTransform = new VolumeTransformer({
         volume: this._volume,
-        type: "s16le"
+        type: "s16le",
       });
       this._engines.opusEncoder = new prism.opus.Encoder({
         channels: 2,
         frameSize: 960,
-        rate: 48000
+        rate: 48000,
       });
       this._encoded = this._raw.stream
         .pipe(this._engines.ffmpeg)
@@ -466,30 +518,39 @@ export default class Player {
     }
     this._audio = createAudioResource(this._encoded, {
       inputType: StreamType.Opus,
-      metadata: this._songs[0]
+      metadata: this._songs[0],
     });
     this._player.play(this._audio);
-    
+
     let playingEmbed = new Discord.MessageEmbed()
       .setTitle("🕒 載入中...")
       .setColor(colors.warning);
 
-    this._noticeMessage = await this._channel.send({
-      embeds: [playingEmbed]
-    }).catch(this.noop);
-    this._buttonCollector = this._noticeMessage?.createMessageComponentCollector({
-      componentType: "BUTTON"
-    });
+    this._noticeMessage = await this._channel
+      .send({
+        embeds: [playingEmbed],
+      })
+      .catch(this.noop);
+    this._buttonCollector =
+      this._noticeMessage?.createMessageComponentCollector({
+        componentType: "BUTTON",
+      });
 
     this.updateNoticeEmbed();
 
-    this._buttonCollector?.on("collect", (interaction) => this.handelButtonClick(interaction));
+    this._buttonCollector?.on("collect", (interaction) =>
+      this.handelButtonClick(interaction)
+    );
   }
 
   updateNoticeEmbed() {
     let musicButton = new Discord.MessageButton()
       .setCustomId("pause")
-      .setEmoji(this._paused ? "<:play:827734196243398668>" : "<:pause:827737900359745586>")
+      .setEmoji(
+        this._paused
+          ? "<:play:827734196243398668>"
+          : "<:pause:827737900359745586>"
+      )
       .setStyle("PRIMARY");
     let skipButton = new Discord.MessageButton()
       .setCustomId("skip")
@@ -517,13 +578,21 @@ export default class Player {
     if (this._volume >= 1 || this._muted) volUpButton.setDisabled(true);
     if (this._volume <= 0 || this._muted) volDownButton.setDisabled(true);
 
-    let rowOne = new Discord.MessageActionRow()
-      .addComponents(musicButton, skipButton, stopButton);
-    let rowTwo = new Discord.MessageActionRow()
-      .addComponents(volDownButton, volUpButton, hintButton);    
-    
+    let rowOne = new Discord.MessageActionRow().addComponents(
+      musicButton,
+      skipButton,
+      stopButton
+    );
+    let rowTwo = new Discord.MessageActionRow().addComponents(
+      volDownButton,
+      volUpButton,
+      hintButton
+    );
+
     let playingEmbed = new Discord.MessageEmbed()
-      .setDescription(`🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`)
+      .setDescription(
+        `🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`
+      )
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
     if (this._muted) playingEmbed.addField("🔇 靜音", "開啟", true);
@@ -532,10 +601,12 @@ export default class Player {
     if (this._repeat) playingEmbed.addField("🔂 重複播放", "開啟", true);
     playingEmbed.addField("👥 點歌者", this._audio.metadata.queuer, true);
 
-    this._noticeMessage?.edit({
-      embeds: [playingEmbed],
-      components: [rowOne, rowTwo]
-    }).catch(this.noop);
+    this._noticeMessage
+      ?.edit({
+        embeds: [playingEmbed],
+        components: [rowOne, rowTwo],
+      })
+      .catch(this.noop);
   }
 
   get ping() {
@@ -572,7 +643,7 @@ export default class Player {
       this._volume = volume;
     }
     this._engines.volumeTransform.setVolume(volume);
-    
+
     this.updateNoticeEmbed();
   }
 
@@ -582,21 +653,21 @@ export default class Player {
         .setTitle("😱 我沒辦法取得你想播放的音樂，因為需要登入帳號")
         .setColor(colors.danger);
       return this._channel.send({
-        embeds: [invaildEmbed]
+        embeds: [invaildEmbed],
       });
     } else if (e.message.includes("429")) {
       let limitEmbed = new Discord.MessageEmbed()
         .setTitle("😱 現在無法取得這個音樂，請稍後再試")
         .setColor(colors.danger);
       return this._channel.send({
-        embeds: [limitEmbed]
+        embeds: [limitEmbed],
       });
     } else if (e.message.includes("private")) {
       let privateEmbed = new Discord.MessageEmbed()
         .setTitle("😱 這是私人影片")
         .setColor(colors.danger);
       return this._channel.send({
-        embeds: [privateEmbed]
+        embeds: [privateEmbed],
       });
     }
     log.error(e.message, e);
@@ -619,7 +690,7 @@ export default class Player {
         this._engines.webmDemuxer?.destroy();
         this._engines.ffmpeg?.destroy();
         this._engines.libsamplerate?.destroy();
-      // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty
       } catch {}
       this._engines = {
         opusDecoder: null,
@@ -627,20 +698,22 @@ export default class Player {
         webmDemuxer: null,
         ffmpeg: null,
         volumeTransform: null,
-        libsamplerate: null
+        libsamplerate: null,
       };
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 序列裡的歌曲播放完畢")
         .setColor(colors.success);
       if (!this._guildDeleted) {
-        this._channel.send({
-          embeds: [endEmbed]
-        }).catch(this.noop);
+        this._channel
+          .send({
+            embeds: [endEmbed],
+          })
+          .catch(this.noop);
       }
       this._client.players.delete(this._guildId);
       try {
         this._connection.destroy();
-      // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty
       } catch (e) {}
     } else {
       this.playStream();
@@ -649,71 +722,75 @@ export default class Player {
 
   handelButtonClick(interaction) {
     if (!allowModify(interaction)) {
-      return interaction.reply({
-        content: "❌ 你必須跟我在同一個頻道裡!",
-        ephemeral: true
-      }).catch(this.noop);
+      return interaction
+        .reply({
+          content: "❌ 你必須跟我在同一個頻道裡!",
+          ephemeral: true,
+        })
+        .catch(this.noop);
     }
 
     let replyMessage = "";
     switch (interaction.customId) {
-    case "pause":
-      if (this._paused) {
-        this._player.unpause();
-        this._paused = false;
-        replyMessage = "▶️ 繼續播放音樂";
-      } else if (!this._paused) {
-        this._player.pause();
-        this._paused = true;
-        replyMessage = "⏸️ 暫停播放音樂";
-      }
-      break;
-    case "skip":
-      this._player.stop();
-      replyMessage = "⏭️ 跳過音樂";
-      break;
-    case "stop":
-      this._songs = [];
-      this._player.stop();
-      replyMessage = "⏹️ 停止播放音樂";
-      this._connection.destroy();
-      this._client.players.delete(this._guildId);
-      break;
-    case "volup":
-      this.volume = parseFloat((this._volume + 0.1).toFixed(10));
-      replyMessage = `🔊 音量增加10%, 目前音量為 ${this._volume * 100}%`;
-      break;
-    case "voldown":
-      this.volume = parseFloat((this._volume - 0.1).toFixed(10));
-      replyMessage = `🔊 音量減少10%, 目前音量為 ${this._volume * 100}%`;
-      break;
-    case "mute":
-      if (this._muted) {
-        this._engines.volumeTransform.setVolume(this._volume);
-        this._muted = false;
-        replyMessage = `🔊 音量恢復至${this._volume * 100}%`;
-      } else {
-        this._engines.volumeTransform.setVolume(0);
-        this._muted = true;
-        replyMessage = "🔇 靜音音樂";
-      }
-      break;
-    default:
-      interaction.reply("❌ 發生了億點點的錯誤");
-      return;
+      case "pause":
+        if (this._paused) {
+          this._player.unpause();
+          this._paused = false;
+          replyMessage = "▶️ 繼續播放音樂";
+        } else if (!this._paused) {
+          this._player.pause();
+          this._paused = true;
+          replyMessage = "⏸️ 暫停播放音樂";
+        }
+        break;
+      case "skip":
+        this._player.stop();
+        replyMessage = "⏭️ 跳過音樂";
+        break;
+      case "stop":
+        this._songs = [];
+        this._player.stop();
+        replyMessage = "⏹️ 停止播放音樂";
+        this._connection.destroy();
+        this._client.players.delete(this._guildId);
+        break;
+      case "volup":
+        this.volume = parseFloat((this._volume + 0.1).toFixed(10));
+        replyMessage = `🔊 音量增加10%, 目前音量為 ${this._volume * 100}%`;
+        break;
+      case "voldown":
+        this.volume = parseFloat((this._volume - 0.1).toFixed(10));
+        replyMessage = `🔊 音量減少10%, 目前音量為 ${this._volume * 100}%`;
+        break;
+      case "mute":
+        if (this._muted) {
+          this._engines.volumeTransform.setVolume(this._volume);
+          this._muted = false;
+          replyMessage = `🔊 音量恢復至${this._volume * 100}%`;
+        } else {
+          this._engines.volumeTransform.setVolume(0);
+          this._muted = true;
+          replyMessage = "🔇 靜音音樂";
+        }
+        break;
+      default:
+        interaction.reply("❌ 發生了億點點的錯誤");
+        return;
     }
     let clickEmbed = new Discord.MessageEmbed()
       .addField(replyMessage, "\u200b")
       .setAuthor({
         name: interaction.user.username,
         iconURL: interaction.user.avatarURL({
-          dynamic: true
-        })
+          dynamic: true,
+        }),
       })
       .setColor(colors.success);
-    interaction.reply({
-      embeds: [clickEmbed]
-    }).catch(this.noop);
+    interaction
+      .reply({
+        embeds: [clickEmbed],
+      })
+      .catch(this.noop);
     setTimeout(() => {
       interaction.deleteReply().catch(this.noop);
     }, 15_000);

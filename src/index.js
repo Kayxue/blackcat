@@ -10,16 +10,16 @@ dotenv.config();
 const config = configFile();
 
 const manager = new ShardingManager("./src/instance.js", {
-  token: config.token
+  token: config.token,
 });
 
-manager.on("shardCreate", shard => {
+manager.on("shardCreate", (shard) => {
   log.info(`已啟動分片 ${shard.id}`);
 
   shard.on("ready", () => {
     shard.process.send({
       type: "shardId",
-      value: shard.id
+      value: shard.id,
     });
   });
 });
@@ -31,8 +31,10 @@ if (config.enableApi) {
 
   http.use(helmet());
 
-  let routeFiles = fs.readdirSync("./src/routes/").filter(file => file.endsWith(".js"));
-  routeFiles.forEach(async route => {
+  let routeFiles = fs
+    .readdirSync("./src/routes/")
+    .filter((file) => file.endsWith(".js"));
+  routeFiles.forEach(async (route) => {
     let routeFunction = (await import(`./routes/${route}`)).default;
     routeFunction(http);
   });

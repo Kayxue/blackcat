@@ -11,7 +11,7 @@ export default function (http) {
       },
       default: function () {
         res.type("txt").send("Not found");
-      }
+      },
     });
   });
 }

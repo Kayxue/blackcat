@@ -28,28 +28,28 @@ where options is an object of the form:
 
 ```javascript
 let options = {
-    // Value can be from 0 to 4 or using enum. 0 is the best quality and the slowest.
-    type: SampleRate.SRC_SINC_MEDIUM_QALITY,
-    // Stereo
-    channels: 2,
-    // Sample rate of source
-    fromRate: 48000,
-    // bit depth of source. Valid values: 16 or 32
-    fromDepth: 16,
-    // Desired sample rate
-    toRate: 44100,
-    // Desired bit depth. Valid values: 16 or 32
-    toDepth: 16
-}
+  // Value can be from 0 to 4 or using enum. 0 is the best quality and the slowest.
+  type: SampleRate.SRC_SINC_MEDIUM_QALITY,
+  // Stereo
+  channels: 2,
+  // Sample rate of source
+  fromRate: 48000,
+  // bit depth of source. Valid values: 16 or 32
+  fromDepth: 16,
+  // Desired sample rate
+  toRate: 44100,
+  // Desired bit depth. Valid values: 16 or 32
+  toDepth: 16,
+};
 ```
 
 Input audio data should be signed integers (e.g. S16_LE or S32_LE). Output will also be signed integers. Floating point input/output is not yet supported.
 Input should be from a readable stream, output should be to a writable stream: e.g.
 
 ```javascript
-const fs = require('fs');
-let rs = fs.createReadStream('input.pcm');
-let ws = fs.createWriteStream('output.pcm');
+const fs = require("fs");
+let rs = fs.createReadStream("input.pcm");
+let ws = fs.createWriteStream("output.pcm");
 
 rs.pipe(resample).pipe(ws);
 ```

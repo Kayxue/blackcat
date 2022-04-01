@@ -1,8 +1,7 @@
 name: "⬇️ 安裝時發生的問題"
 description: 安裝機器人時發生的問題
-labels: ['topic: installation']
+labels: ["topic: installation"]
 body:
-
   - type: textarea
     id: current-behavior
     attributes:

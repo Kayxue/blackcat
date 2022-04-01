@@ -21,13 +21,9 @@ function error(msg, error) {
   }
 }
 
-export {
-  info,
-  warn,
-  error
-};
+export { info, warn, error };
 export default {
   info,
   warn,
-  error
+  error,
 };

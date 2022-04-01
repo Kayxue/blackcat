@@ -4,20 +4,25 @@ import {
   MessageEmbed,
   MessageButton,
   MessageActionRow,
-  InteractionCollector
+  InteractionCollector,
 } from "discord.js";
 
 export default {
   data: {
     name: "queue",
-    description: "顯示播放序列"
+    description: "顯示播放序列",
   },
-  run: async function(interaction) {
+  run: async function (interaction) {
     let player;
-    if (!PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)) {
+    if (
+      !PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)
+    ) {
       return interaction.reply("❌ 必須要有音樂正在播放");
     } else {
-      player = PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id);
+      player = PlayerManager.getSendingPlayer(
+        interaction.client,
+        interaction.guild.id
+      );
     }
     let songs = player.songs;
 
@@ -34,7 +39,8 @@ export default {
       songList.forEach((song, songIndex) => {
         embedPage.addField(
           `[${pageIndex * 10 + songIndex + 1}] ${song.title}`,
-          `${song.duractionParsed ?? "未知的長度"} / [YouTube](${song.url})`);
+          `${song.duractionParsed ?? "未知的長度"} / [YouTube](${song.url})`
+        );
       });
       embeds.push(embedPage);
     });
@@ -52,75 +58,89 @@ export default {
       .setEmoji("❎")
       .setStyle("DANGER");
 
-    if (embeds.length - 1 === 0)
-      nextBtn.setDisabled(true);
-    let buttons = new MessageActionRow()
-      .setComponents(previousBtn, closeBtn, nextBtn);
+    if (embeds.length - 1 === 0) nextBtn.setDisabled(true);
+    let buttons = new MessageActionRow().setComponents(
+      previousBtn,
+      closeBtn,
+      nextBtn
+    );
 
     let queueMessage;
     try {
       queueMessage = await interaction.reply({
         embeds: [embeds[currentPage]],
-        components: [buttons]
+        components: [buttons],
       });
-    } catch (e) { return; }
+    } catch (e) {
+      return;
+    }
 
     let collector = new InteractionCollector(interaction.client, {
       componentType: "BUTTON",
       interactionType: "MESSAGE_COMPONENT",
       idle: 15_000,
-      message: queueMessage
+      message: queueMessage,
     });
     collector.on("collect", (collected) => {
       if (collected.user.id !== interaction.user.id) {
         return collected.followUp({
           content: "😐 這個按鈕不是給你點的",
-          ephemeral: true
+          ephemeral: true,
         });
       }
       switch (collected.customId) {
-      case "previous":
-        currentPage -= 1;
-        if (currentPage <= 1) {
-          previousBtn.setDisabled(true);
-          currentPage = 1;
-        }
-        nextBtn.setDisabled(false);
-        buttons = new MessageActionRow()
-          .setComponents(previousBtn, closeBtn, nextBtn);
+        case "previous":
+          currentPage -= 1;
+          if (currentPage <= 1) {
+            previousBtn.setDisabled(true);
+            currentPage = 1;
+          }
+          nextBtn.setDisabled(false);
+          buttons = new MessageActionRow().setComponents(
+            previousBtn,
+            closeBtn,
+            nextBtn
+          );
 
-        collected.update({
-          embeds: [embeds[currentPage]],
-          components: [buttons]
-        }).catch(() => {});
-        break;
-      case "next":
-        currentPage += 1;
-        if (currentPage >= embeds.length) {
-          nextBtn.setDisabled(true);
-          currentPage = embeds.length;
-        }
-        previousBtn.setDisabled(false);
-        buttons = new MessageActionRow()
-          .setComponents(previousBtn, closeBtn, nextBtn);
+          collected
+            .update({
+              embeds: [embeds[currentPage]],
+              components: [buttons],
+            })
+            .catch(() => {});
+          break;
+        case "next":
+          currentPage += 1;
+          if (currentPage >= embeds.length) {
+            nextBtn.setDisabled(true);
+            currentPage = embeds.length;
+          }
+          previousBtn.setDisabled(false);
+          buttons = new MessageActionRow().setComponents(
+            previousBtn,
+            closeBtn,
+            nextBtn
+          );
 
-        collected.update({
-          embeds: [embeds[currentPage]],
-          components: [buttons]
-        }).catch(() => {});
-        break;
-      case "close":
-        collector.stop();
+          collected
+            .update({
+              embeds: [embeds[currentPage]],
+              components: [buttons],
+            })
+            .catch(() => {});
+          break;
+        case "close":
+          collector.stop();
       }
     });
     collector.on("end", () => {
-      let endEmbed = new MessageEmbed()
-        .setTitle("💤 已關閉")
-        .setColor(danger);
-      interaction.editReply({
-        embeds: [endEmbed],
-        components: []
-      }).catch(() => {});
+      let endEmbed = new MessageEmbed().setTitle("💤 已關閉").setColor(danger);
+      interaction
+        .editReply({
+          embeds: [endEmbed],
+          components: [],
+        })
+        .catch(() => {});
     });
   },
 };

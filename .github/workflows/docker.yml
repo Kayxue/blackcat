@@ -2,7 +2,7 @@ name: Build and Push
 
 on:
   push:
-    branches: [ rewrite ]
+    branches: [rewrite]
 
 jobs:
   build:

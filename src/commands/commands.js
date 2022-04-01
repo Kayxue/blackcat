@@ -8,15 +8,19 @@ export default {
   },
   run: function (interaction) {
     let commands = interaction.client.commands;
-    
-    let formatted = commands.map((i) => `\`${i.data.name}\`: **${i.data.description}**`);
+
+    let formatted = commands.map(
+      (i) => `\`${i.data.name}\`: **${i.data.description}**`
+    );
     let commandsEmbed = new MessageEmbed()
       .setTitle("🗒️ 指令清單")
       .setDescription(formatted.join("\n"))
       .setColor(blurple);
-    
-    interaction.reply({
-      embeds: [commandsEmbed]
-    }).catch(() => {});
-  }
+
+    interaction
+      .reply({
+        embeds: [commandsEmbed],
+      })
+      .catch(() => {});
+  },
 };
