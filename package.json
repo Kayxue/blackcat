@@ -7,7 +7,6 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "yarn@3.2.0",
   "type": "module",
   "sourceType": "module",
   "scripts": {
