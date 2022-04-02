@@ -345,14 +345,7 @@ export default class Player {
     try {
       this._connection.destroy();
       // eslint-disable-next-line no-empty
-    } catch (e) {
-      
-      
-      
-      
-      
-      
-    }
+    } catch (e) {}
   }
 
   loop(interaction) {
