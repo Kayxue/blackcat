@@ -2,7 +2,7 @@ name: Lint & Format code
 
 on:
   push:
-    branches: [rewrite]
+    branches: [main]
 
 permissions:
   checks: write
