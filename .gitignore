@@ -116,7 +116,7 @@ config.js
 .dccache
 
 # Yarn
-.yarn/
+.yarn/*
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins
