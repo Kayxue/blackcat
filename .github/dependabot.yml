@@ -6,7 +6,7 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "npm"
-    directory: "/src/audio/engines/libsamplerate"
+    directory: "/src/audio/engine/libsamplerate"
     schedule:
       interval: "daily"
 
