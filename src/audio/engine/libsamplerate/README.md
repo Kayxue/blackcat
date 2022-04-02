@@ -4,8 +4,7 @@ ABI stable native implementation of libsamplerate as a Transform stream. Built f
 
 ## Introduction
 
-Allows the upsampling/downsampling and/or upconverting/downconverting to/from arbitrary sample rates and to/from 16 or 32 bits per sample. Tested on Linux (x64 and arm), Windows and MacOS.
-This module uses the "Full Api" detailed [here](http://www.mega-nerd.com/libsamplerate/api_full.html)
+Allows the upsampling/downsampling and/or upconverting/downconverting to/from arbitrary sample rates and to/from 16 or 32 bits per sample. Tested on Linux (x64 and arm), Windows and MacOS. This module uses the "Full Api" detailed [here](http://www.mega-nerd.com/libsamplerate/api_full.html)
 
 ## Install
 
@@ -19,12 +18,9 @@ For Windows, install the Visual C++ build tools and download cmake from [cmake.o
 
 ## Usage
 
-Include module;
-`const SampleRate = require('node-libsamplerate');`
+Include module; `const SampleRate = require('node-libsamplerate');`
 
-Instantiate:
-`const resample = new SampleRate(options);`
-where options is an object of the form:
+Instantiate: `const resample = new SampleRate(options);` where options is an object of the form:
 
 ```javascript
 let options = {
@@ -43,8 +39,7 @@ let options = {
 };
 ```
 
-Input audio data should be signed integers (e.g. S16_LE or S32_LE). Output will also be signed integers. Floating point input/output is not yet supported.
-Input should be from a readable stream, output should be to a writable stream: e.g.
+Input audio data should be signed integers (e.g. S16_LE or S32_LE). Output will also be signed integers. Floating point input/output is not yet supported. Input should be from a readable stream, output should be to a writable stream: e.g.
 
 ```javascript
 const fs = require("fs");
@@ -54,8 +49,7 @@ let ws = fs.createWriteStream("output.pcm");
 rs.pipe(resample).pipe(ws);
 ```
 
-NOTE: if reading from a WAV file, start the read at 44 bytes to avoid the wav header (`{start:44}` for `fs.createReadStream`).
-If recording from `arecord`, `sox` or similar, use format `raw`.
+NOTE: if reading from a WAV file, start the read at 44 bytes to avoid the wav header (`{start:44}` for `fs.createReadStream`). If recording from `arecord`, `sox` or similar, use format `raw`.
 
 ### Altering playback speed
 

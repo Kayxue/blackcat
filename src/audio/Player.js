@@ -69,7 +69,7 @@ export default class Player {
             "錯誤內容:\n" +
             "```\n" +
             e.message +
-            "\n```"
+            "\n```",
         )
         .setColor(colors.danger);
       this._channel.send({
@@ -88,44 +88,57 @@ export default class Player {
     this._connection.on(VoiceConnectionStatus.Ready, () => {
       log.info(`${this._guildId}:${this._channelId} 已進入預備狀態`);
     });
-    this._connection.on(VoiceConnectionStatus.Disconnected, async () => {
-      log.warn(`${this._guildId}:${this._channelId} 語音斷開連結`);
-      try {
-        await Promise.race([
-          entersState(
-            this._connection,
-            VoiceConnectionStatus.Signalling,
-            5_000
-          ),
-          entersState(
-            this._connection,
-            VoiceConnectionStatus.Connecting,
-            5_000
-          ),
-        ]);
-        log.info(`${this._guildId}:${this._channelId} 重新連接成功`);
-      } catch (error) {
-        log.warn(`${this._guildId}:${this._channelId} 無法重新連線`);
-        let disconnecteEmbed = new Discord.MessageEmbed()
-          .setTitle("😕 我的語音連接斷開了")
-          .setColor(colors.danger);
-        this._channel
-          .send({
-            embeds: [disconnecteEmbed],
-          })
-          .catch(this.noop);
-        this.stop(null, true);
-      }
-    });
+    this._connection.on(
+      VoiceConnectionStatus.Disconnected,
+      async () => {
+        log.warn(`${this._guildId}:${this._channelId} 語音斷開連結`);
+        try {
+          await Promise.race([
+            entersState(
+              this._connection,
+              VoiceConnectionStatus.Signalling,
+              5_000,
+            ),
+            entersState(
+              this._connection,
+              VoiceConnectionStatus.Connecting,
+              5_000,
+            ),
+          ]);
+          log.info(
+            `${this._guildId}:${this._channelId} 重新連接成功`,
+          );
+        } catch (error) {
+          log.warn(
+            `${this._guildId}:${this._channelId} 無法重新連線`,
+          );
+          let disconnecteEmbed = new Discord.MessageEmbed()
+            .setTitle("😕 我的語音連接斷開了")
+            .setColor(colors.danger);
+          this._channel
+            .send({
+              embeds: [disconnecteEmbed],
+            })
+            .catch(this.noop);
+          this.stop(null, true);
+        }
+      },
+    );
     this._player.once(AudioPlayerStatus.Playing, () => {
-      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`);
+      log.info(
+        `${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`,
+      );
     });
     this._player.on(AudioPlayerStatus.Idle, () => {
-      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`);
+      log.info(
+        `${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`,
+      );
       this.handelIdle();
     });
     this._player.on(AudioPlayerStatus.Buffering, () => {
-      log.info(`${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`);
+      log.info(
+        `${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`,
+      );
     });
 
     this._init = true;
@@ -162,7 +175,10 @@ export default class Player {
       })
       .catch(this.noop);
 
-    if (play.yt_validate(track) !== "video" && !track.startsWith("https")) {
+    if (
+      play.yt_validate(track) !== "video" &&
+      !track.startsWith("https")
+    ) {
       try {
         let result = await play.search(track, {
           limit: 1,
@@ -194,7 +210,9 @@ export default class Player {
         return this.handelYoutubeError(e);
       }
       let playlistEmbed = new Discord.MessageEmbed()
-        .setTitle(`🔍 已加入整個播放清單，共有 **${videos.length}** 首歌曲`)
+        .setTitle(
+          `🔍 已加入整個播放清單，共有 **${videos.length}** 首歌曲`,
+        )
         .setColor(colors.success);
       interaction.followUp({
         embeds: [playlistEmbed],
@@ -331,7 +349,9 @@ export default class Player {
   }
 
   loop(interaction) {
-    let loopEmbed = new Discord.MessageEmbed().setColor(colors.success);
+    let loopEmbed = new Discord.MessageEmbed().setColor(
+      colors.success,
+    );
     if (!this._loop) {
       this._loop = true;
       loopEmbed.setTitle("🔁 重複播放所有歌曲");
@@ -369,12 +389,14 @@ export default class Player {
   }
 
   nightcore(interaction) {
-    let nightcoreEmbed = new Discord.MessageEmbed().setColor(colors.success);
+    let nightcoreEmbed = new Discord.MessageEmbed().setColor(
+      colors.success,
+    );
     if (!this._nightcore) {
       this._nightcore = true;
       nightcoreEmbed.setTitle("🌌 Nightcore!");
       nightcoreEmbed.setDescription(
-        "變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用"
+        "變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用",
       );
     } else {
       this._nightcore = false;
@@ -390,7 +412,9 @@ export default class Player {
   async playStream() {
     if (!this._songs[0]?.rawData.full) {
       try {
-        this._songs[0].rawData = await play.video_info(this._songs[0].url);
+        this._songs[0].rawData = await play.video_info(
+          this._songs[0].url,
+        );
         this._songs[0].rawData.full = true;
       } catch (e) {
         this.handelYoutubeError(e);
@@ -400,9 +424,12 @@ export default class Player {
       this._songs[0] = {
         title: this._songs[0].rawData.video_details.title,
         url: this._songs[0].rawData.video_details.url,
-        duraction: this._songs[0].rawData.video_details.duractionInSec,
-        duractionParsed: this._songs[0].rawData.video_details.duractionRaw,
-        thumbnail: this._songs[0].rawData.video_details.thumbnails.pop().url,
+        duraction:
+          this._songs[0].rawData.video_details.duractionInSec,
+        duractionParsed:
+          this._songs[0].rawData.video_details.duractionRaw,
+        thumbnail:
+          this._songs[0].rawData.video_details.thumbnails.pop().url,
         queuer: this._songs[0].queuer,
         rawData: this._songs[0].rawData,
       };
@@ -539,7 +566,7 @@ export default class Player {
     this.updateNoticeEmbed();
 
     this._buttonCollector?.on("collect", (interaction) =>
-      this.handelButtonClick(interaction)
+      this.handelButtonClick(interaction),
     );
   }
 
@@ -549,7 +576,7 @@ export default class Player {
       .setEmoji(
         this._paused
           ? "<:play:827734196243398668>"
-          : "<:pause:827737900359745586>"
+          : "<:pause:827737900359745586>",
       )
       .setStyle("PRIMARY");
     let skipButton = new Discord.MessageButton()
@@ -575,31 +602,44 @@ export default class Player {
       .setStyle("SUCCESS");
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
-    if (this._volume >= 1 || this._muted) volUpButton.setDisabled(true);
-    if (this._volume <= 0 || this._muted) volDownButton.setDisabled(true);
+    if (this._volume >= 1 || this._muted)
+      volUpButton.setDisabled(true);
+    if (this._volume <= 0 || this._muted)
+      volDownButton.setDisabled(true);
 
     let rowOne = new Discord.MessageActionRow().addComponents(
       musicButton,
       skipButton,
-      stopButton
+      stopButton,
     );
     let rowTwo = new Discord.MessageActionRow().addComponents(
       volDownButton,
       volUpButton,
-      hintButton
+      hintButton,
     );
 
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(
-        `🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`
+        `🎵 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`,
       )
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
     if (this._muted) playingEmbed.addField("🔇 靜音", "開啟", true);
-    else playingEmbed.addField("🔊 音量", `${this._volume * 100}%`, true);
-    if (this._loop) playingEmbed.addField("🔁 循環播放", "開啟", true);
-    if (this._repeat) playingEmbed.addField("🔂 重複播放", "開啟", true);
-    playingEmbed.addField("👥 點歌者", this._audio.metadata.queuer, true);
+    else
+      playingEmbed.addField(
+        "🔊 音量",
+        `${this._volume * 100}%`,
+        true,
+      );
+    if (this._loop)
+      playingEmbed.addField("🔁 循環播放", "開啟", true);
+    if (this._repeat)
+      playingEmbed.addField("🔂 重複播放", "開啟", true);
+    playingEmbed.addField(
+      "👥 點歌者",
+      this._audio.metadata.queuer,
+      true,
+    );
 
     this._noticeMessage
       ?.edit({
@@ -756,11 +796,15 @@ export default class Player {
         break;
       case "volup":
         this.volume = parseFloat((this._volume + 0.1).toFixed(10));
-        replyMessage = `🔊 音量增加10%, 目前音量為 ${this._volume * 100}%`;
+        replyMessage = `🔊 音量增加10%, 目前音量為 ${
+          this._volume * 100
+        }%`;
         break;
       case "voldown":
         this.volume = parseFloat((this._volume - 0.1).toFixed(10));
-        replyMessage = `🔊 音量減少10%, 目前音量為 ${this._volume * 100}%`;
+        replyMessage = `🔊 音量減少10%, 目前音量為 ${
+          this._volume * 100
+        }%`;
         break;
       case "mute":
         if (this._muted) {

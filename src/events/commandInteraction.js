@@ -1,5 +1,9 @@
 import log from "../logger.js";
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import {
+  MessageEmbed,
+  MessageActionRow,
+  MessageButton,
+} from "discord.js";
 import { danger } from "../color.js";
 
 export default {
@@ -13,16 +17,18 @@ export default {
         .setTitle("❌ 你必須把我邀請進一個伺服器裡！")
         .setDescription(
           "你沒辦法在私訊中使用黑貓，必須要在一個伺服器裡使用黑貓。\n" +
-            "您可以點擊底下的按鈕來邀請黑貓進伺服器"
+            "您可以點擊底下的按鈕來邀請黑貓進伺服器",
         )
         .setColor(danger);
       let inviteButton = new MessageButton()
         .setLabel("邀請黑貓")
         .setStyle("LINK")
         .setURL(
-          "https://discord.com/oauth2/authorize?client_id=848006097197334568&permissions=415776501073&scope=applications.commands%20bot"
+          "https://discord.com/oauth2/authorize?client_id=848006097197334568&permissions=415776501073&scope=applications.commands%20bot",
         );
-      let buttonRow = new MessageActionRow().addComponents(inviteButton);
+      let buttonRow = new MessageActionRow().addComponents(
+        inviteButton,
+      );
       return interaction
         .reply({
           embeds: [guildEmbed],
@@ -30,8 +36,11 @@ export default {
         })
         .catch(() => {});
     }
-    if (!interaction.channel) return interaction.reply("❌ 無法取得文字頻道");
-    const command = interaction.client.commands.get(interaction.commandName);
+    if (!interaction.channel)
+      return interaction.reply("❌ 無法取得文字頻道");
+    const command = interaction.client.commands.get(
+      interaction.commandName,
+    );
 
     if (!command) {
       let notfoundEmbed = new MessageEmbed()
@@ -49,7 +58,10 @@ export default {
     } catch (error) {
       let errorEmbed = new MessageEmbed()
         .setTitle("🙁 執行指令時出現錯誤")
-        .addField("️⚠️ 錯誤內容:", "```js\n" + `${error.message}\n` + "```")
+        .addField(
+          "️⚠️ 錯誤內容:",
+          "```js\n" + `${error.message}\n` + "```",
+        )
         .addField("🗨️ 指令內容", interaction.commandName)
         .setTimestamp()
         .setColor(danger);

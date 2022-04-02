@@ -11,13 +11,18 @@ export default {
   run: function (interaction) {
     let player;
     if (
-      !PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)
+      !PlayerManager.getSendingPlayer(
+        interaction.client,
+        interaction.guild.id,
+      )
     ) {
-      return interaction.reply("❌ 必須要有音樂正在播放").catch(() => {});
+      return interaction
+        .reply("❌ 必須要有音樂正在播放")
+        .catch(() => {});
     } else {
       player = PlayerManager.getSendingPlayer(
         interaction.client,
-        interaction.guild.id
+        interaction.guild.id,
       );
     }
     let data = player.nowplaying;
@@ -36,7 +41,7 @@ export default {
             isFinite(Math.round(progressbar[1]))
               ? `${Math.round(progressbar[1])}%`
               : "無限"
-          }\``
+          }\``,
       )
       .setThumbnail(data.thumbnail)
       .setColor(blurple);

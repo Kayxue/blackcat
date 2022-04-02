@@ -13,19 +13,26 @@ export default {
       .addField(
         "🔗 API",
         `**${Date.now() - interaction.createdTimestamp}** 毫秒`,
-        true
+        true,
       )
-      .addField("🌐 WebSocket", `**${interaction.client.ws.ping}** 毫秒`, true)
+      .addField(
+        "🌐 WebSocket",
+        `**${interaction.client.ws.ping}** 毫秒`,
+        true,
+      )
       .setColor(blurple);
-    let player = getSendingPlayer(interaction.client, interaction.guild.id);
+    let player = getSendingPlayer(
+      interaction.client,
+      interaction.guild.id,
+    );
     if (player) {
       pingEmbed.addField(
         "🎶 音樂 - UDP",
-        `**${player.ping.udp ?? "未知"}** 毫秒`
+        `**${player.ping.udp ?? "未知"}** 毫秒`,
       );
       pingEmbed.addField(
         "🎶 音樂 - WebSocket",
-        `**${player.ping.ws ?? "未知"}** 毫秒`
+        `**${player.ping.ws ?? "未知"}** 毫秒`,
       );
     }
     interaction

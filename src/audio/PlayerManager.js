@@ -7,7 +7,7 @@ function createSendingPlayer(interaction) {
   const player = new Player(
     interaction,
     interaction.guild,
-    interaction.member.voice.channel
+    interaction.member.voice.channel,
   );
   interaction.client.players.set(interaction.guildId, player);
   return player;

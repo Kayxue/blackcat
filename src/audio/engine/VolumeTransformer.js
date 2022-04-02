@@ -5,11 +5,13 @@ class VolumeTransformer extends Transform {
     super(options);
 
     this._readInt = (buffer, index) => buffer.readInt16LE(index);
-    this._writeInt = (buffer, int, index) => buffer.writeInt16LE(int, index);
+    this._writeInt = (buffer, int, index) =>
+      buffer.writeInt16LE(int, index);
     this._bits = 16;
     this._bytes = this._bits / 8;
     this._extremum = Math.pow(2, this._bits - 1);
-    this._volume = typeof options.volume === "undefined" ? 1 : options.volume;
+    this._volume =
+      typeof options.volume === "undefined" ? 1 : options.volume;
     this._chunk = Buffer.alloc(0);
   }
 
@@ -37,7 +39,10 @@ class VolumeTransformer extends Transform {
     for (let i = 0; i < complete; i += _bytes) {
       const int = Math.min(
         _extremum - 1,
-        Math.max(-_extremum, Math.floor(this._volume * this._readInt(chunk, i)))
+        Math.max(
+          -_extremum,
+          Math.floor(this._volume * this._readInt(chunk, i)),
+        ),
       );
       this._writeInt(chunk, int, i);
     }

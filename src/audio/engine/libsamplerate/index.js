@@ -1,6 +1,7 @@
 const { Transform } = require("stream");
-const SampleRateStream =
-  require("bindings")("node-libsamplerate").SampleRateStream;
+const SampleRateStream = require("bindings")(
+  "node-libsamplerate",
+).SampleRateStream;
 
 let defaultOpts = {
   type: 2,

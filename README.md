@@ -3,8 +3,7 @@
   <img src="https://catmusic.ml/favicon.png" width="70" height="70" />
 </p>
 
-![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=flat&logo=node.js&logoColor=white)
-[![codebeat badge](https://codebeat.co/badges/92ee76a9-f812-4a55-beb5-c02375a441c6)](https://codebeat.co/projects/github-com-blackcatbot-blackcat-rewrite)
+![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?style=flat&logo=node.js&logoColor=white) [![codebeat badge](https://codebeat.co/badges/92ee76a9-f812-4a55-beb5-c02375a441c6)](https://codebeat.co/projects/github-com-blackcatbot-blackcat-rewrite)
 
 ## 功能
 
@@ -72,5 +71,4 @@
 
 ![Repobeats](https://repobeats.axiom.co/api/embed/a6bd28c74d122a98b8db7d45fd5ca39ad0e8b12e.svg)
 
-> Black cat source code
-> Licensed under Apache 2.0
+> Black cat source code Licensed under Apache 2.0

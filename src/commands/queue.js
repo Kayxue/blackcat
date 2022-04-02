@@ -15,13 +15,16 @@ export default {
   run: async function (interaction) {
     let player;
     if (
-      !PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)
+      !PlayerManager.getSendingPlayer(
+        interaction.client,
+        interaction.guild.id,
+      )
     ) {
       return interaction.reply("❌ 必須要有音樂正在播放");
     } else {
       player = PlayerManager.getSendingPlayer(
         interaction.client,
-        interaction.guild.id
+        interaction.guild.id,
       );
     }
     let songs = player.songs;
@@ -34,12 +37,16 @@ export default {
     }
     parsedSongs.forEach((songList, pageIndex) => {
       let embedPage = new MessageEmbed()
-        .setTitle(`🎵 音樂序列 | 第${pageIndex + 1}/${parsedSongs.length}頁`)
+        .setTitle(
+          `🎵 音樂序列 | 第${pageIndex + 1}/${parsedSongs.length}頁`,
+        )
         .setColor(blurple);
       songList.forEach((song, songIndex) => {
         embedPage.addField(
           `[${pageIndex * 10 + songIndex + 1}] ${song.title}`,
-          `${song.duractionParsed ?? "未知的長度"} / [YouTube](${song.url})`
+          `${song.duractionParsed ?? "未知的長度"} / [YouTube](${
+            song.url
+          })`,
         );
       });
       embeds.push(embedPage);
@@ -62,7 +69,7 @@ export default {
     let buttons = new MessageActionRow().setComponents(
       previousBtn,
       closeBtn,
-      nextBtn
+      nextBtn,
     );
 
     let queueMessage;
@@ -99,7 +106,7 @@ export default {
           buttons = new MessageActionRow().setComponents(
             previousBtn,
             closeBtn,
-            nextBtn
+            nextBtn,
           );
 
           collected
@@ -119,7 +126,7 @@ export default {
           buttons = new MessageActionRow().setComponents(
             previousBtn,
             closeBtn,
-            nextBtn
+            nextBtn,
           );
 
           collected
@@ -134,7 +141,9 @@ export default {
       }
     });
     collector.on("end", () => {
-      let endEmbed = new MessageEmbed().setTitle("💤 已關閉").setColor(danger);
+      let endEmbed = new MessageEmbed()
+        .setTitle("💤 已關閉")
+        .setColor(danger);
       interaction
         .editReply({
           embeds: [endEmbed],

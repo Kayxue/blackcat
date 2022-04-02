@@ -11,7 +11,10 @@ export default {
   run: function (interaction) {
     let player;
     if (
-      !PlayerManager.getSendingPlayer(interaction.client, interaction.guild.id)
+      !PlayerManager.getSendingPlayer(
+        interaction.client,
+        interaction.guild.id,
+      )
     ) {
       return interaction.reply("❌ 必須要有音樂正在播放");
     } else {

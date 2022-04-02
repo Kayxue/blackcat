@@ -10,7 +10,7 @@ export default {
     let commands = interaction.client.commands;
 
     let formatted = commands.map(
-      (i) => `\`${i.data.name}\`: **${i.data.description}**`
+      (i) => `\`${i.data.name}\`: **${i.data.description}**`,
     );
     let commandsEmbed = new MessageEmbed()
       .setTitle("🗒️ 指令清單")

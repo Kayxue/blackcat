@@ -47,9 +47,13 @@ const eventFiles = fs
 eventFiles.forEach(async (event) => {
   const eventFile = (await import(`./events/${event}`)).default;
   if (eventFile.once) {
-    client.once(eventFile.event, (...args) => eventFile.run(client, ...args));
+    client.once(eventFile.event, (...args) =>
+      eventFile.run(client, ...args),
+    );
   } else {
-    client.on(eventFile.event, (...args) => eventFile.run(client, ...args));
+    client.on(eventFile.event, (...args) =>
+      eventFile.run(client, ...args),
+    );
   }
 });
 
