@@ -1,0 +1,37 @@
+name: Lint & Format code
+
+on:
+  push:
+    branches: [rewrite]
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  linter:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 17
+
+      - name: Install Node.js dependencies
+        run: yarn install
+
+      - name: Run linters
+        uses: wearerequired/lint-action@v1
+        with:
+          eslint: true
+          prettier: true
+          auto_fix: true
+          git_name: Automatic linting
+          git_email: "action@github.com"
+          commit_message: "Format code using ${linter}"
+          neutral_check_on_warning: true
