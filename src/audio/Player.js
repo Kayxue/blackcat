@@ -768,7 +768,6 @@ export default class Player {
 
   handelIdle() {
     this._noticeMessage.delete();
-    console.log(this._songs);
 
     let playedSong = this._songs.shift();
     if (this._loop) this._songs.push(playedSong);
