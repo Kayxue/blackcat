@@ -102,6 +102,9 @@ export default {
             previousBtn.setDisabled(true);
             currentPage = 1;
             nextBtn.setDisabled(false);
+          } else {
+            previousBtn.setDisabled(false);
+            nextBtn.setDisabled(false);
           }
           buttons = new MessageActionRow().setComponents(
             previousBtn,
@@ -122,6 +125,9 @@ export default {
             nextBtn.setDisabled(true);
             currentPage = embeds.length;
             previousBtn.setDisabled(false);
+          } else {
+            previousBtn.setDisabled(false);
+            nextBtn.setDisabled(false);
           }
           buttons = new MessageActionRow().setComponents(
             previousBtn,
