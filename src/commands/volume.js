@@ -28,7 +28,6 @@ export default {
       return interaction
         .reply({
           embeds: [optimizeEmbed],
-          ephemeral: true,
         })
         .catch(() => {});
     }
