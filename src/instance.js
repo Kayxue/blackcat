@@ -5,9 +5,9 @@ import Discord from "discord.js";
 import fs from "node:fs";
 
 import log from "./logger.js";
-import configFile from "../config.js";
+import configReslover from "./util/configReslover.js";
 
-const config = configFile();
+const config = await configReslover();
 const client = new Discord.Client({
   intents: [
     Discord.Intents.FLAGS.GUILDS,

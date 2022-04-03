@@ -4,10 +4,10 @@ import express from "express";
 import helmet from "helmet";
 import fs from "node:fs";
 import log from "./logger.js";
-import configFile from "../config.js";
+import configReslover from "./util/configReslover.js";
 
 dotenv.config();
-const config = configFile();
+const config = await configReslover();
 
 const manager = new ShardingManager("./src/instance.js", {
   token: config.token,
