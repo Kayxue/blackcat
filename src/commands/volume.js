@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
-import { blurple, success } from "../color.js";
+import { blurple, success, danger } from "../color.js";
 
 export default {
   data: {
@@ -17,6 +17,21 @@ export default {
     ],
   },
   run: function (interaction) {
+    if (interaction.client.config.optimizeQuality) {
+      let optimizeEmbed = new MessageEmbed()
+        .setTitle("❌ 為了優化音樂品質，音量已停用")
+        .setDescription(
+          "如果你還是想要修改音量，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/blackcat)",
+        )
+        .setColor(danger);
+      return interaction
+        .reply({
+          embeds: [optimizeEmbed],
+          ephemeral: true,
+        })
+        .catch(() => {});
+    }
+
     let player;
     if (
       !PlayerManager.getSendingPlayer(

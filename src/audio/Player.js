@@ -24,6 +24,7 @@ export default class Player {
     this._guildId = guild.id;
     this._voiceChannel = voice;
     this._channelId = voice.id;
+    this._optimize = interaction.client.config.optimizeQuality;
 
     this._init = false;
     this._paused = false;
@@ -442,64 +443,70 @@ export default class Player {
     }
 
     if (this._raw.type === "opus") {
-      this._engines.opusDecoder = new prism.opus.Decoder({
-        channels: 2,
-        frameSize: 960,
-        rate: 48000,
-      });
-      this._engines.volumeTransform = new VolumeTransformer({
-        volume: this._volume,
-      });
-      if (this._nightcore)
-        this._engines.libsamplerate = new SampleRate({
-          type: SampleRate.SRC_SINC_FASTEST,
+      if (!this._optimize) {
+        this._engines.opusDecoder = new prism.opus.Decoder({
           channels: 2,
-          fromRate: 48000,
-          fromDepth: 16,
-          toRate: 48000 / 1.15,
-          toDepth: 16,
+          frameSize: 960,
+          rate: 48000,
         });
-      this._engines.opusEncoder = new prism.opus.Encoder({
-        channels: 2,
-        frameSize: 960,
-        rate: 48000,
-      });
+        this._engines.volumeTransform = new VolumeTransformer({
+          volume: this._volume,
+        });
+        if (this._nightcore)
+          this._engines.libsamplerate = new SampleRate({
+            type: SampleRate.SRC_SINC_FASTEST,
+            channels: 2,
+            fromRate: 48000,
+            fromDepth: 16,
+            toRate: 48000 / 1.15,
+            toDepth: 16,
+          });
+        this._engines.opusEncoder = new prism.opus.Encoder({
+          channels: 2,
+          frameSize: 960,
+          rate: 48000,
+        });
+      }
       if (this._nightcore && this._engines.libsamplerate) {
         this._encoded = this._raw.stream
           .pipe(this._engines.opusDecoder)
           .pipe(this._engines.volumeTransform)
           .pipe(this._engines.libsamplerate)
           .pipe(this._engines.opusEncoder);
-      } else {
+      } else if (!this._optimize) {
         this._encoded = this._raw.stream
           .pipe(this._engines.opusDecoder)
           .pipe(this._engines.volumeTransform)
           .pipe(this._engines.opusEncoder);
+      } else {
+        this._encoded = this._raw.stream;
       }
     } else if (this._raw.type === "webm/opus") {
       this._engines.webmDemuxer = new prism.opus.WebmDemuxer();
-      this._engines.opusDecoder = new prism.opus.Decoder({
-        channels: 2,
-        frameSize: 960,
-        rate: 48000,
-      });
-      this._engines.volumeTransform = new VolumeTransformer({
-        volume: this._volume,
-      });
-      if (this._nightcore)
-        this._engines.libsamplerate = new SampleRate({
-          type: SampleRate.SRC_SINC_FASTEST,
+      if (!this._optimize) {
+        this._engines.opusDecoder = new prism.opus.Decoder({
           channels: 2,
-          fromRate: 48000,
-          fromDepth: 16,
-          toRate: 48000 / 1.15,
-          toDepth: 16,
+          frameSize: 960,
+          rate: 48000,
         });
-      this._engines.opusEncoder = new prism.opus.Encoder({
-        channels: 2,
-        frameSize: 960,
-        rate: 48000,
-      });
+        this._engines.volumeTransform = new VolumeTransformer({
+          volume: this._volume,
+        });
+        if (this._nightcore)
+          this._engines.libsamplerate = new SampleRate({
+            type: SampleRate.SRC_SINC_FASTEST,
+            channels: 2,
+            fromRate: 48000,
+            fromDepth: 16,
+            toRate: 48000 / 1.15,
+            toDepth: 16,
+          });
+        this._engines.opusEncoder = new prism.opus.Encoder({
+          channels: 2,
+          frameSize: 960,
+          rate: 48000,
+        });
+      }
       if (this._nightcore && this._engines.libsamplerate) {
         this._encoded = this._raw.stream
           .pipe(this._engines.webmDemuxer)
@@ -507,41 +514,68 @@ export default class Player {
           .pipe(this._engines.volumeTransform)
           .pipe(this._engines.libsamplerate)
           .pipe(this._engines.opusEncoder);
-      } else {
+      } else if (!this._optimize) {
         this._encoded = this._raw.stream
           .pipe(this._engines.webmDemuxer)
           .pipe(this._engines.opusDecoder)
           .pipe(this._engines.volumeTransform)
           .pipe(this._engines.opusEncoder);
+      } else {
+        this._encoded = this._raw.stream.pipe(
+          this._engines.webmDemuxer,
+        );
       }
     } else {
-      this._engines.ffmpeg = new prism.FFmpeg({
-        args: [
-          "-analyzeduration",
-          "0",
-          "-loglevel",
-          "0",
-          "-f",
-          "s16le",
-          "-ar",
-          "48000",
-          "-ac",
-          "2",
-        ],
-      });
-      this._engines.volumeTransform = new VolumeTransformer({
-        volume: this._volume,
-        type: "s16le",
-      });
-      this._engines.opusEncoder = new prism.opus.Encoder({
-        channels: 2,
-        frameSize: 960,
-        rate: 48000,
-      });
-      this._encoded = this._raw.stream
-        .pipe(this._engines.ffmpeg)
-        .pipe(this._engines.volumeTransform)
-        .pipe(this._engines.opusEncoder);
+      if (!this._optimize) {
+        this._engines.ffmpeg = new prism.FFmpeg({
+          args: [
+            "-analyzeduration",
+            "0",
+            "-loglevel",
+            "0",
+            "-f",
+            "s16le",
+            "-ar",
+            "48000",
+            "-ac",
+            "2",
+          ],
+        });
+        this._engines.volumeTransform = new VolumeTransformer({
+          volume: this._volume,
+          type: "s16le",
+        });
+        this._engines.opusEncoder = new prism.opus.Encoder({
+          channels: 2,
+          frameSize: 960,
+          rate: 48000,
+        });
+      } else {
+        this._engines.ffmpeg = new prism.FFmpeg({
+          args: [
+            "-analyzeduration",
+            "0",
+            "-loglevel",
+            "0",
+            "-acodec",
+            "libopus",
+            "-f",
+            "opus",
+            "-ar",
+            "48000",
+            "-ac",
+            "2",
+          ],
+        });
+      }
+      if (!this._optimize) {
+        this._encoded = this._raw.stream
+          .pipe(this._engines.ffmpeg)
+          .pipe(this._engines.volumeTransform)
+          .pipe(this._engines.opusEncoder);
+      } else {
+        this._encoded = this._raw.stream.pipe(this._engines.ffmpeg);
+      }
     }
     this._audio = createAudioResource(this._encoded, {
       inputType: StreamType.Opus,
@@ -588,35 +622,48 @@ export default class Player {
       .setEmoji("<:stop:827734840891015189>")
       .setStyle("DANGER");
 
-    let volDownButton = new Discord.MessageButton()
-      .setCustomId("voldown")
-      .setEmoji("<:vol_down:827734683340111913>")
-      .setStyle("SUCCESS");
-    let volUpButton = new Discord.MessageButton()
-      .setCustomId("volup")
-      .setEmoji("<:vol_up:827734772889157722>")
-      .setStyle("SUCCESS");
-    let hintButton = new Discord.MessageButton()
-      .setCustomId("mute")
-      .setEmoji("<:mute:827734384606052392>")
-      .setStyle("SUCCESS");
+    let volDownButton, volUpButton, hintButton;
+    if (!this._optimize) {
+      // eslint-disable-next-line no-unused-vars
+      let volDownButton = new Discord.MessageButton()
+        .setCustomId("voldown")
+        .setEmoji("<:vol_down:827734683340111913>")
+        .setStyle("SUCCESS");
+      // eslint-disable-next-line no-unused-vars
+      let volUpButton = new Discord.MessageButton()
+        .setCustomId("volup")
+        .setEmoji("<:vol_up:827734772889157722>")
+        .setStyle("SUCCESS");
+      // eslint-disable-next-line no-unused-vars
+      let hintButton = new Discord.MessageButton()
+        .setCustomId("mute")
+        .setEmoji("<:mute:827734384606052392>")
+        .setStyle("SUCCESS");
+    }
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
-    if (this._volume >= 1 || this._muted)
-      volUpButton.setDisabled(true);
-    if (this._volume <= 0 || this._muted)
-      volDownButton.setDisabled(true);
 
+    if (!this._optimize) {
+      if (this._volume >= 1 || this._muted)
+        volUpButton.setDisabled(true);
+      if (this._volume <= 0 || this._muted)
+        volDownButton.setDisabled(true);
+    }
+
+    let rowTwo;
     let rowOne = new Discord.MessageActionRow().addComponents(
       musicButton,
       skipButton,
       stopButton,
     );
-    let rowTwo = new Discord.MessageActionRow().addComponents(
-      volDownButton,
-      volUpButton,
-      hintButton,
-    );
+    if (!this._optimize) {
+      // eslint-disable-next-line no-unused-vars
+      let rowTwo = new Discord.MessageActionRow().addComponents(
+        volDownButton,
+        volUpButton,
+        hintButton,
+      );
+    }
 
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(
@@ -624,13 +671,16 @@ export default class Player {
       )
       .setThumbnail(this._audio.metadata.thumbnail)
       .setColor(colors.success);
-    if (this._muted) playingEmbed.addField("🔇 靜音", "開啟", true);
-    else
-      playingEmbed.addField(
-        "🔊 音量",
-        `${this._volume * 100}%`,
-        true,
-      );
+
+    if (!this._optimize) {
+      if (this._muted) playingEmbed.addField("🔇 靜音", "開啟", true);
+      else
+        playingEmbed.addField(
+          "🔊 音量",
+          `${this._volume * 100}%`,
+          true,
+        );
+    }
     if (this._loop)
       playingEmbed.addField("🔁 循環播放", "開啟", true);
     if (this._repeat)
@@ -641,10 +691,13 @@ export default class Player {
       true,
     );
 
+    let components = [rowOne];
+    if (!this._optimize) components.push(rowTwo);
+
     this._noticeMessage
       ?.edit({
         embeds: [playingEmbed],
-        components: [rowOne, rowTwo],
+        components,
       })
       .catch(this.noop);
   }
