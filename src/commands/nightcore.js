@@ -1,5 +1,6 @@
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
+import joinVC from "../util/joinVC.js";
 import { MessageEmbed } from "discord.js";
 import { danger } from "../color.js";
 
@@ -37,8 +38,7 @@ export default {
         interaction.client,
         interaction.guild.id,
       );
-      if (!allowModify(interaction))
-        return interaction.reply("❌ 你必須加入一個語音頻道");
+      if (!allowModify(interaction)) return joinVC(interaction);
     }
     player.nightcore(interaction);
   },

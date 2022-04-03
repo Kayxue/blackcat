@@ -1,5 +1,7 @@
+import { MessageEmbed } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
+import { danger } from "../color.js";
 
 export default {
   data: {
@@ -15,10 +17,16 @@ export default {
     ],
   },
   run: async function (interaction) {
-    if (!interaction.member.voice?.channel)
+    if (!interaction.member.voice?.channel) {
+      let joinVCEmbed = new MessageEmbed()
+        .setTitle("❌ 你必須先在語音頻道內")
+        .setColor(danger);
       return interaction
-        .reply("❌ 你必須加入一個語音頻道")
+        .reply({
+          embeds: [joinVCEmbed],
+        })
         .catch(() => {});
+    }
 
     if (!interaction.member.voice.channel.joinable)
       return interaction

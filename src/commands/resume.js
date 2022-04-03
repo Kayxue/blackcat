@@ -2,6 +2,7 @@ import { MessageEmbed } from "discord.js";
 import { danger } from "../color.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
+import joinVC from "../util/joinVC.js";
 
 export default {
   data: {
@@ -19,8 +20,7 @@ export default {
       return interaction.reply("❌ 必須要有音樂正在播放");
     } else {
       player = PlayerManager.getSendingPlayer(interaction.guild.id);
-      if (!allowModify(interaction))
-        return interaction.reply("❌ 你必須加入一個語音頻道");
+      if (!allowModify(interaction)) return joinVC(interaction);
     }
     if (!player.paused) {
       let pausedEmbed = new MessageEmbed()

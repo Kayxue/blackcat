@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { danger } from "../color";
+import { danger } from "../color.js";
 
 export default function joinVC(interaction) {
   let vcEmbed = new MessageEmbed()
