@@ -791,7 +791,10 @@ export default class Player {
         this._songs = [];
         this._player.stop();
         replyMessage = "⏹️ 停止播放音樂";
-        this._connection.destroy();
+        try {
+          this._connection.destroy();
+          // eslint-disable-next-line no-empty
+        } catch (e) {}
         this._client.players.delete(this._guildId);
         break;
       case "volup":
