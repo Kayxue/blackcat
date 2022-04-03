@@ -101,8 +101,8 @@ export default {
           if (currentPage <= 1) {
             previousBtn.setDisabled(true);
             currentPage = 1;
+            nextBtn.setDisabled(false);
           }
-          nextBtn.setDisabled(false);
           buttons = new MessageActionRow().setComponents(
             previousBtn,
             closeBtn,
@@ -121,8 +121,8 @@ export default {
           if (currentPage >= embeds.length) {
             nextBtn.setDisabled(true);
             currentPage = embeds.length;
+            previousBtn.setDisabled(false);
           }
-          previousBtn.setDisabled(false);
           buttons = new MessageActionRow().setComponents(
             previousBtn,
             closeBtn,
