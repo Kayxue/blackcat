@@ -644,18 +644,15 @@ export default class Player {
 
     let volDownButton, volUpButton, hintButton;
     if (!this._optimize) {
-      // eslint-disable-next-line no-unused-vars
-      let volDownButton = new Discord.MessageButton()
+      volDownButton = new Discord.MessageButton()
         .setCustomId("voldown")
         .setEmoji("<:vol_down:827734683340111913>")
         .setStyle("SUCCESS");
-      // eslint-disable-next-line no-unused-vars
-      let volUpButton = new Discord.MessageButton()
+      volUpButton = new Discord.MessageButton()
         .setCustomId("volup")
         .setEmoji("<:vol_up:827734772889157722>")
         .setStyle("SUCCESS");
-      // eslint-disable-next-line no-unused-vars
-      let hintButton = new Discord.MessageButton()
+      hintButton = new Discord.MessageButton()
         .setCustomId("mute")
         .setEmoji("<:mute:827734384606052392>")
         .setStyle("SUCCESS");
@@ -678,7 +675,7 @@ export default class Player {
     );
     if (!this._optimize) {
       // eslint-disable-next-line no-unused-vars
-      let rowTwo = new Discord.MessageActionRow().addComponents(
+      rowTwo = new Discord.MessageActionRow().addComponents(
         volDownButton,
         volUpButton,
         hintButton,
