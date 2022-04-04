@@ -412,7 +412,7 @@ export default class Player {
   }
 
   playnext(interaction, index) {
-    let playnextEmbed = new MessageEmbed()
+    let playnextEmbed = new Discord.MessageEmbed()
       .setTitle(
         `⚡ ${this._songs[index - 1].title} 將會在目前歌曲結束後播放`,
       )
