@@ -39,7 +39,7 @@
   2. 安裝所需套件
 
   ```sh
-  bash setup.sh
+  yarn install
   ```
 
   3. 填寫`config.example.js`並重新命名成`config.js`
