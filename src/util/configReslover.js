@@ -43,6 +43,7 @@ export default async function () {
         enableDev: !!process.env.ENABLE_DEV || false,
         enableApi: !!process.env.ENABLE_API || false,
         apiPort: process.env.API_PORT ?? process.env.PORT ?? 8080,
+        optimizeQuality: !!process.env.OPTIMIZE_QUALITY || false,
       };
 
       let invaild = false;
