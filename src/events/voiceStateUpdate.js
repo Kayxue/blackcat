@@ -18,7 +18,7 @@ export default {
 
       setTimeout(() => {
         let voiceChannel = newState.guild.me.voice.channel;
-        if (!VoiceChannel) return; // Bot has been kicked out by user, let player do it's work
+        if (!voiceChannel) return; // Bot has been kicked out by user, let player do it's work
 
         let members = voiceChannel.members.filter(
           (member) => !member.user.bot,
