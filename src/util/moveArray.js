@@ -8,4 +8,4 @@ export default function moveArray(original, oldIndex, newIndex) {
   }
   modified.splice(newIndex, 0, modified.splice(oldIndex, 1)[0]);
   return modified;
-};
+}

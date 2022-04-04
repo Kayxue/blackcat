@@ -40,25 +40,31 @@ export default {
       let invaildEmbed = new MessageEmbed()
         .setTitle("❌ 歌曲編號不能小於或等於0!")
         .setColor(danger);
-      return interaction.reply({
-        embeds: [invaildEmbed]
-      }).catch(() => {});
+      return interaction
+        .reply({
+          embeds: [invaildEmbed],
+        })
+        .catch(() => {});
     } else if (number <= 2) {
       let invaildEmbed = new MessageEmbed()
         .setTitle("❌ 歌曲編號不能是1或是2!")
         .setColor(danger);
-      return interaction.reply({
-        embeds: [invaildEmbed]
-      }).catch(() => {});
+      return interaction
+        .reply({
+          embeds: [invaildEmbed],
+        })
+        .catch(() => {});
     } else if (number > player.songs.length) {
       let invaildEmbed = new MessageEmbed()
         .setTitle("❌ 歌曲編號不能大約序列長度")
         .setColor(danger);
-      return interaction.reply({
-        embeds: [invaildEmbed]
-      }).catch(() => {});
+      return interaction
+        .reply({
+          embeds: [invaildEmbed],
+        })
+        .catch(() => {});
     }
-    
+
     player.playnext(interaction, number);
   },
 };
