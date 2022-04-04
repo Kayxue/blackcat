@@ -22,7 +22,7 @@
 
 > 注意：黑貓程式碼是專門為 Linux 所打造，如果您正在使用 Windows，請嘗試使用[`WSL`](https://ubuntu.com/wsl)或是使用 Docker
 
-- 使用 Node.js
+- 使用 Node.js (你必須安裝 Node.js)
 
   1. 複製程式碼
 
@@ -59,7 +59,22 @@
 
 - 使用 Docker 映像檔
 
-  Under development
+  1. 拉取 Docker 映像檔
+
+  ```sh
+  docker pull wolfyuan/blackcat
+  ```
+
+  2. 啟動機器人
+
+  ```sh
+  docker run -d -e TOKEN="機器人Token" \
+    -e devGuild="測試伺服器ID" \
+    -e enableDev="是否啟用開發者模式(true/false)" \
+    -e enableApi="是否啟用API(true/false)" \
+    -e apiPort="API埠號" \
+    --name blackcat wolfyuan/blackcat
+  ```
 
 ## 貢獻者
 
