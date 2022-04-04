@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:alpine
 
 RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake bash && \
   addgroup -S catrunner && \
