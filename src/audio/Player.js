@@ -572,15 +572,18 @@ export default class Player {
             "0",
             "-loglevel",
             "0",
-            "-acodec",
-            "libopus",
             "-f",
-            "opus",
+            "s16le",
             "-ar",
             "48000",
             "-ac",
             "2",
           ],
+        });
+        this._engines.opusEncoder = new prism.opus.Encoder({
+          channels: 2,
+          frameSize: 960,
+          rate: 48000,
         });
       }
       if (!this._optimize) {
@@ -589,7 +592,9 @@ export default class Player {
           .pipe(this._engines.volumeTransform)
           .pipe(this._engines.opusEncoder);
       } else {
-        this._encoded = this._raw.stream.pipe(this._engines.ffmpeg);
+        this._encoded = this._raw.stream
+          .pipe(this._engines.ffmpeg)
+          .pipe(this._engines.opusEncoder);
       }
     }
     this._audio = createAudioResource(this._encoded, {
