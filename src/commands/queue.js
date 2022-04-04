@@ -27,7 +27,7 @@ export default {
         interaction.guild.id,
       );
     }
-    let songs = player.songs;
+    let songs = player.songs.slice(0);
 
     let parsedSongs = [],
       embeds = [],
