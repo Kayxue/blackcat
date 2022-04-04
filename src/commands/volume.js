@@ -12,7 +12,7 @@ export default {
       {
         name: "volume",
         description: "音量大小，留空會顯示目前的音量",
-        type: 4,
+        type: 4, // integer
         required: false,
       },
     ],

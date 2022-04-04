@@ -13,6 +13,7 @@ import prism from "prism-media";
 import SampleRate from "node-libsamplerate";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
+import moveArray from "../util/moveArray.js"
 import log from "../logger.js";
 import colors from "../color.js";
 
@@ -409,6 +410,16 @@ export default class Player {
       })
       .catch(this.noop);
   }
+  
+  playnext(interaction, index) {
+    let playnextEmbed = new MessageEmbed()
+      .setTitle(`⚡ ${this._songs[index - 1].title} 將會在目前歌曲結束後播放`)
+      .setColor(colors.blurple);
+    this._songs = moveArray(this._songs, index - 1, 1);
+    interaction.reply({
+      embeds: [playnextEmbed]
+    }).catch(() => {})
+  }
 
   async playStream() {
     if (!this._songs[0]?.rawData.full) {
@@ -724,6 +735,10 @@ export default class Player {
 
   get pauseState() {
     return this._paused;
+  }
+  
+  get textChannel() {
+    return this._channel;
   }
 
   set volume(volume) {
