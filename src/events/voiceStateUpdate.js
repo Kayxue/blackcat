@@ -34,7 +34,7 @@ export default {
             .catch(() => {});
           player.stop(null, true);
         }
-      });
+      }, 15_000);
     } catch (e) {}
   },
 };
