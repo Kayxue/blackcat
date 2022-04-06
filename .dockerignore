@@ -2,3 +2,7 @@
 .github/
 config.js
 .gitignore
+node_modules/
+src/audio/engine/libsamplerate/node_modules
+src/audio/engine/libsamplerate/build
+src/audio/engine/libsamplerate/deps/include
