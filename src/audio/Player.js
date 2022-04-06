@@ -10,7 +10,7 @@ import {
 import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
-import SampleRate from "node-libsamplerate";
+import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
 import moveArray from "../util/moveArray.js";

@@ -19,4 +19,4 @@ fi
 cd src/audio/engine/libsamplerate
 yarn install
 yarn build
-cd ../../../../
+cd -
