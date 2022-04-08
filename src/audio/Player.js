@@ -455,6 +455,7 @@ export default class Player {
       this._raw = await play.stream(this._songs[0].url);
     } catch (e) {
       this.handelYoutubeError(e);
+      return;
     }
 
     if (this._raw.type === "opus") {
@@ -766,25 +767,25 @@ export default class Player {
       let invaildEmbed = new Discord.MessageEmbed()
         .setTitle("😱 我沒辦法取得你想播放的音樂，因為需要登入帳號")
         .setColor(colors.danger);
-      return this._channel.send({
+      this._channel.send({
         embeds: [invaildEmbed],
       });
     } else if (e.message.includes("429")) {
       let limitEmbed = new Discord.MessageEmbed()
         .setTitle("😱 現在無法取得這個音樂，請稍後再試")
         .setColor(colors.danger);
-      return this._channel.send({
+      this._channel.send({
         embeds: [limitEmbed],
       });
     } else if (e.message.includes("private")) {
       let privateEmbed = new Discord.MessageEmbed()
         .setTitle("😱 這是私人影片")
         .setColor(colors.danger);
-      return this._channel.send({
+      this._channel.send({
         embeds: [privateEmbed],
       });
     }
-    log.error(e.message, e);
+    return log.error(e.message, e);
   }
 
   handelIdle() {
