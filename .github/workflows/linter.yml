@@ -31,7 +31,7 @@ jobs:
           eslint: false
           prettier: true
           auto_fix: true
-          git_name: Automatic linting
-          git_email: "action@github.com"
+          git_name: "github-actions[bot]"
+          git_email: "github-actions[bot]@users.noreply.github.com"
           commit_message: "Format code using ${linter}"
           neutral_check_on_warning: true
