@@ -9,6 +9,8 @@ export default {
   // 這樣做會讓測試模式更新時間更短
   optimizeQuality: false,
   // 是否啟用優化品質，優化品質會減少一些資源消耗，但是會停用音量控制及nightcore音效
+  cookie: undefined,
+  // 播放器使用的YouTube cookie
   enableDev: false,
   // 是否啟用開發測試模式
   // 如果此設定為true，則devGuild必須設定伺服器ID

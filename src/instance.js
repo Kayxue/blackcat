@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import Discord from "discord.js";
+import play from "play-dl";
 import fs from "node:fs";
 
 import log from "./logger.js";
@@ -65,3 +66,11 @@ process.on("message", (message) => {
     log.info(`分片已接收到ID ${message.value}`);
   }
 });
+
+if (config.cookie) {
+  play.setToken({
+    youtube: {
+      cookie: config.cookie
+    }
+  })
+}
