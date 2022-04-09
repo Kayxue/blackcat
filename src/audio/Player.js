@@ -55,8 +55,8 @@ export default class Player {
       play.setToken({
         youtube: {
           cookie: interaction.client.config.cookie,
-        }
-      })
+        },
+      });
     }
   }
 
