@@ -13,7 +13,7 @@
     "start": "node src/index.js",
     "commit": "cz c",
     "commit:setup": "pip install -U commitizen",
-    "install": "bash setup.sh",
+    "install": "bash scripts/setup.sh",
     "prepare": "husky install"
   },
   "repository": {
