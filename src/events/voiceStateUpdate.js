@@ -1,5 +1,4 @@
 import { MessageEmbed } from "discord.js";
-import log from "../logger.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import { danger } from "../color.js";
 
@@ -23,7 +22,7 @@ export default {
         let members = voiceChannel.members.filter(
           (member) => !member.user.bot,
         );
-        if (members <= 0) {
+        if (members.size <= 0) {
           let leaveEmbed = new MessageEmbed()
             .setTitle("👋 語音頻道已經沒人了，所以我停止了音樂")
             .setColor(danger);

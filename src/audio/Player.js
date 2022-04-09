@@ -55,8 +55,8 @@ export default class Player {
       play.setToken({
         youtube: {
           cookie: interaction.client.config.cookie,
-        }
-      })
+        },
+      });
     }
   }
 
@@ -778,9 +778,11 @@ export default class Player {
           "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
-      this._channel.send({
-        embeds: [invaildEmbed],
-      });
+      this._channel
+        .send({
+          embeds: [invaildEmbed],
+        })
+        .catch(this.noop);
     } else if (e.message.includes("429")) {
       let limitEmbed = new Discord.MessageEmbed()
         .setTitle("😱 現在無法取得這個音樂，請稍後再試")
@@ -788,9 +790,11 @@ export default class Player {
           "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
-      this._channel.send({
-        embeds: [limitEmbed],
-      });
+      this._channel
+        .send({
+          embeds: [limitEmbed],
+        })
+        .catch(this.noop);
     } else if (e.message.includes("private")) {
       let privateEmbed = new Discord.MessageEmbed()
         .setTitle("😱 這是私人影片")
@@ -798,9 +802,11 @@ export default class Player {
           "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
-      this._channel.send({
-        embeds: [privateEmbed],
-      });
+      this._channel
+        .send({
+          embeds: [privateEmbed],
+        })
+        .catch(this.noop);
     } else {
       let errorEmbed = new Discord.MessageEmbed()
         .setTitle("😱 發生了未知的錯誤!")
@@ -808,9 +814,11 @@ export default class Player {
           "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
-      this._channel.send({
-        embeds: [errorEmbed],
-      });
+      this._channel
+        .send({
+          embeds: [errorEmbed],
+        })
+        .catch(this.noop);
     }
     log.error(e.message, e);
   }
