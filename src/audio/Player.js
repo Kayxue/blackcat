@@ -50,6 +50,14 @@ export default class Player {
     };
     this._encoded = null;
     this._raw = null;
+
+    if (interaction.client.config.cookie) {
+      play.setToken({
+        youtube: {
+          cookie: interaction.client.config.cookie,
+        }
+      })
+    }
   }
 
   noop() {}

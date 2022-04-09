@@ -66,11 +66,3 @@ process.on("message", (message) => {
     log.info(`分片已接收到ID ${message.value}`);
   }
 });
-
-if (config.cookie) {
-  play.setToken({
-    youtube: {
-      cookie: config.cookie,
-    },
-  });
-}
