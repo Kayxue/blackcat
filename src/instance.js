@@ -70,7 +70,7 @@ process.on("message", (message) => {
 if (config.cookie) {
   play.setToken({
     youtube: {
-      cookie: config.cookie
-    }
-  })
+      cookie: config.cookie,
+    },
+  });
 }
