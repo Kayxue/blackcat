@@ -766,6 +766,11 @@ export default class Player {
     if (e.message.includes("confirm your age")) {
       let invaildEmbed = new Discord.MessageEmbed()
         .setTitle("😱 我沒辦法取得你想播放的音樂，因為需要登入帳號")
+        .setDescription(
+          "錯誤訊息:\n"+
+          "```js"+
+          `${e.message}\n`+
+          "```")
         .setColor(colors.danger);
       this._channel.send({
         embeds: [invaildEmbed],
@@ -773,6 +778,11 @@ export default class Player {
     } else if (e.message.includes("429")) {
       let limitEmbed = new Discord.MessageEmbed()
         .setTitle("😱 現在無法取得這個音樂，請稍後再試")
+        .setDescription(
+          "錯誤訊息:\n"+
+          "```js"+
+          `${e.message}\n`+
+          "```")
         .setColor(colors.danger);
       this._channel.send({
         embeds: [limitEmbed],
@@ -780,12 +790,29 @@ export default class Player {
     } else if (e.message.includes("private")) {
       let privateEmbed = new Discord.MessageEmbed()
         .setTitle("😱 這是私人影片")
+        .setDescription(
+          "錯誤訊息:\n" +
+          "```js" +
+          `${e.message}\n` +
+          "```")
         .setColor(colors.danger);
       this._channel.send({
         embeds: [privateEmbed],
       });
+    } else {
+      let errorEmbed = new Discord.MessageEmbed()
+        .setTitle("😱 發生了未知的錯誤!")
+        .setDescription(
+          "錯誤訊息:\n" +
+          "```js" +
+          `${e.message}\n` +
+          "```")
+        .setColor(colors.danger);
+      this._channel.send({
+        embeds: [errorEmbed],
+      });
     }
-    return log.error(e.message, e);
+    log.error(e.message, e);
   }
 
   handelIdle() {
