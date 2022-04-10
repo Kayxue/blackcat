@@ -17,6 +17,6 @@ else
 fi
 
 cd src/audio/engine/libsamplerate
-yarn install
-yarn build
+pnpm install
+pnpm build
 cd -
