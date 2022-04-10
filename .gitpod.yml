@@ -1,6 +1,6 @@
 tasks:
   - name: Install Node.js dependencies
-    init: bash setup.sh --gitpod
+    init: bash scripts/setup.sh --gitpod
   - name: Build docker image
     init: docker build -t blackcat:gitpod .
 
