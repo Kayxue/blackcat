@@ -17,6 +17,13 @@ export default async function () {
         invaild = true;
       }
       if (
+        typeof config.cookie !== "string" &&
+        typeof config.cookie !== "undefined"
+      ) {
+        log.error("`cookie`不是一個字串");
+        invaild = true;
+      }
+      if (
         typeof config.devGuild !== "string" &&
         config.enableDev === true
       ) {
@@ -39,6 +46,7 @@ export default async function () {
       log.warn("找不到設定檔，正在從環境變數讀取");
       let config = {
         token: process.env.TOKEN,
+        cookie: process.env.COOKIE,
         devGuild: process.env.DEV_GUILD,
         enableDev: !!process.env.ENABLE_DEV || false,
         enableApi: !!process.env.ENABLE_API || false,
@@ -53,15 +61,25 @@ export default async function () {
         invaild = true;
       }
       if (typeof config.enableApi !== "boolean") {
-        log.error("`enableApi`不是一個布林值(true/false)");
+        log.error("`ENABLE_API`不是一個布林值(true/false)");
         invaild = true;
       }
-      if (typeof config.devGuild !== "number" && config.enableDev) {
-        log.error("`apiPort`不是一個數字");
+      if (
+        typeof config.cookie !== "string" &&
+        typeof config.cookie !== "undefined"
+      ) {
+        log.error("`COOKIE`不是一個字串");
+        invaild = true;
+      }
+      if (
+        typeof config.devGuild !== "string" &&
+        config.enableDev === true
+      ) {
+        log.error("`DEV_GUILD`不是一個字串(ID)，且`enableDev`為true");
         invaild = true;
       }
       if (typeof config.apiPort !== "number") {
-        log.error("`apiPort`不是一個數字");
+        log.error("`API_PORT`/`PORT`不是一個數字");
         invaild = true;
       }
 
