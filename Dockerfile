@@ -9,7 +9,7 @@ COPY --chown=catrunner:catrunner . /home/catrunner/
 WORKDIR /home/catrunner/
 
 USER catrunner
-RUN pnpm install && rm -rf ~/.pnpm-store
+RUN pnpm install
 
 USER root
 RUN apk del python3 make gcc g++ git libtool autoconf automake cmake
