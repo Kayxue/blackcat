@@ -3,8 +3,8 @@ trap exit INT
 
 build() {
   cd src/audio/engine/libsamplerate
-  pnpm install
-  pnpm build
+  yarn install
+  yarn build
   cd -
 }
 
@@ -12,7 +12,7 @@ if [ "$1" == "--gitpod" ]
 then
   sudo apt-get install -qqy cmake
   sudo apt-get remove -qqy ninja-build
-  pnpm install
+  yarn install
 elif [ ! command -v cmake &> /dev/null ]
 then
   echo "Cannot find cmake"
