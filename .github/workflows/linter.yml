@@ -20,11 +20,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 17
-      - uses: pnpm/action-setup@v2.1.0
-        with:
-          version: latest
       - name: Install Node.js dependencies
-        run: pnpm install
+        run: yarn install
       - name: Run linters
         uses: wearerequired/lint-action@v1
         with:
