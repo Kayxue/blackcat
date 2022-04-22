@@ -1,1 +1,2 @@
-worker: npx pm2-runtime start ./pm2.config.js
+web: yarn start
+worker: yarn start
