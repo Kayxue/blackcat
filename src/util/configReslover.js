@@ -78,10 +78,10 @@ export default async function () {
         log.error("`DEV_GUILD`不是一個字串(ID)，且`enableDev`為true");
         invaild = true;
       }
-      /*if (typeof config.apiPort !== "number") {
+      if (typeof config.apiPort !== "number") {
         log.error("`API_PORT`/`PORT`不是一個數字");
         invaild = true;
-      }*/
+      }
 
       if (invaild) {
         log.error("設定出現錯誤，程式正在自動關閉");
