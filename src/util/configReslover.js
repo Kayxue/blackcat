@@ -50,7 +50,7 @@ export default async function () {
         devGuild: process.env.DEV_GUILD,
         enableDev: !!process.env.ENABLE_DEV || false,
         enableApi: !!process.env.ENABLE_API || false,
-        apiPort: process.env.API_PORT ?? process.env.PORT ?? 8080,
+        apiPort: process.env.API_PORT || process.env.PORT || 8080,
         optimizeQuality: !!process.env.OPTIMIZE_QUALITY || false,
       };
 
