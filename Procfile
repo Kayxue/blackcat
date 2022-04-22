@@ -1,1 +1,1 @@
-worker: pm2-runtime start ./pm2.config.js
+worker: npx pm2-runtime start ./pm2.config.js
