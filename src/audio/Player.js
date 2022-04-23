@@ -787,7 +787,7 @@ export default class Player {
       let limitEmbed = new Discord.MessageEmbed()
         .setTitle("😱 現在無法取得這個音樂，請稍後再試")
         .setDescription(
-          "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
+          "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
       this._channel
@@ -799,7 +799,7 @@ export default class Player {
       let privateEmbed = new Discord.MessageEmbed()
         .setTitle("😱 這是私人影片")
         .setDescription(
-          "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
+          "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
       this._channel
@@ -811,7 +811,7 @@ export default class Player {
       let errorEmbed = new Discord.MessageEmbed()
         .setTitle("😱 發生了未知的錯誤!")
         .setDescription(
-          "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
+          "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
         )
         .setColor(colors.danger);
       this._channel
