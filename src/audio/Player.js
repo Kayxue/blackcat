@@ -264,9 +264,11 @@ export default class Player {
         .setTitle("✅ 已加入播放清單")
         .setDescription(`播放清單內有 ${this._songs.length} 首歌曲`)
         .setColor(colors.success);
-      interaction.editReply({
-        embeds: [addedEmbed],
-      }).catch(this.noop);
+      interaction
+        .editReply({
+          embeds: [addedEmbed],
+        })
+        .catch(this.noop);
 
       this.updateNoticeEmbed();
     }
