@@ -171,7 +171,7 @@ export default class Player {
     }
   }
 
-  async play(track, interaction) {
+  async play(track, interaction, fromSearch = false) {
     let rawData,
       parsedData,
       isPlaylist = false;
@@ -179,11 +179,13 @@ export default class Player {
     let searchEmbed = new Discord.MessageEmbed()
       .setTitle(`🔍 正在搜尋 **${track}**`)
       .setColor(colors.success);
-    interaction
-      .editReply({
-        embeds: [searchEmbed],
-      })
-      .catch(this.noop);
+    if (!fromSearch) {
+      interaction
+        .editReply({
+          embeds: [searchEmbed],
+        })
+        .catch(this.noop);
+    }
 
     if (
       play.yt_validate(track) !== "video" &&
@@ -264,11 +266,13 @@ export default class Player {
         .setTitle("✅ 已加入播放清單")
         .setDescription(`播放清單內有 ${this._songs.length} 首歌曲`)
         .setColor(colors.success);
-      interaction
-        .editReply({
-          embeds: [addedEmbed],
-        })
-        .catch(this.noop);
+      if (!fromSearch) {
+        interaction
+          .editReply({
+            embeds: [addedEmbed],
+          })
+          .catch(this.noop);
+      }
 
       this.updateNoticeEmbed();
     }
