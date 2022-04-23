@@ -266,7 +266,7 @@ export default class Player {
         .setColor(colors.success);
       interaction.editReply({
         embeds: [addedEmbed],
-      });
+      }).catch(this.noop);
 
       this.updateNoticeEmbed();
     }
@@ -690,6 +690,8 @@ export default class Player {
         hintButton,
       );
     }
+
+    if (!this._audio?.metadata?.title) return; //Ignore if title is missing
 
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(
