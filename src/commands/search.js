@@ -204,9 +204,9 @@ export default {
       let videoEmbed = new MessageEmbed()
         .setTitle(`🎶 ${video.title}`)
         .setDescription(
-          `頻道: ${video.channel?.name || "未知的上傳者"}\n影片長度: ${
-            video.durationRaw
-          }`,
+          `頻道: ${
+            video.channel?.name || "未知的上傳者"
+          }\n影片長度: ${video.durationRaw}`,
         )
         .setThumbnail(video.thumbnails[0].url)
         .setURL(video.url)
@@ -315,11 +315,15 @@ export default {
         case "choose":
           collector.stop("choosen");
           let choosenEmbed = new MessageEmbed()
-            .setTitle(`🔍 ${result[currentPage].title} 已經被加入播放清單中`)
+            .setTitle(
+              `🔍 ${result[currentPage].title} 已經被加入播放清單中`,
+            )
             .setColor(color.success);
-          collected.update({
-            embeds: [choosenEmbed]
-          }).catch(() => {});
+          collected
+            .update({
+              embeds: [choosenEmbed],
+            })
+            .catch(() => {});
           player.play(result[currentPage].url, interaction, true);
       }
     });
