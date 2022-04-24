@@ -48,10 +48,10 @@ export default async function () {
         token: process.env.TOKEN,
         cookie: process.env.COOKIE,
         devGuild: process.env.DEV_GUILD,
-        enableDev: !!process.env.ENABLE_DEV || false,
-        enableApi: !!process.env.ENABLE_API || false,
-        apiPort: process.env.API_PORT || process.env.PORT || 8080,
-        optimizeQuality: !!process.env.OPTIMIZE_QUALITY || false,
+        enableDev: process.env.ENABLE_DEV === "true",
+        enableApi: process.env.ENABLE_API === "true",
+        apiPort: process.env.PORT || 8080,
+        optimizeQuality: process.env.OPTIMIZE_QUALITY === "true",
       };
 
       let invaild = false;

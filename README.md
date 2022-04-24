@@ -22,7 +22,15 @@
 
 ## 📥 安裝
 
-> ⚠️ 注意：黑貓程式碼是專門為 Linux 所打造，如果您正在使用 Windows，請嘗試使用[`WSL`](https://ubuntu.com/wsl)或是使用 Docker
+[![部屬到Heroku](https://cdn.catmusic.ml/button.svg)](https://heroku.com/deploy)
+
+> ⚠️ 注意：黑貓程式碼是專門為 Linux 所打造，如果您正在使用 Windows，請部屬到 Heroku 或是使用 Docker
+
+- 部屬到 Heroku
+
+  1. 點擊上方的部屬到 Heroku 按鈕
+
+  2. 就是這麼簡單！請繼續照著螢幕的指示操作！
 
 - 使用 Node.js (你必須安裝 Node.js)
 
@@ -41,26 +49,18 @@
   2. 安裝所需套件
 
   ```sh
-  npm install pnpm -g #如果還沒有安裝PnPm
-  pnpm install
+  npm install yarn -g #如果還沒有安裝Yarn
+  yarn install
   ```
 
   3. 填寫`config.example.js`並重新命名成`config.js`
   4. 啟動機器人
 
-  - 程式關閉時自動重新啟動
-
   ```sh
-  bash start.sh
+  yarn start
   ```
 
-  - 只啟動機器人
-
-  ```sh
-  node src/index.js
-  ```
-
-- 🐋 使用 Docker 映像檔
+- 🐋 使用已建立好的 Docker 映像檔
 
   1. 拉取 Docker 映像檔
 
@@ -80,17 +80,33 @@
     --name blackcat wolfyuan/blackcat
   ```
 
+- 🐋 自行建立 Docker 映像檔
+  1. 建立 Docker image
+  ```sh
+  docker build -t blackcat:latest .
+  ```
+  2. 啟動機器人
+  ```sh
+  docker run -d -e TOKEN="機器人Token" \
+    -e COOKIE="YouTube Cookie"
+    -e DEV_GUILD="測試伺服器ID" \
+    -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
+    -e ENABLE_API="是否啟用API(true/false)" \
+    -e API_PORT="API埠號" \
+    --name blackcat blackcat:latest
+  ```
+
 ## ⚙️ 設定檔
 
-| 設定檔名稱 | 環境變數名稱 | 說明 | 屬性 | 預設 |
-| :-: | :-: | :-- | :-: | :-: |
-| `token` | `TOKEN` | Discord 機器人登入 Token | `string` | `undefined` |
-| `cookie` | `COOKIE` | 播放器在發送請求至 YouTube 時使用的 Cookie | `string?` | `undefined` |
-| `devGuild` | `DEV_GUILD` | 開發時使用的斜線指令伺服器 | `string?` | `undefined` |
-| `enableDev` | `ENABLE_DEV` | 是否啟用開發模式 | `boolean` | `false` |
-| `optimizeQuality` | `OPTIMIZE_QUALITY` | 是否啟用音樂優化模式(如果為`true`，將會停用音量及 nightcore 音效) | `boolean` | `false` |
-| `enableApi` | `ENABLE_API` | 是否啟用 API 伺服器 | `boolean` | `false` |
-| `apiPort` | `API_PORT`/`PORT` | API 伺服器監聽端口 | `number` | `8080` |
+| 設定檔名稱 | 環境變數名稱 | 說明 | 屬性 |
+| :-: | :-: | :-- | :-: |
+| `token` | `TOKEN` | Discord 機器人登入 Token | `string` |
+| `cookie` | `COOKIE` | 播放器在發送請求至 YouTube 時使用的 Cookie | `string?` |
+| `devGuild` | `DEV_GUILD` | 開發時使用的斜線指令伺服器 | `string?` |
+| `enableDev` | `ENABLE_DEV` | 是否啟用開發模式 | `boolean` |
+| `optimizeQuality` | `OPTIMIZE_QUALITY` | 是否啟用音樂優化模式(如果為`true`，將會停用音量及 nightcore 音效) | `boolean` |
+| `enableApi` | `ENABLE_API` | 是否啟用 API 伺服器 | `boolean` |
+| `apiPort` | `PORT` | API 伺服器監聽端口 | `number` |
 
 ## 🙏 貢獻者
 
