@@ -1,4 +1,48 @@
 {
   "name": "Black cat 黑貓音樂機器人",
-  "description": "Discord 第一名的音樂機器人，現在可以在Heroku上自行運行!"
+  "description": "Discord 第一名的音樂機器人，現在可以在Heroku上自行運行!",
+  "website": "https://catmusic.ml",
+  "repository": "https://github.com/blackcatbot/blackcat",
+  "logo": "https://catmusic.ml/favicon.png",
+  "keywords": [
+    "黑貓",
+    "Discord",
+    "音樂機器人",
+    "黑貓音樂機器人",
+    "Black cat"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "TOKEN": {
+      "description": "Discord 機器人登入 Token",
+      "required": true
+    },
+    "COOKIE": {
+      "description": "播放器在發送請求至 YouTube 時使用的 Cookie。請注意，由於Heroku是使用分享伺服器，有很大的機率會被YouTube限速，您可以使用這項設定來解決這個問題。",
+      "required": false
+    },
+    "DEV_GUILD": {
+      "description": "開發時使用的斜線指令伺服器",
+      "required": false
+    },
+    "ENABLE_DEV": {
+      "description": "是否啟用開發模式",
+      "required": true,
+      "value": "false"
+    },
+    "OPTIMIZE_QUALITY": {
+      "description": "是否啟用音樂優化模式(如果為`true`，將會停用音量及 nightcore 音效)",
+      "required": true,
+      "value": "false"
+    },
+    "ENABLE_API": {
+      "description": "是否啟用 API 伺服器，如果此設定為true，您必須使用Web Dyno，如果為false，您必須使用Worker Dyno",
+      "required": true,
+      "value": "false"
+    }
+  }
 }
