@@ -28,17 +28,13 @@ export default {
       let joinVCEmbed = new MessageEmbed()
         .setTitle("❌ 你必須先在語音頻道內")
         .setColor(color.danger);
-      return interaction
-        .reply({
-          embeds: [joinVCEmbed],
-        })
-        .catch(() => {});
+      return interaction.reply({
+        embeds: [joinVCEmbed],
+      });
     }
 
     if (!interaction.member.voice.channel.joinable)
-      return interaction
-        .reply("❌ 我無法連線至語音頻道!")
-        .catch(() => {});
+      return interaction.reply("❌ 我無法連線至語音頻道!");
 
     const query = interaction.options.getString("query");
     let player;
@@ -56,9 +52,7 @@ export default {
         interaction.guild.id,
       );
       if (!allowModify(interaction))
-        return interaction
-          .reply("❌ 你必須跟我在同一個頻道")
-          .catch(() => {});
+        return interaction.reply("❌ 你必須跟我在同一個頻道");
     }
 
     if (
@@ -92,13 +86,11 @@ export default {
 
       let selectMessage;
       try {
-        selectMessage = await interaction
-          .reply({
-            embeds: [videoEmbed],
-            components: [actionRow],
-            fetchReply: true,
-          })
-          .catch(() => {});
+        selectMessage = await interaction.reply({
+          embeds: [videoEmbed],
+          components: [actionRow],
+          fetchReply: true,
+        });
       } catch (e) {
         return;
       }
@@ -120,7 +112,7 @@ export default {
             .setTitle("🎶 已將歌曲加入播放序列中")
             .setDescription(`歌曲網址: ${query}`)
             .setColor(color.success);
-          interaction.reply({ embeds: [playEmbed] }).catch(() => {});
+          interaction.reply({ embeds: [playEmbed] });
           return;
         }
       }
@@ -129,11 +121,9 @@ export default {
     let searchEmbed = new MessageEmbed()
       .setTitle(`🔍 正在搜尋 **${query}**`)
       .setColor(color.success);
-    interaction
-      .reply({
-        embeds: [searchEmbed],
-      })
-      .catch(() => {});
+    interaction.reply({
+      embeds: [searchEmbed],
+    });
 
     let result;
     try {
@@ -266,7 +256,7 @@ export default {
       }
 
       switch (collected.customId) {
-        case "previous":
+        case "previous": {
           currentPage -= 1;
           if (currentPage <= 1) {
             previousBtn.setDisabled(true);
@@ -282,14 +272,13 @@ export default {
             nextBtn,
           );
 
-          collected
-            .update({
-              embeds: [embeds[currentPage]],
-              components: [buttons],
-            })
-            .catch(() => {});
+          collected.update({
+            embeds: [embeds[currentPage]],
+            components: [buttons],
+          });
           break;
-        case "next":
+        }
+        case "next": {
           currentPage += 1;
           if (currentPage >= embeds.length) {
             nextBtn.setDisabled(true);
@@ -305,33 +294,37 @@ export default {
             nextBtn,
           );
 
-          collected
-            .update({
-              embeds: [embeds[currentPage]],
-              components: [buttons],
-            })
-            .catch(() => {});
+          collected.update({
+            embeds: [embeds[currentPage]],
+            components: [buttons],
+          });
           break;
-        case "choose":
+        }
+        case "choose": {
           collector.stop("choosen");
           let choosenEmbed = new MessageEmbed()
             .setTitle(
               `🔍 ${result[currentPage].title} 已經被加入播放清單中`,
             )
             .setColor(color.success);
-          collected
-            .update({
-              embeds: [choosenEmbed],
-            })
-            .catch(() => {});
+          collected.update({
+            embeds: [choosenEmbed],
+            components: [],
+          });
           player.play(result[currentPage].url, interaction, true);
+          break;
+        }
       }
     });
 
     collector.on("end", (_collected, reason) => {
       if (reason !== "choosen") {
+        let expireEmbed = new MessageEmbed()
+          .setTitle("😐 搜尋已取消")
+          .setColor(color.danger);
         interaction.editReply({
-          content: "😐 搜尋已取消",
+          embeds: [expireEmbed],
+          components: [],
         });
       }
     });
