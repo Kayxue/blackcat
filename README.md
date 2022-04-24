@@ -22,7 +22,7 @@
 
 ## 📥 安裝
 
-[![部屬到Heroku](https://cdn.catmusic.ml/button.svg)](https://heroku.com/deploy)
+[![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/blackcat-cdn/main/button.svg)](https://heroku.com/deploy)
 
 > ⚠️ 注意：黑貓程式碼是專門為 Linux 所打造，如果您正在使用 Windows，請部屬到 Heroku 或是使用 Docker
 
