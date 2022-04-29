@@ -3,11 +3,13 @@ name: CI action
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+
+permissions:
+  checks: write
+  contents: write
 
 jobs:
-  build:
+  test-lockfile:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,3 +25,72 @@ jobs:
           cache: yarn
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+  update-lockfile:
+    runs-on: ubuntu-latest
+    name: Update lockfile
+    if: always() && (needs.build.result == "failure")
+    needs: [test-lockfile]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Update lockfile
+        run: yarn install
+      - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          author_name: "github-actions[bot]"
+          author_email: "github-actions[bot]@users.noreply.github.com"
+          message: "Update yarn lockfile"
+
+  linter:
+    name: Run linters
+    runs-on: ubuntu-latest
+    needs: [test-lockfile]
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn install
+      - name: Run linters
+        uses: wearerequired/lint-action@v1
+        with:
+          eslint: false
+          prettier: true
+          auto_fix: true
+          git_name: "github-actions[bot]"
+          git_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "Format code using ${linter}"
+          neutral_check_on_warning: true
+
+  build:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    needs: [test-lockfile]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Get commit SHA
+        run: echo "GITHUB_SHA_SHORT=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+          tags: ${{ secrets.DOCKER_USERNAME }}/blackcat:latest,${{ secrets.DOCKER_USERNAME }}/blackcat:build-${{ env.GITHUB_SHA_SHORT }}
+          push: true
