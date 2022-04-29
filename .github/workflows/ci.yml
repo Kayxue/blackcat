@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         node: [16, 17, 18]
-    name: Node ${{ matrix.node }} sample
+    name: Run CI on node v${{ matrix.node }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
