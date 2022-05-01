@@ -18,6 +18,6 @@ export default function requirePlayer(interaction, callback) {
     );
     if (!allowModify(interaction)) return joinVC(interaction);
   }
-  
+
   callback(player);
 }
