@@ -27,12 +27,9 @@ jobs:
       - name: Setup node environment
         uses: actions/setup-node@v3
         with:
-          node-version: 17
-      - uses: pnpm/action-setup@v2.1.0
-        with:
-          version: latest
+          node-version: 18
       - name: Run build
-        run: "pnpm install"
+        run: "yarn install"
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
   snyk:
