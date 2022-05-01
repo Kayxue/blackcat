@@ -842,6 +842,7 @@ export default class Player {
     if (this._songs.length === 0) {
       try {
         this._encoded?.destroy();
+        this._raw?.stream?.destroy();
         this._engines.volumeTransform?.destroy();
         this._engines.opusDecoder?.destroy();
         this._engines.opusEncoder?.destroy();
