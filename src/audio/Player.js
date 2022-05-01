@@ -344,7 +344,7 @@ export default class Player {
       .catch(this.noop);
   }
 
-  stop(interaction, force = false) {
+  async stop(interaction, force = false) {
     let stopEmbed = new Discord.MessageEmbed()
       .setTitle("⏹️ 停止播放音樂")
       .setColor(colors.success);
@@ -357,6 +357,7 @@ export default class Player {
     }
     this._songs = [];
     this._player.stop();
+    await this._noticeMessage.delete().catch(this.noop);
     this._client.players.delete(this._guildId);
     try {
       this._connection.destroy();
