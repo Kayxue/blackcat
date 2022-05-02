@@ -285,6 +285,8 @@ export default class Player {
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
+    if (this._paused) this._player.unpause();
+    this._paused = false;
     this._player.stop();
     interaction
       .reply({
@@ -914,6 +916,8 @@ export default class Player {
         }
         break;
       case "skip":
+        if (this._paused) this._player.unpause();
+        this._paused = false;
         this._player.stop();
         replyMessage = "⏭️ ┃ 跳過音樂";
         break;
