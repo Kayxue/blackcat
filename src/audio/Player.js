@@ -270,7 +270,7 @@ export default class Player {
         .setColor(colors.success);
       if (!fromSearch) {
         interaction
-          .editReply({
+          .followUp({
             embeds: [addedEmbed],
           })
           .catch(this.noop);
