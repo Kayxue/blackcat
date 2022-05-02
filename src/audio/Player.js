@@ -34,6 +34,7 @@ export default class Player {
     this._repeat = false;
     this._nightcore = false;
     this._guildDeleted = false;
+    this._stopped = false;
     this._volume = 0.7;
     this._noticeMessage = null;
     this._buttonCollector = null;
@@ -358,8 +359,9 @@ export default class Player {
         .catch(this.noop);
     }
     this._songs = [];
+    this._stopped = true;
     this._player.stop();
-    await this._noticeMessage.delete().catch(this.noop);
+    await this._noticeMessage.delete();
     this._client.players.delete(this._guildId);
     try {
       this._connection.destroy();
@@ -840,7 +842,8 @@ export default class Player {
   }
 
   handelIdle() {
-    this._noticeMessage?.delete().catch(this.noop);
+    if (!this._stopped)
+      this._noticeMessage?.delete().catch(this.noop);
 
     let playedSong = this._songs.shift();
     if (this._loop) this._songs.push(playedSong);
@@ -887,7 +890,7 @@ export default class Player {
     }
   }
 
-  handelButtonClick(interaction) {
+  async handelButtonClick(interaction) {
     if (!allowModify(interaction)) {
       return interaction
         .reply({
@@ -918,6 +921,7 @@ export default class Player {
         this._songs = [];
         this._player.stop();
         replyMessage = "⏹️ ┃ 停止播放音樂";
+        await this._noticeMessage.delete().catch(this.noop);
         try {
           this._connection.destroy();
           // eslint-disable-next-line no-empty
