@@ -10,7 +10,7 @@ export default function requirePlayer(interaction, callback) {
       interaction.guild.id,
     )
   ) {
-    return interaction.reply("❌ 必須要有音樂正在播放");
+    return interaction.reply("❌ ┃ 必須要有音樂正在播放");
   } else {
     player = PlayerManager.getSendingPlayer(
       interaction.client,

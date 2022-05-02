@@ -9,14 +9,14 @@ export default {
   },
   run: function (interaction) {
     let pingEmbed = new MessageEmbed()
-      .setTitle("🏓 Ping!")
+      .setTitle("🏓 ┃ Ping!")
       .addField(
-        "🔗 API",
+        "🔗 ┃ API",
         `**${Date.now() - interaction.createdTimestamp}** 毫秒`,
         true,
       )
       .addField(
-        "🌐 WebSocket",
+        "🌐 ┃ WebSocket",
         `**${interaction.client.ws.ping}** 毫秒`,
         true,
       )
@@ -27,11 +27,11 @@ export default {
     );
     if (player) {
       pingEmbed.addField(
-        "🎶 音樂 - UDP",
+        "🎶 ┃ 音樂 - UDP",
         `**${player.ping.udp ?? "未知"}** 毫秒`,
       );
       pingEmbed.addField(
-        "🎶 音樂 - WebSocket",
+        "🎶 ┃ 音樂 - WebSocket",
         `**${player.ping.ws ?? "未知"}** 毫秒`,
       );
     }

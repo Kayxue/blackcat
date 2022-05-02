@@ -20,7 +20,7 @@ export default {
   run: function (interaction) {
     if (interaction.client.config.optimizeQuality) {
       let optimizeEmbed = new MessageEmbed()
-        .setTitle("❌ 為了優化音樂品質，音量已停用")
+        .setTitle("❌ ┃ 為了優化音樂品質，音量已停用")
         .setDescription(
           "如果你還是想要修改音量，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/blackcat)",
         )
@@ -39,7 +39,7 @@ export default {
         interaction.guild.id,
       )
     ) {
-      return interaction.reply("❌ 必須要有音樂正在播放");
+      return interaction.reply("❌ ┃ 必須要有音樂正在播放");
     } else {
       player = PlayerManager.getSendingPlayer(
         interaction.client,
@@ -51,21 +51,21 @@ export default {
       typeof interaction.options.getInteger("volume") !== "undefined"
     ) {
       if (interaction.options.getInteger("volume") > 200) {
-        return interaction.reply("❌ 音量不能大於 200");
+        return interaction.reply("❌ ┃ 音量不能大於 200");
       } else if (interaction.options.getInteger("volume") < 0) {
-        return interaction.reply("❌ 音量不能小於 0");
+        return interaction.reply("❌ ┃ 音量不能小於 0");
       }
 
       player.volume = interaction.options.getInteger("volume") / 100;
       let volumeEmbed = new MessageEmbed()
-        .setTitle(`🔊 設定音量至 ${player.volume * 100}%`)
+        .setTitle(`🔊 設定音量至 ┃ ${player.volume * 100}%`)
         .setColor(success);
       return interaction.reply({
         embeds: [volumeEmbed],
       });
     } else {
       let volumeEmbed = new MessageEmbed()
-        .setTitle(`🔊 目前音量 ${player.volume * 100}%`)
+        .setTitle(`🔊 目前音量 ┃ ${player.volume * 100}%`)
         .setColor(blurple);
       return interaction.reply({
         embeds: [volumeEmbed],

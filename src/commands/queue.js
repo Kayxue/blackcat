@@ -38,7 +38,9 @@ export default {
     parsedSongs.forEach((songList, pageIndex) => {
       let embedPage = new MessageEmbed()
         .setTitle(
-          `🎵 音樂序列 | 第${pageIndex + 1}/${parsedSongs.length}頁`,
+          `🎵 ┃ 音樂序列 <第${pageIndex + 1}/${
+            parsedSongs.length
+          }頁>`,
         )
         .setColor(blurple);
       songList.forEach((song, songIndex) => {
@@ -91,7 +93,7 @@ export default {
     collector.on("collect", (collected) => {
       if (collected.user.id !== interaction.user.id) {
         return interaction.followUp({
-          content: "😐 這個按鈕不是給你點的",
+          content: "😐 ┃ 這個按鈕不是給你點的",
           ephemeral: true,
         });
       }
@@ -148,7 +150,7 @@ export default {
     });
     collector.on("end", () => {
       let endEmbed = new MessageEmbed()
-        .setTitle("💤 已關閉")
+        .setTitle("💤 ┃ 已關閉")
         .setColor(danger);
       interaction
         .editReply({

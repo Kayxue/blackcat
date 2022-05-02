@@ -17,14 +17,14 @@ export default {
         interaction.guild.id,
       )
     ) {
-      return interaction.reply("❌ 必須要有音樂正在播放");
+      return interaction.reply("❌ ┃ 必須要有音樂正在播放");
     } else {
       player = PlayerManager.getSendingPlayer(interaction.guild.id);
       if (!allowModify(interaction)) return joinVC(interaction);
     }
     if (!player.paused) {
       let pausedEmbed = new MessageEmbed()
-        .setTitle("▶️ 音樂已經在播放了")
+        .setTitle("▶️ ┃ 音樂已經在播放了")
         .setDescription("輸入`/pause`來暫停音樂")
         .setColor(danger);
       return interaction

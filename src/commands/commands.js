@@ -13,7 +13,7 @@ export default {
       (i) => `\`${i.data.name}\`: **${i.data.description}**`,
     );
     let commandsEmbed = new MessageEmbed()
-      .setTitle("🗒️ 指令清單")
+      .setTitle("🗒️ ┃ 指令清單")
       .setDescription(formatted.join("\n"))
       .setColor(blurple);
 

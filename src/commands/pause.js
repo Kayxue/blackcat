@@ -18,7 +18,7 @@ export default {
       )
     ) {
       return interaction
-        .reply("❌ 必須要有音樂正在播放")
+        .reply("❌ ┃ 必須要有音樂正在播放")
         .catch(() => {});
     } else {
       player = PlayerManager.getSendingPlayer(
@@ -29,7 +29,7 @@ export default {
     }
     if (player.paused) {
       let pausedEmbed = new MessageEmbed()
-        .setTitle("⏸️ 音樂已經暫停了")
+        .setTitle("⏸️ ┃ 音樂已經暫停了")
         .setDescription("輸入`/resume`來繼續播放音樂")
         .setColor(danger);
       return interaction

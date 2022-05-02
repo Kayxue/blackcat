@@ -24,7 +24,7 @@ export default {
         );
         if (members.size <= 0) {
           let leaveEmbed = new MessageEmbed()
-            .setTitle("👋 語音頻道已經沒人了，所以我停止了音樂")
+            .setTitle("👋 ┃ 語音頻道已經沒人了，所以我停止了音樂")
             .setColor(danger);
           player.textChannel
             .send({
@@ -34,6 +34,7 @@ export default {
           player.stop(null, true);
         }
       }, 15_000);
+      // eslint-disable-next-line no-empty
     } catch (e) {}
   },
 };

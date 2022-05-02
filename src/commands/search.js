@@ -26,7 +26,7 @@ export default {
   run: async function (interaction) {
     if (!interaction.member.voice?.channel) {
       let joinVCEmbed = new MessageEmbed()
-        .setTitle("❌ 你必須先在語音頻道內")
+        .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(color.danger);
       return interaction.reply({
         embeds: [joinVCEmbed],
@@ -34,7 +34,7 @@ export default {
     }
 
     if (!interaction.member.voice.channel.joinable)
-      return interaction.reply("❌ 我無法連線至語音頻道!");
+      return interaction.reply("❌ ┃ 我無法連線至語音頻道!");
 
     const query = interaction.options.getString("query");
     let player;
@@ -52,7 +52,7 @@ export default {
         interaction.guild.id,
       );
       if (!allowModify(interaction))
-        return interaction.reply("❌ 你必須跟我在同一個頻道");
+        return interaction.reply("❌ ┃ 你必須跟我在同一個頻道");
     }
 
     if (
@@ -61,7 +61,7 @@ export default {
     ) {
       let videoEmbed = new MessageEmbed()
         .setTitle(
-          `🤔 ${interaction.user.username}，您是不是要播放這個影片?`,
+          `🤔 ┃ ${interaction.user.username}，您是不是要播放這個影片?`,
         )
         .setDescription(
           `偵測到您輸入的搜尋字串是YouTube影片連結，是否要播放?\n搜尋字串: ${query}`,
@@ -109,7 +109,7 @@ export default {
         if (selected.customId === "yes") {
           player.play(query, interaction, true);
           let playEmbed = new MessageEmbed()
-            .setTitle("🎶 已將歌曲加入播放序列中")
+            .setTitle("🎶 ┃ 已將歌曲加入播放序列中")
             .setDescription(`歌曲網址: ${query}`)
             .setColor(color.success);
           interaction.reply({ embeds: [playEmbed] });
@@ -119,7 +119,7 @@ export default {
     }
 
     let searchEmbed = new MessageEmbed()
-      .setTitle(`🔍 正在搜尋 **${query}**`)
+      .setTitle(`🔍 ┃ 正在搜尋 **${query}**`)
       .setColor(color.success);
     interaction.reply({
       embeds: [searchEmbed],
@@ -136,7 +136,9 @@ export default {
     } catch (e) {
       if (e.message.includes("confirm your age")) {
         let invaildEmbed = new MessageEmbed()
-          .setTitle("😱 我沒辦法取得你想播放的音樂，因為需要登入帳號")
+          .setTitle(
+            "😱 ┃ 我沒辦法取得你想播放的音樂，因為需要登入帳號",
+          )
           .setDescription(
             "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
           )
@@ -148,7 +150,7 @@ export default {
           .catch(this.noop);
       } else if (e.message.includes("429")) {
         let limitEmbed = new MessageEmbed()
-          .setTitle("😱 現在無法取得這個音樂，請稍後再試")
+          .setTitle("😱 ┃ 現在無法取得這個音樂，請稍後再試")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
           )
@@ -160,7 +162,7 @@ export default {
           .catch(this.noop);
       } else if (e.message.includes("private")) {
         let privateEmbed = new MessageEmbed()
-          .setTitle("😱 這是私人影片")
+          .setTitle("😱 ┃ 這是私人影片")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
           )
@@ -172,7 +174,7 @@ export default {
           .catch(this.noop);
       } else {
         let errorEmbed = new MessageEmbed()
-          .setTitle("😱 發生了未知的錯誤!")
+          .setTitle("😱 ┃ 發生了未知的錯誤!")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
           )
@@ -192,7 +194,7 @@ export default {
 
     result.forEach((video) => {
       let videoEmbed = new MessageEmbed()
-        .setTitle(`🎶 ${video.title}`)
+        .setTitle(`🎶 ┃ ${video.title}`)
         .setDescription(
           `頻道: ${
             video.channel?.name || "未知的上傳者"
@@ -250,7 +252,7 @@ export default {
     collector.on("collect", (collected) => {
       if (collected.user.id !== interaction.user.id) {
         return interaction.followUp({
-          content: "😐 這個按鈕不是給你點的",
+          content: "😐 ┃ 這個按鈕不是給你點的",
           ephemeral: true,
         });
       }

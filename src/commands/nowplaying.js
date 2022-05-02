@@ -17,7 +17,7 @@ export default {
       )
     ) {
       return interaction
-        .reply("❌ 必須要有音樂正在播放")
+        .reply("❌ ┃ 必須要有音樂正在播放")
         .catch(() => {});
     } else {
       player = PlayerManager.getSendingPlayer(
@@ -34,7 +34,7 @@ export default {
     else playtime = playtime.substr(11, 8);
 
     let nowEmbed = new MessageEmbed()
-      .setTitle("🎧 正在播放")
+      .setTitle("🎧 ┃ 正在播放")
       .setDescription(
         `[${data.title}](${data.url})\n` +
           `${progressbar[0]} \`${playtime}/${

@@ -19,7 +19,7 @@ export default {
   run: async function (interaction) {
     if (!interaction.member.voice?.channel) {
       let joinVCEmbed = new MessageEmbed()
-        .setTitle("❌ 你必須先在語音頻道內")
+        .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(danger);
       return interaction
         .reply({
@@ -30,7 +30,7 @@ export default {
 
     if (!interaction.member.voice.channel.joinable)
       return interaction
-        .reply("❌ 我無法連線至語音頻道!")
+        .reply("❌ ┃ 我無法連線至語音頻道!")
         .catch(() => {});
 
     const url = interaction.options.getString("name");
@@ -50,7 +50,7 @@ export default {
       );
       if (!allowModify(interaction))
         return interaction
-          .reply("❌ 你必須跟我在同一個頻道")
+          .reply("❌ ┃ 你必須跟我在同一個頻道")
           .catch(() => {});
     }
     await interaction.deferReply().catch(() => {});

@@ -24,7 +24,7 @@ export default {
       status: "dnd",
       activities: [
         {
-          name: "/help | ... | catmusic.ml",
+          name: "/help ┃ ... ┃ catmusic.ml",
           type: "LISTENING",
         },
       ],
@@ -34,7 +34,7 @@ export default {
         status: "dnd",
         activities: [
           {
-            name: "/help | catmusic.ml",
+            name: "/help ┃ catmusic.ml",
             type: "LISTENING",
           },
         ],
