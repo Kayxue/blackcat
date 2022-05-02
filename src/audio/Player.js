@@ -961,8 +961,8 @@ export default class Player {
     }
     let clickEmbed = new Discord.MessageEmbed()
       .addField(replyMessage, "\u200b")
-      .setAuthor({
-        name: interaction.user.username,
+      .setFooter({
+        text: interaction.user.username,
         iconURL: interaction.user.avatarURL({
           dynamic: true,
         }),
