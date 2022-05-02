@@ -625,9 +625,7 @@ export default class Player {
 
     let playingEmbed = new Discord.MessageEmbed()
       .setTitle(
-        `🕒 ┃ 正在準備播放 ${
-          this._songs[0]?.title ?? "未知的歌曲"
-        }...`,
+        `🕒 正在準備播放 ${this._songs[0]?.title ?? "未知的歌曲"}...`,
       )
       .setColor(colors.warning);
 
