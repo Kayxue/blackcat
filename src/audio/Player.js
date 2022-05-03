@@ -363,7 +363,7 @@ export default class Player {
     this._songs = [];
     this._stopped = true;
     this._player.stop();
-    await this._noticeMessage.delete();
+    await this._noticeMessage.delete().catch(this.noop);
     this._client.players.delete(this._guildId);
     try {
       this._connection.destroy();
