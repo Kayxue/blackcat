@@ -363,7 +363,7 @@ export default class Player {
     this._songs = [];
     this._stopped = true;
     this._player.stop();
-    await this._noticeMessage.delete().catch(this.noop);
+    await this._noticeMessage?.delete().catch(this.noop);
     this._client.players.delete(this._guildId);
     try {
       this._connection.destroy();
@@ -925,7 +925,7 @@ export default class Player {
         this._songs = [];
         this._player.stop();
         replyMessage = "⏹️ ┃ 停止播放音樂";
-        await this._noticeMessage.delete().catch(this.noop);
+        await this._noticeMessage?.delete().catch(this.noop);
         try {
           this._connection.destroy();
           // eslint-disable-next-line no-empty
