@@ -1,8 +1,10 @@
+import { MessageEmbed } from "discord.js";
+import { warning } from "../color.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import joinVC from "../util/joinVC.js";
 
-export default function requirePlayer(interaction, callback) {
+export default async function requirePlayer(interaction, callback) {
   let player;
   if (
     !PlayerManager.getSendingPlayer(
@@ -18,7 +20,17 @@ export default function requirePlayer(interaction, callback) {
       interaction.client,
       interaction.guild.id,
     );
-    if (!allowModify(interaction)) return joinVC(interaction);
+    if (!interaction.guild.me.voice.channel && player) {
+      let corruptedEmbed = new MessageEmbed()
+        .setTitle("😔 播放器已損毀，我們正在嘗試建立一個新的")
+        .setColor(warning);
+      try {
+        await interaction.channel.send({
+          embeds: [corruptedEmbed]
+        });
+        player.stop(null, true);
+      } catch (e) {}
+    } else if (!allowModify(interaction)) return joinVC(interaction);
   }
 
   callback(player);
