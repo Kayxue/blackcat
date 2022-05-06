@@ -26,7 +26,7 @@ export default async function requirePlayer(interaction, callback) {
         .setColor(warning);
       try {
         await interaction.channel.send({
-          embeds: [corruptedEmbed]
+          embeds: [corruptedEmbed],
         });
         player.stop(null, true);
       } catch (e) {}
