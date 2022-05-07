@@ -1,6 +1,7 @@
 import { MessageEmbed } from "discord.js";
+import PlayerManager from "../audio/PlayerManager.js";
+import allowModify from "../util/allowModify.js";
 import { danger } from "../color.js";
-import requirePlayer from "../util/requirePlayer.js";
 
 export default {
   data: {
@@ -33,9 +34,26 @@ export default {
         .catch(() => {});
 
     const url = interaction.options.getString("name");
-    requirePlayer(interaction, async (player) => {
-      await interaction.deferReply().catch(() => {});
-      player.play(url, interaction);
-    });
+    let player;
+    if (
+      !PlayerManager.getSendingPlayer(
+        interaction.client,
+        interaction.guild.id,
+      )
+    ) {
+      player = PlayerManager.createSendingPlayer(interaction);
+      player.init();
+    } else {
+      player = PlayerManager.getSendingPlayer(
+        interaction.client,
+        interaction.guild.id,
+      );
+      if (!allowModify(interaction))
+        return interaction
+          .reply("❌ ┃ 你必須跟我在同一個頻道")
+          .catch(() => {});
+    }
+    await interaction.deferReply().catch(() => {});
+    player.play(url, interaction);
   },
 };

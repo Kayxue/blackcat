@@ -848,8 +848,8 @@ export default class Player {
       this._noticeMessage?.delete().catch(this.noop);
 
     let playedSong = this._songs.shift();
-    if (this._loop) this._songs.push(playedSong);
-    if (this._repeat) this._songs.unshift(playedSong);
+    if (this._loop && playedSong) this._songs.push(playedSong);
+    if (this._repeat && playedSong) this._songs.unshift(playedSong);
     this._noticeMessage?.delete().catch(() => {});
     this._noticeMessage = null;
     if (this._songs.length === 0) {
@@ -923,6 +923,7 @@ export default class Player {
         break;
       case "stop":
         this._songs = [];
+        this._stopped = true;
         this._player.stop();
         replyMessage = "⏹️ ┃ 停止播放音樂";
         await this._noticeMessage?.delete().catch(this.noop);
