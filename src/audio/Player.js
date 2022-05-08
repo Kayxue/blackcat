@@ -282,16 +282,16 @@ export default class Player {
   }
 
   skip(interaction) {
-    if(!this._audio?.metadata)
+    if (!this._audio?.metadata)
       return interaction
-          .reply({
-            embeds: [
-                new MessageEmbed()
-                  .setTitle(`❌️ ┃ 沒有音樂正在播放`)
-                  .setColor("RED")
-            ]
-          })
-          .catch(this.noop);
+        .reply({
+          embeds: [
+            new MessageEmbed()
+              .setTitle(`❌️ ┃ 沒有音樂正在播放`)
+              .setColor("RED"),
+          ],
+        })
+        .catch(this.noop);
 
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
