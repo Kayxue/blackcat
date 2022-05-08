@@ -7,7 +7,7 @@ import {
   VoiceConnectionStatus,
   StreamType,
 } from "@discordjs/voice";
-import Discord from "discord.js";
+import Discord, { MessageEmbed } from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
 import Canvas from "skia-canvas";
@@ -288,6 +288,17 @@ export default class Player {
   }
 
   skip(interaction) {
+    if (!this._audio?.metadata)
+      return interaction
+        .reply({
+          embeds: [
+            new MessageEmbed()
+              .setTitle(`❌️ ┃ 沒有音樂正在播放`)
+              .setColor("RED"),
+          ],
+        })
+        .catch(this.noop);
+
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
