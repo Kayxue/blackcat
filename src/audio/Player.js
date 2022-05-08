@@ -10,6 +10,7 @@ import {
 import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
+import Canvas from "skia-canvas";
 import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
@@ -59,6 +60,9 @@ export default class Player {
         },
       });
     }
+
+    Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
+    Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
   }
 
   noop() {}
@@ -239,8 +243,9 @@ export default class Player {
           url: video.url,
           duraction: video.duractionInSec,
           duractionParsed: video.duractionRaw,
-          thumbnail: video.thumbnails.pop().url,
+          thumbnail: rawData.video_details.thumbnails.pop().url,
           queuer: interaction.user.username,
+          id: rawData.video_details.id,
           rawData: video,
         });
       });
@@ -254,6 +259,7 @@ export default class Player {
           duractionParsed: rawData.video_details.durationRaw,
           thumbnail: rawData.video_details.thumbnails.pop().url,
           queuer: interaction.user.username,
+          id: rawData.video_details.id,
           rawData,
         },
       ];
@@ -650,7 +656,7 @@ export default class Player {
     );
   }
 
-  updateNoticeEmbed() {
+  async updateNoticeEmbed() {
     let musicButton = new Discord.MessageButton()
       .setCustomId("pause")
       .setEmoji(
@@ -710,11 +716,127 @@ export default class Player {
 
     if (!this._audio?.metadata?.title) return; //Ignore if title is missing
 
+    // Image process
+    let canvas = new Canvas.Canvas(960, 300);
+    let ctx = canvas.getContext("2d");
+    let bg = await Canvas.loadImage(
+      `https://i3.ytimg.com/vi/${this._audio.metadata.id}/maxresdefault.jpg`,
+    );
+    let percentage =
+      Math.round((this.playTime / this.nowplaying.duraction) * 100) /
+      100;
+    Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
+    Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
+    ctx.fillStyle = "#15202b";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let percent = bg.width / 200;
+    let bgHeight = bg.height / percent;
+    let bgWidth = bg.width / percent;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(30 + 5, 25);
+    ctx.lineTo(30 + bgWidth - 5, 25);
+    ctx.quadraticCurveTo(30 + bgWidth, 25, 30 + bgWidth, 25 + 5);
+    ctx.lineTo(30 + bgWidth, 25 + bgHeight - 5);
+    ctx.quadraticCurveTo(
+      30 + bgWidth,
+      25 + bgHeight,
+      30 + bgWidth - 5,
+      25 + bgHeight,
+    );
+    ctx.lineTo(30 + 5, 25 + bgHeight);
+    ctx.quadraticCurveTo(30, 25 + bgHeight, 30, 25 + bgHeight - 5);
+    ctx.lineTo(30, 25 + 5);
+    ctx.quadraticCurveTo(30, 25, 30 + 5, 25);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(bg, 30, 25, bgWidth, bgHeight);
+    ctx.restore();
+    ctx.font = "25px noto";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("正在播放:", 250, 50);
+    ctx.font = `50px noto, joypixels`;
+    let text = this._audio.metadata.title;
+    if (text.length > 18) {
+      text = text.substring(0, 18) + "...";
+    }
+    ctx.fillText(text, 250, 110);
+    ctx.save();
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.moveTo(20 + 5, 200);
+    ctx.lineTo(50 + 860 - 5, 200);
+    ctx.quadraticCurveTo(50 + 860, 200, 50 + 860, 200 + 5);
+    ctx.lineTo(50 + 860, 200 + 10 - 5);
+    ctx.quadraticCurveTo(50 + 860, 200 + 10, 50 + 860 - 5, 200 + 10);
+    ctx.lineTo(50 + 5, 200 + 10);
+    ctx.quadraticCurveTo(50, 200 + 10, 50, 200 + 10 - 5);
+    ctx.lineTo(50, 200 + 5);
+    ctx.quadraticCurveTo(50, 200, 50 + 5, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    ctx.save();
+    ctx.fillStyle = "#EF4444";
+    ctx.beginPath();
+    ctx.moveTo(50 + 5, 200);
+    ctx.lineTo(50 + percentage * 860 - 10, 200);
+    ctx.quadraticCurveTo(
+      50 + percentage * 860,
+      200,
+      50 + percentage * 860,
+      200 + 5,
+    );
+    ctx.lineTo(50 + percentage * 860, 200 + 10 - 5);
+    ctx.quadraticCurveTo(
+      50 + percentage * 860,
+      200 + 10,
+      50 + percentage * 860 - 5,
+      200 + 10,
+    );
+    ctx.lineTo(50 + 5, 200 + 10);
+    ctx.quadraticCurveTo(50, 200 + 10, 50, 200 + 10 - 5);
+    ctx.lineTo(50, 200 + 5);
+    ctx.quadraticCurveTo(50, 200, 50 + 5, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "20px noto,joypixels";
+    let enabledMode = [];
+
+    if (!this._optimize) {
+      if (this._muted) enabledMode.push("🔇 靜音");
+      else enabledMode.push(`🔊 音量: ${this._volume * 100}%`);
+    }
+    if (this._loop) enabledMode.push("🔁 循環播放");
+    if (this._repeat) enabledMode.push("🔂 重複播放");
+    enabledMode.push(`👥 點歌者: ${this._audio.metadata.queuer}`);
+    let playtime = new Date(this.playTime * 1000).toISOString();
+    if (this.nowplaying.duraction <= 0) playtime = "直播";
+    else if (this.nowplaying.duraction < 3600)
+      playtime = playtime.substr(14, 5);
+    else playtime = playtime.substr(11, 8);
+    ctx.fillText(
+      `${playtime}/${
+        this._audio.metadata.duractionParsed
+      } | ${enabledMode.join(" | ")}`,
+      50,
+      250,
+    );
+    let buffer = await canvas.toBuffer("png");
+
+    let attachment = new Discord.MessageAttachment(
+      buffer,
+      `${this._guildId}.png`,
+    );
+
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(
         `🎵 ┃ 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`,
       )
       .setThumbnail(this._audio.metadata.thumbnail)
+      .setImage(`attachment://${this._guildId}.png`)
       .setColor(colors.success);
 
     if (!this._optimize) {
@@ -744,6 +866,7 @@ export default class Player {
       ?.edit({
         embeds: [playingEmbed],
         components,
+        files: [attachment],
       })
       .catch(this.noop);
   }
@@ -774,6 +897,18 @@ export default class Player {
 
   get textChannel() {
     return this._channel;
+  }
+
+  get enabledMode() {
+    return {
+      loop: this._loop,
+      repeat: this._repeat,
+      mute: this._muted,
+    };
+  }
+
+  get queuer() {
+    return this._audio.metadata.queuer;
   }
 
   set volume(volume) {
