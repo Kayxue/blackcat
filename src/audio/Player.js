@@ -7,7 +7,7 @@ import {
   VoiceConnectionStatus,
   StreamType,
 } from "@discordjs/voice";
-import Discord, {MessageEmbed} from "discord.js";
+import Discord, { MessageEmbed } from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
 import SampleRate from "./engine/libsamplerate/index.js";
@@ -292,7 +292,7 @@ export default class Player {
             ]
           })
           .catch(this.noop);
-    
+
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
