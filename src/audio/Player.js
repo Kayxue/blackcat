@@ -7,7 +7,7 @@ import {
   VoiceConnectionStatus,
   StreamType,
 } from "@discordjs/voice";
-import Discord, { MessageEmbed } from "discord.js";
+import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
 import Canvas from "skia-canvas";
@@ -292,9 +292,9 @@ export default class Player {
       return interaction
         .reply({
           embeds: [
-            new MessageEmbed()
+            new Discord.MessageEmbed()
               .setTitle(`❌️ ┃ 沒有音樂正在播放`)
-              .setColor("RED"),
+              .setColor(colors.danger),
           ],
         })
         .catch(this.noop);
