@@ -243,9 +243,9 @@ export default class Player {
           url: video.url,
           duraction: video.duractionInSec,
           duractionParsed: video.duractionRaw,
-          thumbnail: rawData.video_details.thumbnails.pop().url,
+          thumbnail: video.thumbnails.pop().url,
           queuer: interaction.user.username,
-          id: rawData.video_details.id,
+          id: play.extractID(video.url),
           rawData: video,
         });
       });
@@ -480,13 +480,13 @@ export default class Player {
       this._songs[0] = {
         title: this._songs[0].rawData.video_details.title,
         url: this._songs[0].rawData.video_details.url,
-        duraction:
-          this._songs[0].rawData.video_details.duractionInSec,
+        duraction: this._songs[0].rawData.video_details.durationInSec,
         duractionParsed:
-          this._songs[0].rawData.video_details.duractionRaw,
+          this._songs[0].rawData.video_details.durationRaw,
         thumbnail:
           this._songs[0].rawData.video_details.thumbnails.pop().url,
         queuer: this._songs[0].queuer,
+        id: play.extractID(this._songs[0].url),
         rawData: this._songs[0].rawData,
       };
     }
@@ -768,8 +768,15 @@ export default class Player {
     ctx.fillText("正在播放:", 250, 50);
     ctx.font = `50px noto, joypixels`;
     let text = this._audio.metadata.title;
-    if (text.length > 18) {
-      text = text.substring(0, 18) + "...";
+    let textLength = 25;
+    while (
+      ctx.measureText(`${text.substring(0, textLength)}...`).width >
+      canvas.width - 250
+    ) {
+      textLength -= 1;
+    }
+    if (text.length > textLength) {
+      text = text.substring(0, textLength) + "...";
     }
     ctx.fillText(text, 250, 110);
     ctx.save();
@@ -791,18 +798,24 @@ export default class Player {
     ctx.fillStyle = "#EF4444";
     ctx.beginPath();
     ctx.moveTo(50 + 5, 200);
-    ctx.lineTo(50 + percentage * 860 - 10, 200);
-    ctx.quadraticCurveTo(
-      50 + percentage * 860,
+    ctx.lineTo(
+      50 + (!isFinite(percentage) ? 1 : percentage) * 860 - 10,
       200,
-      50 + percentage * 860,
+    );
+    ctx.quadraticCurveTo(
+      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
+      200,
+      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
       200 + 5,
     );
-    ctx.lineTo(50 + percentage * 860, 200 + 10 - 5);
+    ctx.lineTo(
+      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
+      200 + 10 - 5,
+    );
     ctx.quadraticCurveTo(
-      50 + percentage * 860,
+      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
       200 + 10,
-      50 + percentage * 860 - 5,
+      50 + (!isFinite(percentage) ? 1 : percentage) * 860 - 5,
       200 + 10,
     );
     ctx.lineTo(50 + 5, 200 + 10);

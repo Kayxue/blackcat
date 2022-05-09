@@ -69,8 +69,15 @@ export default {
     ctx.fillText("正在播放:", 250, 50);
     ctx.font = `50px noto, joypixels`;
     let text = data.title;
-    if (text.length > 18) {
-      text = text.substring(0, 18) + "...";
+    let textLength = 25;
+    while (
+      ctx.measureText(`${text.substring(0, textLength)}...`).width >
+      canvas.width - 250
+    ) {
+      textLength -= 1;
+    }
+    if (text.length > textLength) {
+      text = text.substring(0, textLength) + "...";
     }
     ctx.fillText(text, 250, 110);
     ctx.save();
