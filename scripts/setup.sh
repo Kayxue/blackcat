@@ -6,14 +6,14 @@ trap exit INT
 build() {
   cd src/audio/engine/libsamplerate
   yarn install
-  yarn build
+  yarn rebuild
   cd -
 }
 
 if [ "$1" == "--gitpod" ]
 then
   sudo apt-get install -qqy cmake
-  sudo apt-get remove -qqy ninja-build
+  sudo apt-get remove -qqy ninja-buil
   yarn install
 elif [ ! command -v cmake &> /dev/null ]
 then
