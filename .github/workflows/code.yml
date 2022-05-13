@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           languages: "javascript"
       - name: Setup node environment
@@ -31,7 +31,7 @@ jobs:
       - name: Run build
         run: "yarn install"
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v2
   snyk:
     runs-on: ubuntu-latest
     name: Snyk Container Analysis
@@ -49,6 +49,6 @@ jobs:
           image: blackcat:snyk
           args: --file=Dockerfile
       - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
