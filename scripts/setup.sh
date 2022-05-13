@@ -13,7 +13,7 @@ build() {
 if [ "$1" == "--gitpod" ]
 then
   sudo apt-get install -qqy cmake
-  sudo apt-get remove -qqy ninja-buil
+  sudo apt-get remove -qqy ninja-build
   yarn install
 elif [ ! command -v cmake &> /dev/null ]
 then
