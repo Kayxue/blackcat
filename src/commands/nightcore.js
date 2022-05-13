@@ -31,7 +31,9 @@ export default {
         interaction.guild.id,
       )
     ) {
-      return interaction.reply("❌ 必須要有音樂正在播放");
+      return interaction
+        .reply("❌ ┃ 必須要有音樂正在播放")
+        .catch(() => {});
     } else {
       player = PlayerManager.getSendingPlayer(
         interaction.client,

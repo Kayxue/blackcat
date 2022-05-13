@@ -231,9 +231,11 @@ export default class Player {
           `🔍 ┃ 已加入整個播放清單，共有 **${videos.length}** 首歌曲`,
         )
         .setColor(colors.success);
-      interaction.followUp({
-        embeds: [playlistEmbed],
-      });
+      interaction
+        .followUp({
+          embeds: [playlistEmbed],
+        })
+        .catch(this.noop);
 
       parsedData = [];
       videos.forEach((video) => {
@@ -288,16 +290,16 @@ export default class Player {
   }
 
   skip(interaction) {
-    if (!this._audio?.metadata)
+    if (!this._audio?.metadata) {
+      let nomusicEmbed = new Discord.MessageEmbed()
+        .setTitle("❌️ ┃ 沒有音樂正在播放")
+        .setColor(colors.danger);
       return interaction
         .reply({
-          embeds: [
-            new Discord.MessageEmbed()
-              .setTitle(`❌️ ┃ 沒有音樂正在播放`)
-              .setColor(colors.danger),
-          ],
+          embeds: [nomusicEmbed],
         })
         .catch(this.noop);
+    }
 
     let skipEmbed = new Discord.MessageEmbed()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
