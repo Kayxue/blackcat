@@ -32,9 +32,16 @@ export default {
     Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
     let canvas = new Canvas.Canvas(960, 300);
     let ctx = canvas.getContext("2d");
-    let bg = await Canvas.loadImage(
-      `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`,
-    );
+    let bg;
+    try {
+      bg = await Canvas.loadImage(
+        `https://i3.ytimg.com/vi/${this._audio.metadata.id}/maxresdefault.jpg`,
+      );
+    } catch (e) {
+      bg = await Canvas.loadImage(
+        "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
+      );
+    }
     let percentage =
       Math.round((player.playTime / data.duraction) * 100) / 100;
     Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
