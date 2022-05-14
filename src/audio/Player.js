@@ -1056,6 +1056,12 @@ export default class Player {
         volumeTransform: null,
         libsamplerate: null,
       };
+      this._raw.stream.destroy();
+      this._raw.stream.read(); // Drain the data
+
+      this._audio = null;
+      this._encoded = null;
+      this._raw = null;
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 ┃ 序列裡的歌曲播放完畢")
         .setColor(colors.success);
