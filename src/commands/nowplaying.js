@@ -35,7 +35,7 @@ export default {
     let bg;
     try {
       bg = await Canvas.loadImage(
-        `https://i3.ytimg.com/vi/${this._audio.metadata.id}/maxresdefault.jpg`,
+        `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`,
       );
     } catch (e) {
       bg = await Canvas.loadImage(
