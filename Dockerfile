@@ -1,17 +1,20 @@
-FROM node:lts-alpine
+FROM ubuntu:20.04
 
-RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake bash && \
-  addgroup -S catrunner && \
-  adduser -S catrunner -G catrunner
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt -qqy upgrade && \
+  apt install -qqy build-essential python3 cmake libfontconfig1 fontconfig curl bash
 
-COPY --chown=catrunner:catrunner . /home/catrunner/
-WORKDIR /home/catrunner/
+SHELL [ "/bin/bash", "-c" ]
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+  apt install nodejs && \
+  npm install -g yarn && \
+  fc-cache -fv && \
+  groupadd -r cat && useradd --create-home --home /home/cat -r -g cat cat
 
-USER catrunner
-RUN yarn install
+COPY --chown=cat:cat . /home/cat
+WORKDIR /home/cat
+USER cat
 
-USER root
-RUN apk del python3 make gcc g++ git libtool autoconf automake cmake
-USER catrunner
+RUN yarn install 
 
-ENTRYPOINT ["bash", "start.sh"]
+ENTRYPOINT [ "yarn", "start" ]
