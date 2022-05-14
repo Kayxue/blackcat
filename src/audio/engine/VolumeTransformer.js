@@ -15,14 +15,14 @@ class VolumeTransformer extends Transform {
     this._chunk = Buffer.alloc(0);
   }
 
-  _readInt(buffer, index) {
+  _readInt(_buffer, index) {
     return index;
   }
-  _writeInt(buffer, int, index) {
+  _writeInt(_buffer, _int, index) {
     return index;
   }
 
-  _transform(chunk, encoding, done) {
+  _transform(chunk, _encoding, done) {
     // If the volume is 1, act like a passthrough stream
     if (this._volume === 1) {
       this.push(chunk);
