@@ -1117,6 +1117,7 @@ export default class Player {
         this._songs = [];
         this._stopped = true;
         this._player.stop();
+        this._buttonCollector?.stop();
         replyMessage = "⏹️ ┃ 停止播放音樂";
         await this._noticeMessage?.delete().catch(this.noop);
         try {
