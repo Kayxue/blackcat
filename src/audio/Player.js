@@ -167,9 +167,7 @@ export default class Player {
 
   async setSpeaker() {
     await entersState(this._connection, VoiceConnectionStatus.Ready);
-    try {
-      this._guild.me.voice.setSuppressed(false);
-    } catch (e) {
+    this._guild.me.voice.setSuppressed(false).catch(() => {
       let notSpeakerEmbed = new Discord.MessageEmbed()
         .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
         .setColor(colors.danger);
@@ -178,7 +176,7 @@ export default class Player {
           embeds: [notSpeakerEmbed],
         })
         .catch(this.noop);
-    }
+    });
   }
 
   async play(track, interaction, fromSearch = false) {
