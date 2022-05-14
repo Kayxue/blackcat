@@ -388,6 +388,8 @@ export default class Player {
       this._connection.destroy();
       // eslint-disable-next-line no-empty
     } catch (e) {}
+
+    delete this;
   }
 
   loop(interaction) {
@@ -1055,6 +1057,8 @@ export default class Player {
         this._connection.destroy();
         // eslint-disable-next-line no-empty
       } catch (e) {}
+
+      delete this;
     } else {
       this.playStream();
     }
@@ -1100,6 +1104,8 @@ export default class Player {
           // eslint-disable-next-line no-empty
         } catch (e) {}
         this._client.players.delete(this._guildId);
+
+        delete this;
         break;
       case "volup":
         this.volume = parseFloat((this._volume + 0.1).toFixed(10));
