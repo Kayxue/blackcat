@@ -95,7 +95,18 @@ export default class Player {
     }
 
     if (this._voiceChannel.type === "GUILD_STAGE_VOICE") {
-      this.setSpeaker();
+      try {
+        this.setSpeaker();
+      } catch (e) {
+        let notSpeakerEmbed = new Discord.MessageEmbed()
+          .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
+          .setColor(colors.danger);
+        this._channel
+          .send({
+            embeds: [notSpeakerEmbed],
+          })
+          .catch(this.noop);
+      }
     }
 
     this._player = createAudioPlayer({
