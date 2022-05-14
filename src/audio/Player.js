@@ -6,6 +6,7 @@ import {
   joinVoiceChannel,
   VoiceConnectionStatus,
   StreamType,
+  NoSubscriberBehavior,
 } from "@discordjs/voice";
 import Discord from "discord.js";
 import play from "play-dl";
@@ -97,7 +98,11 @@ export default class Player {
       this.setSpeaker();
     }
 
-    this._player = createAudioPlayer();
+    this._player = createAudioPlayer({
+      behaviors: {
+        noSubscriber: NoSubscriberBehavior.Pause,
+      },
+    });
     this._connection.subscribe(this._player);
 
     this._connection.on(VoiceConnectionStatus.Ready, () => {
