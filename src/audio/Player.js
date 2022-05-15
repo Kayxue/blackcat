@@ -1036,8 +1036,8 @@ export default class Player {
     if (this._repeat && playedSong) this._songs.unshift(playedSong);
     this._noticeMessage?.delete().catch(() => {});
     this._noticeMessage = null;
-    if (this._songs.length === 0) {
-      try {
+
+    try {
         this._encoded?.destroy();
         this._raw?.stream?.destroy();
         this._engines.volumeTransform?.destroy();
@@ -1062,6 +1062,8 @@ export default class Player {
       this._audio = null;
       this._encoded = null;
       this._raw = null;
+
+    if (this._songs.length === 0) {
       let endEmbed = new Discord.MessageEmbed()
         .setTitle("👌 ┃ 序列裡的歌曲播放完畢")
         .setColor(colors.success);
