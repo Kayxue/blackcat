@@ -1038,30 +1038,30 @@ export default class Player {
     this._noticeMessage = null;
 
     try {
-        this._encoded?.destroy();
-        this._raw?.stream?.destroy();
-        this._engines.volumeTransform?.destroy();
-        this._engines.opusDecoder?.destroy();
-        this._engines.opusEncoder?.destroy();
-        this._engines.webmDemuxer?.destroy();
-        this._engines.ffmpeg?.destroy();
-        this._engines.libsamplerate?.destroy();
-        // eslint-disable-next-line no-empty
-      } catch {}
-      this._engines = {
-        opusDecoder: null,
-        opusEncoder: null,
-        webmDemuxer: null,
-        ffmpeg: null,
-        volumeTransform: null,
-        libsamplerate: null,
-      };
-      this._raw.stream.destroy();
-      this._raw.stream.read(); // Drain the data
+      this._encoded?.destroy();
+      this._raw?.stream?.destroy();
+      this._engines.volumeTransform?.destroy();
+      this._engines.opusDecoder?.destroy();
+      this._engines.opusEncoder?.destroy();
+      this._engines.webmDemuxer?.destroy();
+      this._engines.ffmpeg?.destroy();
+      this._engines.libsamplerate?.destroy();
+      // eslint-disable-next-line no-empty
+    } catch {}
+    this._engines = {
+      opusDecoder: null,
+      opusEncoder: null,
+      webmDemuxer: null,
+      ffmpeg: null,
+      volumeTransform: null,
+      libsamplerate: null,
+    };
+    this._raw.stream.destroy();
+    this._raw.stream.read(); // Drain the data
 
-      this._audio = null;
-      this._encoded = null;
-      this._raw = null;
+    this._audio = null;
+    this._encoded = null;
+    this._raw = null;
 
     if (this._songs.length === 0) {
       let endEmbed = new Discord.MessageEmbed()
