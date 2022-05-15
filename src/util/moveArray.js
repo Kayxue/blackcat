@@ -1,7 +1,7 @@
 export default function moveArray(original, oldIndex, newIndex) {
   let modified = original.slice(0);
   if (newIndex >= modified.length) {
-    var k = newIndex - modified.length + 1;
+    let k = newIndex - modified.length + 1;
     while (k--) {
       modified.push(undefined);
     }
