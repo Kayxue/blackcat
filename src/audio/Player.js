@@ -887,7 +887,7 @@ export default class Player {
       .setThumbnail(this._audio.metadata.thumbnail)
       /*.setImage(`attachment://${this._guildId}.png`)*/
       .setColor(colors.success)
-      .setFooter("進度條已被暫時停用，因為會造成記憶體洩漏")
+      .setFooter("進度條已被暫時停用，因為會造成記憶體洩漏");
 
     if (!this._optimize) {
       if (this._muted)

@@ -25,8 +25,10 @@ export default {
         interaction.guild.id,
       );
     }
-    
-    return interaction.reply("此指令已暫時停用，因為會造成記憶體洩漏").catch(()=>{});
+
+    return interaction
+      .reply("此指令已暫時停用，因為會造成記憶體洩漏")
+      .catch(() => {});
 
     /*let data = player.nowplaying;
 
