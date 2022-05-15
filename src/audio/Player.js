@@ -746,7 +746,7 @@ export default class Player {
     if (!this._audio?.metadata?.title) return; //Ignore if title is missing
 
     // Image process
-    let canvas = new Canvas.Canvas(960, 300);
+    /*let canvas = new Canvas.Canvas(960, 300);
     let ctx = canvas.getContext("2d");
     let bg;
     try {
@@ -878,15 +878,16 @@ export default class Player {
     let attachment = new Discord.MessageAttachment(
       buffer,
       `${this._guildId}.png`,
-    );
+    );*/
 
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(
         `🎵 ┃ 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`,
       )
       .setThumbnail(this._audio.metadata.thumbnail)
-      .setImage(`attachment://${this._guildId}.png`)
-      .setColor(colors.success);
+      /*.setImage(`attachment://${this._guildId}.png`)*/
+      .setColor(colors.success)
+      .setFooter("進度條已被暫時停用，因為會造成記憶體洩漏")
 
     if (!this._optimize) {
       if (this._muted)
@@ -915,7 +916,7 @@ export default class Player {
       ?.edit({
         embeds: [playingEmbed],
         components,
-        files: [attachment],
+        /*files: [attachment],*/
       })
       .catch(this.noop);
   }

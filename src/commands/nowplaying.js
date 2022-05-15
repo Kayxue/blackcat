@@ -25,8 +25,10 @@ export default {
         interaction.guild.id,
       );
     }
+    
+    return interaction.reply("此指令已暫時停用，因為會造成記憶體洩漏").catch(()=>{});
 
-    let data = player.nowplaying;
+    /*let data = player.nowplaying;
 
     Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
     Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
@@ -167,6 +169,6 @@ export default {
         embeds: [nowEmbed],
         files: [attachment],
       })
-      .catch(() => {});
+      .catch(() => {});*/
   },
 };
