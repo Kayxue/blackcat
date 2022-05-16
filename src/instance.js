@@ -30,7 +30,7 @@ const client = new Discord.Client({
 });
 
 client.commands = new Discord.Collection();
-client.players = new Discord.Collection();
+client.players = new Map();
 client.config = config;
 client.logger = log;
 

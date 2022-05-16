@@ -188,8 +188,9 @@ export default class Player {
   }
 
   async play(track, interaction, fromSearch = false) {
-    let rawData,
-      parsedData,
+    let rawData = null,
+      parsedData = null,
+      isFull = null,
       isPlaylist = false;
 
     let searchEmbed = new Discord.MessageEmbed()
@@ -215,14 +216,14 @@ export default class Player {
         if (!rawData) {
           return this._channel.send("Nothing found");
         }
-        rawData.full = false;
+        isFull = false;
       } catch (e) {
         return this.handelYoutubeError(e);
       }
     } else if (play.yt_validate(track) === "video") {
       try {
         rawData = await play.video_info(track);
-        rawData.full = true;
+        isFull = true;
       } catch (e) {
         return this.handelYoutubeError(e);
       }
@@ -259,7 +260,7 @@ export default class Player {
           thumbnail: video.thumbnails.pop().url,
           queuer: interaction.user.username,
           id: play.extractID(video.url),
-          rawData: video,
+          isFull: false,
         });
       });
     }
@@ -273,7 +274,7 @@ export default class Player {
           thumbnail: rawData.video_details.thumbnails.pop().url,
           queuer: interaction.user.username,
           id: rawData.video_details.id,
-          rawData,
+          isFull,
         },
       ];
 
@@ -297,6 +298,10 @@ export default class Player {
       }
 
       this.updateNoticeEmbed();
+      rawData = null;
+      parsedData = null;
+      isFull = null;
+      isPlaylist = null;
     }
   }
 
@@ -392,15 +397,8 @@ export default class Player {
     }
     this._songs = [];
     this._stopped = true;
-    this._player.stop();
     await this._noticeMessage?.delete().catch(this.noop);
-    this._client.players.delete(this._guildId);
-    try {
-      this._connection.destroy();
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-
-    delete this;
+    this._player.stop();
   }
 
   loop(interaction) {
@@ -481,29 +479,27 @@ export default class Player {
   }
 
   async playStream() {
-    if (!this._songs[0]?.rawData.full) {
+    if (!this._songs[0]?.isFull) {
+      let rawData;
       try {
-        this._songs[0].rawData = await play.video_info(
-          this._songs[0].url,
-        );
-        this._songs[0].rawData.full = true;
+        rawData = await play.video_info(this._songs[0].url);
       } catch (e) {
         this.handelYoutubeError(e);
         return;
       }
 
       this._songs[0] = {
-        title: this._songs[0].rawData.video_details.title,
-        url: this._songs[0].rawData.video_details.url,
-        duraction: this._songs[0].rawData.video_details.durationInSec,
-        duractionParsed:
-          this._songs[0].rawData.video_details.durationRaw,
-        thumbnail:
-          this._songs[0].rawData.video_details.thumbnails.pop().url,
+        title: rawData.video_details.title,
+        url: rawData.video_details.url,
+        duraction: rawData.video_details.durationInSec,
+        duractionParsed: rawData.video_details.durationRaw,
+        thumbnail: rawData.video_details.thumbnails.pop().url,
         queuer: this._songs[0].queuer,
         id: play.extractID(this._songs[0].url),
-        rawData: this._songs[0].rawData,
+        isFull: true,
       };
+
+      rawData = null;
     }
 
     try {
@@ -1082,7 +1078,7 @@ export default class Player {
         // eslint-disable-next-line no-empty
       } catch (e) {}
 
-      delete this;
+      this.cleanup();
     } else {
       this.playStream();
     }
@@ -1120,17 +1116,10 @@ export default class Player {
       case "stop":
         this._songs = [];
         this._stopped = true;
-        this._player.stop();
         this._buttonCollector?.stop();
         replyMessage = "⏹️ ┃ 停止播放音樂";
         await this._noticeMessage?.delete().catch(this.noop);
-        try {
-          this._connection.destroy();
-          // eslint-disable-next-line no-empty
-        } catch (e) {}
-        this._client.players.delete(this._guildId);
-
-        delete this;
+        this._player.stop();
         break;
       case "volup":
         this.volume = parseFloat((this._volume + 0.1).toFixed(10));
@@ -1178,5 +1167,31 @@ export default class Player {
     }, 15_000);
 
     this.updateNoticeEmbed();
+  }
+
+  cleanup() {
+    this._client = null;
+    this._channel = null;
+    this._guild = null;
+    this._guildId = null;
+    this._voiceChannel = null;
+    this._channelId = null;
+    this._optimize = null;
+    this._init = null;
+    this._paused = null;
+    this._muted = null;
+    this._loop = null;
+    this._repeat = null;
+    this._nightcore = null;
+    this._guildDeleted = null;
+    this._stopped = null;
+    this._volume = null;
+    this._noticeMessage = null;
+    this._buttonCollector = null;
+    this._nowplaying = null;
+    this._songs = null;
+    this._engines = null;
+    this._encoded = null;
+    this._raw = null;
   }
 }
