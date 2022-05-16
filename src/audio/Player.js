@@ -61,13 +61,6 @@ export default class Player {
         },
       });
     }
-
-    Canvas.registerFont("src/assets/notosansTC.otf", {
-      family: "noto",
-    });
-    Canvas.registerFont("src/assets/joypixels.ttf", {
-      family: "joypixels",
-    });
   }
 
   noop() {}
@@ -750,7 +743,14 @@ export default class Player {
     if (!this._audio?.metadata?.title) return; //Ignore if title is missing
 
     // Image process
-    /*let canvas = new Canvas.Canvas(960, 300);
+    Canvas.registerFont("src/assets/notosansTC.otf", {
+      family: "noto",
+    });
+    Canvas.registerFont("src/assets/joypixels.ttf", {
+      family: "joypixels",
+    });
+
+    let canvas = new Canvas.Canvas(960, 300);
     let ctx = canvas.getContext("2d");
     let bg;
     try {
@@ -765,8 +765,6 @@ export default class Player {
     let percentage =
       Math.round((this.playTime / this.nowplaying.duraction) * 100) /
       100;
-    Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
-    Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
     ctx.fillStyle = "#15202b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     let percent = bg.width / 200;
@@ -795,7 +793,7 @@ export default class Player {
     ctx.font = "25px noto";
     ctx.fillStyle = "#ffffff";
     ctx.fillText("正在播放:", 250, 50);
-    ctx.font = `50px noto, joypixels`;
+    ctx.font = '50px "noto","joypixels';
     let text = this._audio.metadata.title;
     let textLength = 25;
     while (
@@ -877,21 +875,20 @@ export default class Player {
       50,
       250,
     );
-    let buffer = await canvas.toBuffer("png");
+    let buffer = canvas.toBuffer("image/png");
 
     let attachment = new Discord.MessageAttachment(
       buffer,
       `${this._guildId}.png`,
-    );*/
+    );
 
     let playingEmbed = new Discord.MessageEmbed()
       .setDescription(
         `🎵 ┃ 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`,
       )
       .setThumbnail(this._audio.metadata.thumbnail)
-      /*.setImage(`attachment://${this._guildId}.png`)*/
-      .setColor(colors.success)
-      .setFooter("進度條已被暫時停用，因為會造成記憶體洩漏");
+      .setImage(`attachment://${this._guildId}.png`)
+      .setColor(colors.success);
 
     if (!this._optimize) {
       if (this._muted)
@@ -916,11 +913,11 @@ export default class Player {
     let components = [rowOne];
     if (!this._optimize) components.push(rowTwo);
 
-    this._noticeMessage
+    await this._noticeMessage
       ?.edit({
         embeds: [playingEmbed],
         components,
-        /*files: [attachment],*/
+        files: [attachment],
       })
       .catch(this.noop);
   }
