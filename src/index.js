@@ -9,7 +9,6 @@ const config = await configReslover();
 
 const manager = new ShardingManager("./src/instance.js", {
   token: config.token,
-  execArgv: ["--inspect"],
 });
 
 manager.on("shardCreate", (shard) => {
