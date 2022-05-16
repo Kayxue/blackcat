@@ -11,7 +11,7 @@ import {
 import Discord from "discord.js";
 import play from "play-dl";
 import prism from "prism-media";
-import Canvas from "skia-canvas";
+import Canvas from "canvas";
 import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
@@ -62,8 +62,12 @@ export default class Player {
       });
     }
 
-    Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
-    Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
+    Canvas.registerFont("src/assets/notosansTC.otf", {
+      family: "noto",
+    });
+    Canvas.registerFont("src/assets/joypixels.ttf", {
+      family: "joypixels",
+    });
   }
 
   noop() {}
