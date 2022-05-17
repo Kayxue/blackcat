@@ -9,9 +9,9 @@ import {
   NoSubscriberBehavior,
 } from "@discordjs/voice";
 import Discord from "discord.js";
-import play from "play-dl";
 import prism from "prism-media";
 import Canvas from "canvas";
+import play from "play-dl";
 import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
@@ -1094,7 +1094,8 @@ export default class Player {
         .catch(this.noop);
     }
 
-    let replyMessage = "";
+    let replyMessage = "",
+      isUpdateRequired = true;
     switch (interaction.customId) {
       case "pause":
         if (this._paused) {
@@ -1120,6 +1121,7 @@ export default class Player {
         replyMessage = "⏹️ ┃ 停止播放音樂";
         await this._noticeMessage?.delete().catch(this.noop);
         this._player.stop();
+        isUpdateRequired = false;
         break;
       case "volup":
         this.volume = parseFloat((this._volume + 0.1).toFixed(10));
@@ -1166,7 +1168,7 @@ export default class Player {
       interaction.deleteReply().catch(this.noop);
     }, 15_000);
 
-    this.updateNoticeEmbed();
+    if (isUpdateRequired) this.updateNoticeEmbed();
   }
 
   cleanup() {

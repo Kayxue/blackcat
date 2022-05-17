@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import Discord from "discord.js";
-import play from "play-dl";
 import fs from "node:fs";
 
 import log from "./logger.js";
