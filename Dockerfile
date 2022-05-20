@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt -qqy upgrade && \
@@ -16,5 +16,10 @@ WORKDIR /home/cat
 USER cat
 
 RUN yarn install 
+
+USER root
+RUN apt remove -qqy build-essential python3 cmake libfontconfig1 fontconfig curl libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+USER cat
 
 ENTRYPOINT [ "yarn", "start" ]
