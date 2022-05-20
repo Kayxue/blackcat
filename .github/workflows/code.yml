@@ -29,7 +29,9 @@ jobs:
         with:
           node-version: 18
       - name: Run build
-        run: "yarn install"
+        run: |
+          sudo apt install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+          yarn install
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
   snyk:
