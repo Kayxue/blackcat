@@ -9,7 +9,7 @@ export default {
     name: "nightcore",
     description: "啟動nightcore音效",
   },
-  run: function (interaction) {
+  run: async function (interaction) {
     if (interaction.client.config.optimizeQuality) {
       let optimizeEmbed = new MessageEmbed()
         .setTitle("❌ ┃ 為了優化音樂品質，Nightcore已停用")
@@ -24,6 +24,22 @@ export default {
         .catch(() => {});
     }
 
+    if (!interaction.member.voice?.channel) {
+      let joinVCEmbed = new MessageEmbed()
+        .setTitle("❌ ┃ 你必須先在語音頻道內")
+        .setColor(danger);
+      return interaction
+        .reply({
+          embeds: [joinVCEmbed],
+        })
+        .catch(() => {});
+    }
+
+    if (!interaction.member.voice.channel.joinable)
+      return interaction
+        .reply("❌ ┃ 我無法連線至語音頻道!")
+        .catch(() => {});
+
     let player;
     if (
       !PlayerManager.getSendingPlayer(
@@ -31,16 +47,21 @@ export default {
         interaction.guild.id,
       )
     ) {
-      return interaction
-        .reply("❌ ┃ 必須要有音樂正在播放")
-        .catch(() => {});
+      player = PlayerManager.createSendingPlayer(interaction);
+      await player.init();
     } else {
       player = PlayerManager.getSendingPlayer(
         interaction.client,
         interaction.guild.id,
       );
-      if (!allowModify(interaction)) return joinVC(interaction);
+      if (!allowModify(interaction))
+        return interaction
+          .reply("❌ ┃ 你必須跟我在同一個頻道")
+          .catch(() => {});
     }
+    // else {
+    //   if (!allowModify(interaction)) return joinVC(interaction);
+    // }
     player.nightcore(interaction);
   },
 };
