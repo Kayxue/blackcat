@@ -10,7 +10,8 @@ import {
 } from "@discordjs/voice";
 import Discord from "discord.js";
 import prism from "prism-media";
-import Canvas from "canvas";
+import Canvas from "@napi-rs/canvas";
+import imageSize from "image-size";
 import play from "play-dl";
 import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
@@ -18,6 +19,8 @@ import allowModify from "../util/allowModify.js";
 import moveArray from "../util/moveArray.js";
 import log from "../logger.js";
 import colors from "../color.js";
+import { request } from "undici";
+import { join, resolve } from "node:path";
 
 export default class Player {
   constructor(interaction, guild, voice) {
@@ -743,33 +746,40 @@ export default class Player {
     if (!this._audio?.metadata?.title) return; //Ignore if title is missing
 
     // Image process
-    Canvas.registerFont("src/assets/notosansTC.otf", {
-      family: "noto",
-    });
-    Canvas.registerFont("src/assets/joypixels.ttf", {
-      family: "joypixels",
-    });
+    Canvas.GlobalFonts.registerFromPath(
+      join(resolve(), "src", "assets", "notosansTC.otf"),
+      "noto",
+    );
+    Canvas.GlobalFonts.registerFromPath(
+      join(resolve(), "src", "assets", "joypixels.ttf"),
+      "joypixels",
+    );
 
     let canvas = new Canvas.Canvas(960, 300);
     let ctx = canvas.getContext("2d");
     let bg;
     try {
-      bg = await Canvas.loadImage(
+      let { body } = await request(
         `https://i3.ytimg.com/vi/${this._audio.metadata.id}/maxresdefault.jpg`,
       );
+      bg = new Canvas.Image();
+      bg.src = Buffer.from(await body.arrayBuffer());
     } catch (e) {
-      bg = await Canvas.loadImage(
+      let { body } = await request(
         "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
       );
+      bg = new Canvas.Image();
+      bg.src = Buffer.from(await body.arrayBuffer());
     }
     let percentage =
       Math.round((this.playTime / this.nowplaying.duraction) * 100) /
       100;
     ctx.fillStyle = "#15202b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    let percent = bg.width / 200;
-    let bgHeight = bg.height / percent;
-    let bgWidth = bg.width / percent;
+    let bgData = await imageSize(bg.src);
+    let percent = bgData.width / 200;
+    let bgHeight = bgData.height / percent;
+    let bgWidth = bgData.width / percent;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(30 + 5, 25);
