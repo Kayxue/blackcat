@@ -187,7 +187,12 @@ export default class Player {
     });
   }
 
-  async play(track, interaction, fromSearch = false) {
+  async play(
+    track,
+    interaction,
+    fromSearch = false,
+    fromNightcore = false,
+  ) {
     let rawData = null,
       parsedData = null,
       isFull = null,
@@ -278,6 +283,8 @@ export default class Player {
         },
       ];
 
+    if (fromNightcore) this._nightcore = true;
+
     if (this._songs.length === 0) {
       this._songs.push(...parsedData);
       this.playStream();
@@ -298,10 +305,7 @@ export default class Player {
       }
 
       this.updateNoticeEmbed();
-      rawData = null;
       parsedData = null;
-      isFull = null;
-      isPlaylist = null;
     }
   }
 
