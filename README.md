@@ -24,15 +24,13 @@
 
 [![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/blackcat-cdn/main/button.svg)](https://heroku.com/deploy?template=https://github.com/blackcatbot/blackcat)
 
-> ⚠️ 注意：黑貓程式碼是專門為 Linux 所打造，如果您正在使用 Windows，請部屬到 Heroku 或是使用 Docker
-
 - 部屬到 Heroku
 
   1. 點擊上方的部屬到 Heroku 按鈕
 
   2. 就是這麼簡單！請繼續照著螢幕的指示操作！
 
-- 使用 Node.js (你必須安裝 Node.js)
+- 在 Linux 上安裝
 
   1. 複製程式碼
 
@@ -51,6 +49,8 @@
   ```sh
   npm install yarn -g #如果還沒有安裝Yarn
   yarn install
+
+  sudo apt-get install cmake # Nightcore 引擎編譯時需要
   ```
 
   3. 填寫`config.example.js`並重新命名成`config.js`
@@ -60,7 +60,38 @@
   yarn start
   ```
 
-- 🐋 使用已建立好的 Docker 映像檔
+- 在 Windows 上安裝
+
+  1. 複製程式碼
+
+  ```batch
+  git clone
+  ```
+
+  2. 安裝所需套件
+
+  ```batch
+  npm install yarn -g
+  yarn install
+  ```
+
+  3. 安裝 MSVC 編譯器
+
+  前往[Visual Studio 官網下載頁面](https://visualstudio.microsoft.com/downloads/)下載 Visual Studio 並安裝 "Desktop development with C++"
+
+  4. 安裝 Cmake
+
+  前往[Cmake 官網下載頁面](https://cmake.org/download/)下載 Cmake
+
+  5. 填寫`config.example.js`並重新命名成`config.js`
+
+  6. 啟動機器人
+
+  ```batch
+  yarn start
+  ```
+
+- 使用已建立好的 Docker 映像檔
 
   1. 拉取 Docker 映像檔
 
