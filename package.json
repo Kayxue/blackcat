@@ -13,7 +13,9 @@
     "start": "node src/index.js",
     "commit": "cz c",
     "commit:setup": "pip install -U commitizen",
-    "install": "bash scripts/setup.sh",
+    "install": "run-script-os",
+    "install:windows": ".\\scripts\\setup.bat",
+    "install:nix": "bash scripts/setup.sh",
     "prepare": "husky install"
   },
   "repository": {
@@ -29,6 +31,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.7.0",
     "@discordjs/voice": "^0.9.0",
+    "@napi-rs/canvas": "^0.1.21",
     "canvas": "^2.9.1",
     "chalk": "^5.0.0",
     "discord-together": "^1.3.3",
@@ -38,11 +41,13 @@
     "express-ws": "^5.0.2",
     "ffmpeg-static": "^5.0.0",
     "helmet": "^5.1.0",
+    "image-size": "^1.0.1",
     "play-dl": "^1.9.4",
     "pretty-bytes": "^6.0.0",
     "prism-media": "^1.3.2",
     "skia-canvas": "^0.9.29",
-    "sodium-native": "^3.3.0"
+    "sodium-native": "^3.3.0",
+    "undici": "^5.3.0"
   },
   "devDependencies": {
     "eslint": "^8.16.0",
@@ -50,7 +55,8 @@
     "husky": "^8.0.1",
     "lint-staged": "^12.4.2",
     "pm2": "^5.2.0",
-    "prettier": "2.6.2"
+    "prettier": "2.6.2",
+    "run-script-os": "^1.1.6"
   },
   "lint-staged": {
     "**/*": [
