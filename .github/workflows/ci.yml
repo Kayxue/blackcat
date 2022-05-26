@@ -11,9 +11,6 @@ permissions:
 jobs:
   test-lockfile:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [16, 17, 18]
     name: Run CI on node v${{ matrix.node }}
     steps:
       - name: Checkout repository
@@ -21,7 +18,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 16
           cache: yarn
       - name: Install dependencies
         run: |
@@ -55,7 +52,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
           cache: "yarn"
       - name: Install dependencies
         run: |
