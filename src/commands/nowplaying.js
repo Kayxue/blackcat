@@ -1,7 +1,10 @@
 import PlayerManager from "../audio/PlayerManager.js";
-import Canvas from "skia-canvas";
+import Canvas from "@napi-rs/canvas";
+import imageSize from "image-size";
+import { request } from "undici";
 import { MessageEmbed, MessageAttachment } from "discord.js";
 import { blurple } from "../color.js";
+import { join, resolve } from "node:path";
 
 export default {
   data: {
@@ -26,35 +29,40 @@ export default {
       );
     }
 
-    return interaction
-      .reply("此指令已暫時停用，因為會造成記憶體洩漏")
-      .catch(() => {});
+    let data = player.nowplaying;
 
-    /*let data = player.nowplaying;
-
-    Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
-    Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
+    Canvas.GlobalFonts.registerFromPath(
+      join(resolve(), "src", "assets", "notosansTC.otf"),
+      "noto",
+    );
+    Canvas.GlobalFonts.registerFromPath(
+      join(resolve(), "src", "assets", "joypixels.ttf"),
+      "joypixels",
+    );
     let canvas = new Canvas.Canvas(960, 300);
     let ctx = canvas.getContext("2d");
     let bg;
     try {
-      bg = await Canvas.loadImage(
+      let { body } = await request(
         `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`,
       );
+      bg = new Canvas.Image();
+      bg.src = Buffer.from(await body.arrayBuffer());
     } catch (e) {
-      bg = await Canvas.loadImage(
+      let { body } = await request(
         "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
       );
+      bg = new Canvas.Image();
+      bg.src = Buffer.from(await body.arrayBuffer());
     }
     let percentage =
       Math.round((player.playTime / data.duraction) * 100) / 100;
-    Canvas.FontLibrary.use("noto", "src/assets/notosansTC.otf");
-    Canvas.FontLibrary.use("joypixels", "src/assets/joypixels.ttf");
     ctx.fillStyle = "#15202b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let bgData = await imageSize(bg.src);
     let percent = bg.width / 200;
-    let bgHeight = bg.height / percent;
-    let bgWidth = bg.width / percent;
+    let bgHeight = bgData.height / percent;
+    let bgWidth = bgData.width / percent;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(30 + 5, 25);
@@ -153,7 +161,7 @@ export default {
       50,
       250,
     );
-    let buffer = await canvas.toBuffer("png");
+    let buffer = canvas.toBuffer("image/png");
 
     let attachment = new MessageAttachment(
       buffer,
@@ -171,6 +179,6 @@ export default {
         embeds: [nowEmbed],
         files: [attachment],
       })
-      .catch(() => {});*/
+      .catch(() => {});
   },
 };
