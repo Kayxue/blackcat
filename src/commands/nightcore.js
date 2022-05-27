@@ -70,15 +70,16 @@ export default {
     else if (player.songs.length === 0 && url) {
       await interaction.deferReply().catch(() => {});
       player.play(url, interaction, false, true);
-    } else if (!url && player.songs.lenght === 0) {
-      let noURLEmbed = new MessageEmbed()
-        .setColor(danger)
-        .setTitle("❌ ┃ 請輸入網址來使用Nightcore模式播放音樂");
-      interaction
-        .reply({
-          embeds: [noURLEmbed],
-        })
-        .catch(() => {});
+    } else if (!url && player.songs.length === 0) {
+      player.nightcore(interaction);
+      // let noURLEmbed = new MessageEmbed()
+      //   .setColor(danger)
+      //   .setTitle("❌ ┃ 請輸入網址來使用Nightcore模式播放音樂");
+      // interaction
+      //   .reply({
+      //     embeds: [noURLEmbed],
+      //   })
+      //   .catch(() => {});
     }
   },
 };
