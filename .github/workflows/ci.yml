@@ -10,11 +10,7 @@ permissions:
 
 jobs:
   test-lockfile:
-    strategy:
-      matrix:
-        platform: ["windows-latest", "ubuntu-latest"]
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: "ubuntu-latest"
     name: Run CI on node in ${{ matrix.platform }}
     steps:
       - name: Checkout repository
@@ -25,9 +21,7 @@ jobs:
           node-version: 16
           cache: yarn
       - name: Install dependencies
-        run: |
-          sudo apt install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-          yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
 
   update-lockfile:
     runs-on: ubuntu-latest
