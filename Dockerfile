@@ -1,25 +1,18 @@
-FROM ubuntu:21.10
+FROM node:lts-alpine
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt -qqy upgrade && \
-  apt install -qqy build-essential python3 cmake libfontconfig1 fontconfig curl bash libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake bash && \
+  addgroup -S catrunner && \
+  adduser -S catrunner -G catrunner
 
 SHELL [ "/bin/bash", "-c" ]
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-  apt install nodejs && \
-  npm install -g yarn && \
-  fc-cache -fv && \
-  groupadd -r cat && useradd --create-home --home /home/cat -r -g cat cat
+COPY --chown=catrunner:catrunner . /home/catrunner/
+WORKDIR /home/catrunner/
 
-COPY --chown=cat:cat . /home/cat
-WORKDIR /home/cat
-USER cat
-
-RUN yarn install 
+USER catrunner
+RUN yarn install
 
 USER root
-RUN apt remove -qqy build-essential python3 cmake libfontconfig1 fontconfig curl libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+RUN apk del python3 make gcc g++ git libtool autoconf automake cmake
+USER catrunner
 
-USER cat
-
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT ["node", "src/index.js"]
