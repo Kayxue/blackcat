@@ -29,6 +29,15 @@ export default {
         interaction.guild.id,
       );
     }
+
+    if (player.songs.length === 0) {
+      let emptyEmbed = new MessageEmbed()
+        .setTitle("❌ ┃ 播放序列為空")
+        .setColor(danger);
+      return interaction
+        .reply({ embeds: [emptyEmbed] })
+        .catch(() => {});
+    }
     let songs = player.songs.slice(0);
 
     let parsedSongs = [],

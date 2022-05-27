@@ -512,6 +512,7 @@ export default class Player {
     try {
       this._raw = await play.stream(this._songs[0].url);
     } catch (e) {
+      this._songs.shift();
       this.handelYoutubeError(e);
       return;
     }
