@@ -10,8 +10,12 @@ permissions:
 
 jobs:
   test-lockfile:
-    runs-on: ubuntu-latest
-    name: Run CI on node v${{ matrix.node }}
+    strategy:
+      matrix:
+        platform: ["windows-latest", "ubuntu-latest"]
+
+    runs-on: ${{ matrix.platform }}
+    name: Run CI on node in ${{ matrix.platform }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
