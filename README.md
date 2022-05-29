@@ -1,7 +1,4 @@
-<h3 align="center">Black cat</h3>
-<p align="center">
-  <img src="https://catmusic.ml/favicon.png" width="70" height="70" />
-</p>
+<h1 align="center">Black cat</h1>
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white&color=5865F2) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
