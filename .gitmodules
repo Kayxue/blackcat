@@ -1,6 +1,6 @@
-[submodule "src/audio/engine/play-dl"]
-	path = src/audio/engine/play-dl
-	url = https://github.com/blackcatbot/play-dl
 [submodule "src/audio/engine/libsamplerate/deps/libsamplerate"]
 	path = src/audio/engine/libsamplerate/deps/libsamplerate
 	url = https://github.com/erikd/libsamplerate
+[submodule "src/audio/engine/play-dl"]
+	path = src/audio/engine/play-dl
+	url = https://github.com/blackcatbot/play-dl
