@@ -16,7 +16,6 @@
     "install": "run-script-os",
     "install:windows": ".\\scripts\\setup.bat",
     "install:nix": "bash scripts/setup.sh",
-    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
