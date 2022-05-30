@@ -4,6 +4,8 @@ RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake 
   addgroup -S catrunner && \
   adduser -S catrunner -G catrunner
 
+ENV HUSKY=0
+
 SHELL [ "/bin/bash", "-c" ]
 COPY --chown=catrunner:catrunner . /home/catrunner/
 WORKDIR /home/catrunner/
