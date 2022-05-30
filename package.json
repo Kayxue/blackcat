@@ -1,6 +1,6 @@
 {
   "name": "blackcat",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Black cat discord music bot",
   "main": "src/index.js",
   "private": true,
