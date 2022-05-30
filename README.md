@@ -33,8 +33,6 @@
 
   ```sh
   git clone https://github.com/blackcatbot/blackcat
-  cd blackcat
-  git submodule update --recursive --init
   ```
 
   或是使用[`gh`](https://cli.github.com)
