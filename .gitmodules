@@ -1,0 +1,3 @@
+[submodule "src/audio/engine/play-dl"]
+	path = src/audio/engine/play-dl
+	url = https://github.com/AtariTom/play-dl
