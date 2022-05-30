@@ -1,1 +1,4 @@
-src/audio/engine/libsamplerate/
+src/audio/engine/libsamplerate/deps/libsamplerate
+src/audio/engine/libsamplerate/build
+src/audio/engine/libsamplerate/node_modules
+src/audio/engine/play-dl
