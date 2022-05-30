@@ -1,7 +1,12 @@
 @echo off
 
+echo Chaning directory
 cd .\src\audio\engine\libsamplerate
-yarn install
+echo Running build... Building libsamplerate
+start "libsamplerate" yarn install
+echo Chaning directory
 cd ..\play-dl
-yarn install
+echo Running build... Building play-dl
+start "play-dl" yarn install
+echo Restoring
 cd ..\..\..\..\
