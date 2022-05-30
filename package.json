@@ -49,15 +49,8 @@
   "devDependencies": {
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^12.4.2",
     "pm2": "^5.2.0",
     "prettier": "2.6.2",
     "run-script-os": "^1.1.6"
-  },
-  "lint-staged": {
-    "**/*": [
-      "prettier --write --ignore-unknown"
-    ]
   }
 }
