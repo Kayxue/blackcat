@@ -1,4 +1,4 @@
-import play from "play-dl";
+import play from "../audio/engine/play-dl/dist/index.mjs";
 import log from "../logger.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
