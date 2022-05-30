@@ -3,7 +3,9 @@
 set -e
 trap exit INT
 
-git submodule update --recursive --init
+if [[ -z "${IN_DOCKER}" ]]; then
+  git submodule update --recursive --init
+fi
 cd src/audio/engine/libsamplerate
 yarn install
 cd -
