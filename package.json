@@ -31,7 +31,7 @@
   "homepage": "https://catmusic.ml",
   "dependencies": {
     "@discordjs/opus": "^0.7.0",
-    "@discordjs/voice": "^0.9.0",
+    "@discordjs/voice": "^0.10.0",
     "@napi-rs/canvas": "^0.1.22",
     "chalk": "^5.0.0",
     "discord-together": "^1.3.3",
