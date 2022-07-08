@@ -1960,6 +1960,18 @@ pidusage@~3.0:
   dependencies:
     safe-buffer "^5.2.1"
 
+play-audio@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/play-audio/-/play-audio-0.5.2.tgz#191dd45b95ff64ae20bbd718671da4e987d4edd1"
+  integrity sha512-ZAqHUKkQLix2Iga7pPbsf1LpUoBjcpwU93F1l3qBIfxYddQLhxS6GKmS0d3jV8kSVaUbr6NnOEcEMFvuX93SWQ==
+
+play-dl@^1.9.5:
+  version "1.9.5"
+  resolved "https://registry.yarnpkg.com/play-dl/-/play-dl-1.9.5.tgz#d9d1bb11d3c0e4754341a4ce22b1794a23843662"
+  integrity sha512-tfjBgpU6AD63snK6sXiSuAOi+3iLsqVvsFcvCritOetF/zIo2OcB4BURX+WaQLUmEX3sUJhzP/vqG8SSl7WEpA==
+  dependencies:
+    play-audio "^0.5.2"
+
 pm2-axon-rpc@~0.7.0, pm2-axon-rpc@~0.7.1:
   version "0.7.1"
   resolved "https://registry.npmjs.org/pm2-axon-rpc/-/pm2-axon-rpc-0.7.1.tgz"
