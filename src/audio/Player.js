@@ -12,7 +12,7 @@ import Discord from "discord.js";
 import prism from "prism-media";
 import Canvas from "@napi-rs/canvas";
 import imageSize from "image-size";
-import play from "./engine/play-dl/dist/index.mjs";
+import play from "play-dl";
 import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
