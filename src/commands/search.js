@@ -74,10 +74,12 @@ export default {
       let yesBtn = new MessageButton()
         .setEmoji("✅")
         .setLabel("播放這個歌曲")
+        .setStyle("SUCCESS")
         .setCustomId("yes");
       let noBtn = new MessageButton()
         .setEmoji("❌")
         .setLabel("不要播放這個歌曲")
+        .setStyle("DANGER")
         .setCustomId("no");
       let actionRow = new MessageActionRow().addComponents(
         yesBtn,
@@ -85,19 +87,19 @@ export default {
       );
 
       let selectMessage;
-      try {
-        selectMessage = await interaction.reply({
-          embeds: [videoEmbed],
-          components: [actionRow],
-          fetchReply: true,
-        });
-      } catch (e) {
-        return;
-      }
+      //try {
+      selectMessage = await interaction.reply({
+        embeds: [videoEmbed],
+        components: [actionRow],
+        fetchReply: true,
+      });
+      //} catch (e) {
+      //  return;
+      //}
 
       let selected;
       try {
-        selected = selectMessage.awaitMessageComponent({
+        selected = await selectMessage.awaitMessageComponent({
           time: 15_000,
           filter: (btnInteraction) =>
             btnInteraction.user.id === interaction.user.id,
@@ -112,7 +114,7 @@ export default {
             .setTitle("🎶 ┃ 已將歌曲加入播放序列中")
             .setDescription(`歌曲網址: ${query}`)
             .setColor(color.success);
-          interaction.reply({ embeds: [playEmbed] });
+          selected.reply({ embeds: [playEmbed] });
           return;
         }
       }
@@ -121,9 +123,17 @@ export default {
     let searchEmbed = new MessageEmbed()
       .setTitle(`🔍 ┃ 正在搜尋 **${query}**`)
       .setColor(color.success);
-    interaction.reply({
-      embeds: [searchEmbed],
-    });
+    try {
+      await interaction.reply({
+        embeds: [searchEmbed],
+      });
+    } catch (_e) {
+      interaction
+        .editReply({
+          embeds: [searchEmbed],
+        })
+        .catch(() => {});
+    }
 
     let result;
     try {
@@ -233,14 +243,14 @@ export default {
 
     let searchMessage,
       currentPage = 0;
-    try {
-      searchMessage = await interaction.editReply({
-        embeds: [embeds[currentPage]],
-        components: [buttons],
-      });
-    } catch (e) {
-      return;
-    }
+    //try {
+    searchMessage = await interaction.editReply({
+      embeds: [embeds[currentPage]],
+      components: [buttons],
+    });
+    //} catch (e) {
+    //  return;
+    //}
 
     let collector = new InteractionCollector(interaction.client, {
       interactionType: "MESSAGE_COMPONENT",
