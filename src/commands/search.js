@@ -89,15 +89,15 @@ export default {
       );
 
       let selectMessage;
-      //try {
-      selectMessage = await interaction.reply({
-        embeds: [videoEmbed],
-        components: [actionRow],
-        fetchReply: true,
-      });
-      //} catch (e) {
-      //  return;
-      //}
+      try {
+        selectMessage = await interaction.reply({
+          embeds: [videoEmbed],
+          components: [actionRow],
+          fetchReply: true,
+        });
+      } catch (e) {
+        return;
+      }
 
       let selected;
       try {
