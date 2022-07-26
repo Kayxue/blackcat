@@ -12,10 +12,6 @@ export default async function () {
         log.error("`token`不是一個字串");
         invaild = true;
       }
-      if (typeof config.enableApi !== "boolean") {
-        log.error("`enableApi`不是一個布林值(true/false)");
-        invaild = true;
-      }
       if (
         typeof config.cookie !== "string" &&
         typeof config.cookie !== "undefined"
@@ -28,10 +24,6 @@ export default async function () {
         config.enableDev === true
       ) {
         log.error("`devGuild`不是一個字串(ID)，且`enableDev`為true");
-        invaild = true;
-      }
-      if (typeof config.apiPort !== "number") {
-        log.error("`apiPort`不是一個數字");
         invaild = true;
       }
 
@@ -49,8 +41,6 @@ export default async function () {
         cookie: process.env.COOKIE,
         devGuild: process.env.DEV_GUILD,
         enableDev: process.env.ENABLE_DEV === "true",
-        enableApi: process.env.ENABLE_API === "true",
-        apiPort: process.env.PORT || 8080,
         optimizeQuality: process.env.OPTIMIZE_QUALITY === "true",
       };
 
@@ -58,10 +48,6 @@ export default async function () {
 
       if (typeof config.token !== "string") {
         log.error("`TOKEN`不是一個字串");
-        invaild = true;
-      }
-      if (typeof config.enableApi !== "boolean") {
-        log.error("`ENABLE_API`不是一個布林值(true/false)");
         invaild = true;
       }
       if (

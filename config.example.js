@@ -14,9 +14,4 @@ export default {
   enableDev: false,
   // 是否啟用開發測試模式
   // 如果此設定為true，則devGuild必須設定伺服器ID
-  enableApi: true,
-  // 注意：此功能尚未支援
-  // 是否要啟用API伺服器
-  apiPort: process.env.PORT || 8080,
-  // API伺服器監聽端口
 };

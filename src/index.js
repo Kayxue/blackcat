@@ -1,6 +1,5 @@
 import { ShardingManager } from "discord.js";
 import dotenv from "dotenv";
-import server from "./server/server.js";
 import log from "./logger.js";
 import configReslover from "./util/configReslover.js";
 
@@ -23,7 +22,3 @@ manager.on("shardCreate", (shard) => {
 });
 
 manager.spawn();
-
-if (config.enableApi) {
-  server(manager);
-}
