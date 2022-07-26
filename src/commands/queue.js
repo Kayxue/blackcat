@@ -5,6 +5,7 @@ import {
   MessageButton,
   MessageActionRow,
   InteractionCollector,
+  ButtonStyle,
 } from "discord.js";
 
 export default {
@@ -67,16 +68,16 @@ export default {
     let previousBtn = new MessageButton()
       .setCustomId("previous")
       .setEmoji("◀️")
-      .setStyle("PRIMARY")
+      .setStyle(ButtonStyle.Primary)
       .setDisabled(true);
     let nextBtn = new MessageButton()
       .setCustomId("next")
       .setEmoji("▶️")
-      .setStyle("PRIMARY");
+      .setStyle(ButtonStyle.Primary);
     let closeBtn = new MessageButton()
       .setCustomId("close")
       .setEmoji("❎")
-      .setStyle("DANGER");
+      .setStyle(ButtonStyle.Danger);
 
     if (embeds.length - 1 === 0) nextBtn.setDisabled(true);
     let buttons = new MessageActionRow().setComponents(

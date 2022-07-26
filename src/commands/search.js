@@ -8,6 +8,8 @@ import {
   MessageButton,
   MessageActionRow,
   InteractionCollector,
+  ApplicationCommandOptionType,
+  ButtonStyle,
 } from "discord.js";
 
 export default {
@@ -16,7 +18,7 @@ export default {
     description: "搜尋音樂",
     options: [
       {
-        type: 3, //STRING
+        type: ApplicationCommandOptionType.String,
         name: "query",
         description: "YouTube上的音樂名稱",
         required: true,
@@ -74,12 +76,12 @@ export default {
       let yesBtn = new MessageButton()
         .setEmoji("✅")
         .setLabel("播放這個歌曲")
-        .setStyle("SUCCESS")
+        .setStyle(ButtonStyle.Success)
         .setCustomId("yes");
       let noBtn = new MessageButton()
         .setEmoji("❌")
         .setLabel("不要播放這個歌曲")
-        .setStyle("DANGER")
+        .setStyle(ButtonStyle.Success)
         .setCustomId("no");
       let actionRow = new MessageActionRow().addComponents(
         yesBtn,
@@ -223,16 +225,16 @@ export default {
     let previousBtn = new MessageButton()
       .setCustomId("previous")
       .setEmoji("◀️")
-      .setStyle("PRIMARY")
+      .setStyle(ButtonStyle.Primary)
       .setDisabled(true);
     let nextBtn = new MessageButton()
       .setCustomId("next")
       .setEmoji("▶️")
-      .setStyle("PRIMARY");
+      .setStyle(ButtonStyle.Primary);
     let chooseBtn = new MessageButton()
       .setCustomId("choose")
       .setEmoji("✅")
-      .setStyle("SUCCESS");
+      .setStyle(ButtonStyle.Primary);
 
     if (embeds.length - 1 === 0) nextBtn.setDisabled(true);
     let buttons = new MessageActionRow().setComponents(

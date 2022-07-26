@@ -1,4 +1,7 @@
-import { MessageEmbed } from "discord.js";
+import {
+  MessageEmbed,
+  ApplicationCommandOptionType,
+} from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import { danger } from "../color.js";
@@ -9,7 +12,7 @@ export default {
     description: "播放音樂",
     options: [
       {
-        type: 3, //STRING
+        type: ApplicationCommandOptionType.String,
         name: "name",
         description: "YouTube上的音樂名稱/網址",
         required: true,

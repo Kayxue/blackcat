@@ -3,6 +3,7 @@ import {
   MessageEmbed,
   MessageActionRow,
   MessageButton,
+  ButtonStyle,
 } from "discord.js";
 import { danger } from "../color.js";
 
@@ -22,7 +23,7 @@ export default {
         .setColor(danger);
       let inviteButton = new MessageButton()
         .setLabel("邀請黑貓")
-        .setStyle("LINK")
+        .setStyle(ButtonStyle.Link)
         .setURL(
           "https://discord.com/oauth2/authorize?client_id=848006097197334568&permissions=415776501073&scope=applications.commands%20bot",
         );

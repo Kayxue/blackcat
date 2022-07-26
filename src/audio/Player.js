@@ -694,30 +694,30 @@ export default class Player {
           ? "<:play:827734196243398668>"
           : "<:pause:827737900359745586>",
       )
-      .setStyle("PRIMARY");
+      .setStyle(Discord.MessageButtonStyle.PRIMARY);
     let skipButton = new Discord.MessageButton()
       .setCustomId("skip")
       .setEmoji("<:skip:827734282318905355>")
-      .setStyle("PRIMARY");
+      .setStyle(Discord.ButtonStyle.Primary);
     let stopButton = new Discord.MessageButton()
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
-      .setStyle("DANGER");
+      .setStyle(Discord.ButtonStyle.Danger);
 
     let volDownButton, volUpButton, hintButton;
     if (!this._optimize) {
       volDownButton = new Discord.MessageButton()
         .setCustomId("voldown")
         .setEmoji("<:vol_down:827734683340111913>")
-        .setStyle("SUCCESS");
+        .setStyle(Discord.ButtonStyle.Success);
       volUpButton = new Discord.MessageButton()
         .setCustomId("volup")
         .setEmoji("<:vol_up:827734772889157722>")
-        .setStyle("SUCCESS");
+        .setStyle(Discord.ButtonStyle.Success);
       hintButton = new Discord.MessageButton()
         .setCustomId("mute")
         .setEmoji("<:mute:827734384606052392>")
-        .setStyle("SUCCESS");
+        .setStyle(Discord.ButtonStyle.Success);
     }
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);

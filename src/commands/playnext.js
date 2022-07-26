@@ -1,4 +1,7 @@
-import { MessageEmbed } from "discord.js";
+import {
+  MessageEmbed,
+  ApplicationCommandOptionType,
+} from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import joinVC from "../util/joinVC.js";
@@ -12,7 +15,7 @@ export default {
       {
         name: "song",
         description: "歌曲編號",
-        type: 4, // integer
+        type: ApplicationCommandOptionType.Integer,
         required: true,
       },
     ],

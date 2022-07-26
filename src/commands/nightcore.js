@@ -1,7 +1,10 @@
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import joinVC from "../util/joinVC.js";
-import { MessageEmbed } from "discord.js";
+import {
+  MessageEmbed,
+  ApplicationCommandOptionType,
+} from "discord.js";
 import { danger } from "../color.js";
 
 export default {
@@ -10,7 +13,7 @@ export default {
     description: "啟動Nightcore音效",
     options: [
       {
-        type: 3, //STRING
+        type: ApplicationCommandOptionType.String,
         name: "name",
         description:
           "YouTube上的音樂名稱/網址，使用這個值來直接播放Nightcore音樂",
