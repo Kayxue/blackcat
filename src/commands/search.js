@@ -245,14 +245,14 @@ export default {
 
     let searchMessage,
       currentPage = 0;
-    //try {
-    searchMessage = await interaction.editReply({
-      embeds: [embeds[currentPage]],
-      components: [buttons],
-    });
-    //} catch (e) {
-    //  return;
-    //}
+    try {
+      searchMessage = await interaction.editReply({
+        embeds: [embeds[currentPage]],
+        components: [buttons],
+      });
+    } catch (e) {
+      return;
+    }
 
     let collector = new InteractionCollector(interaction.client, {
       interactionType: "MESSAGE_COMPONENT",
