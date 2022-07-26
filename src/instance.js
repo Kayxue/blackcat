@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import Discord from "discord.js";
+import Cluster from "discord-hybrid-sharding";
 import fs from "node:fs";
 
 import log from "./logger.js";
@@ -26,7 +27,10 @@ const client = new Discord.Client({
       },
     ],
   },
+  shards: Cluster.data.SHARD_LIST,
+  shardCount: Cluster.data.TOTAL_SHARDS,
 });
+client.cluster = new Cluster.Client(client);
 
 client.commands = new Discord.Collection();
 client.players = new Map();
@@ -58,10 +62,3 @@ eventFiles.forEach(async (event) => {
 });
 
 client.login(config.token);
-
-process.on("message", (message) => {
-  if (message.type === "shardId") {
-    client.shardId = message.value;
-    log.info(`分片已接收到ID ${message.value}`);
-  }
-});

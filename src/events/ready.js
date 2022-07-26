@@ -38,7 +38,6 @@ export default {
             type: "LISTENING",
           },
         ],
-        shardId: client.shardId,
       });
     }, 20_000);
   },

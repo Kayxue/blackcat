@@ -18,11 +18,11 @@ export default {
     minutes %= 60;
     hours %= 24;
 
-    let guilds = await interaction.client.shard.fetchClientValues(
-      "guilds.cache.size",
+    let guilds = await interaction.client.cluster.broadcastEval(
+      "this.guilds.cache.size",
     );
-    let players = await interaction.client.shard.fetchClientValues(
-      "players.size",
+    let players = await interaction.client.cluster.broadcastEval(
+      "this.players.size",
     );
 
     let allGuilds = guilds.reduce(
@@ -57,7 +57,7 @@ export default {
         {
           name: "❄ ┃ 分片",
           value: `**${interaction.guild.shardId + 1}/${
-            interaction.client.shard.count
+            interaction.client.cluster.info.TOTAL_SHARDS
           }**`,
           inline: true,
         },
