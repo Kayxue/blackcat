@@ -1,9 +1,10 @@
 import log from "../logger.js";
 import {
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
   ButtonStyle,
+  InteractionType,
 } from "discord.js";
 import { danger } from "../color.js";
 
@@ -11,23 +12,24 @@ export default {
   event: "interactionCreate",
   once: false,
   run: async (_client, interaction) => {
-    if (!interaction.isCommand()) return;
+    if (interaction.type !== InteractionType.ApplicationCommand)
+      return;
 
     if (!interaction.guild) {
-      let guildEmbed = new MessageEmbed()
+      let guildEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須把我邀請進一個伺服器裡！")
         .setDescription(
           "你沒辦法在私訊中使用黑貓，必須要在一個伺服器裡使用黑貓。\n" +
             "您可以點擊底下的按鈕來邀請黑貓進伺服器",
         )
         .setColor(danger);
-      let inviteButton = new MessageButton()
+      let inviteButton = new ButtonBuilder()
         .setLabel("邀請黑貓")
         .setStyle(ButtonStyle.Link)
         .setURL(
           "https://discord.com/oauth2/authorize?client_id=848006097197334568&permissions=415776501073&scope=applications.commands%20bot",
         );
-      let buttonRow = new MessageActionRow().addComponents(
+      let buttonRow = new ActionRowBuilder().addComponents(
         inviteButton,
       );
       return interaction
@@ -44,7 +46,7 @@ export default {
     );
 
     if (!command) {
-      let notfoundEmbed = new MessageEmbed()
+      let notfoundEmbed = new EmbedBuilder()
         .setTitle(`🤔 ┃ 找不到名為${interaction.commandName}的指令`)
         .setColor(danger);
       return interaction
@@ -57,13 +59,18 @@ export default {
     try {
       command.run(interaction);
     } catch (error) {
-      let errorEmbed = new MessageEmbed()
+      let errorEmbed = new EmbedBuilder()
         .setTitle("🙁 ┃ 執行指令時出現錯誤")
-        .addField(
-          "️⚠️ ┃  錯誤內容:",
-          "```js\n" + `${error.message}\n` + "```",
-        )
-        .addField("🗨️ ┃ 指令內容", interaction.commandName)
+        .addFields([
+          {
+            name: "️⚠️ ┃  錯誤內容:",
+            value: "```js\n" + `${error.message}\n` + "```",
+          },
+          {
+            name: "🗨️ ┃ 指令內容",
+            value: interaction.commandName,
+          },
+        ])
         .setTimestamp()
         .setColor(danger);
       if (interaction.replied) {

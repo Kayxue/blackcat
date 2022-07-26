@@ -4,9 +4,9 @@ import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import color from "../color.js";
 import {
-  MessageEmbed,
-  MessageButton,
-  MessageActionRow,
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
   InteractionCollector,
   ApplicationCommandOptionType,
   ButtonStyle,
@@ -27,7 +27,7 @@ export default {
   },
   run: async function (interaction) {
     if (!interaction.member.voice?.channel) {
-      let joinVCEmbed = new MessageEmbed()
+      let joinVCEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(color.danger);
       return interaction.reply({
@@ -61,7 +61,7 @@ export default {
       play.yt_validate(query) === "video" &&
       query.startsWith("https://")
     ) {
-      let videoEmbed = new MessageEmbed()
+      let videoEmbed = new EmbedBuilder()
         .setTitle(
           `🤔 ┃ ${interaction.user.username}，您是不是要播放這個影片?`,
         )
@@ -73,17 +73,17 @@ export default {
         })
         .setColor(color.warning);
 
-      let yesBtn = new MessageButton()
+      let yesBtn = new ButtonBuilder()
         .setEmoji("✅")
         .setLabel("播放這個歌曲")
         .setStyle(ButtonStyle.Success)
         .setCustomId("yes");
-      let noBtn = new MessageButton()
+      let noBtn = new ButtonBuilder()
         .setEmoji("❌")
         .setLabel("不要播放這個歌曲")
         .setStyle(ButtonStyle.Success)
         .setCustomId("no");
-      let actionRow = new MessageActionRow().addComponents(
+      let actionRow = new ActionRowBuilder().addComponents(
         yesBtn,
         noBtn,
       );
@@ -112,7 +112,7 @@ export default {
       if (selected) {
         if (selected.customId === "yes") {
           player.play(query, interaction, true);
-          let playEmbed = new MessageEmbed()
+          let playEmbed = new EmbedBuilder()
             .setTitle("🎶 ┃ 已將歌曲加入播放序列中")
             .setDescription(`歌曲網址: ${query}`)
             .setColor(color.success);
@@ -122,14 +122,14 @@ export default {
       }
     }
 
-    let searchEmbed = new MessageEmbed()
+    let searchEmbed = new EmbedBuilder()
       .setTitle(`🔍 ┃ 正在搜尋 **${query}**`)
       .setColor(color.success);
-    try {
-      await interaction.reply({
+    if (interaction.isRepliable()) {
+      interaction.reply({
         embeds: [searchEmbed],
       });
-    } catch (_e) {
+    } else {
       interaction
         .editReply({
           embeds: [searchEmbed],
@@ -147,7 +147,7 @@ export default {
       });
     } catch (e) {
       if (e.message.includes("confirm your age")) {
-        let invaildEmbed = new MessageEmbed()
+        let invaildEmbed = new EmbedBuilder()
           .setTitle(
             "😱 ┃ 我沒辦法取得你想播放的音樂，因為需要登入帳號",
           )
@@ -161,7 +161,7 @@ export default {
           })
           .catch(this.noop);
       } else if (e.message.includes("429")) {
-        let limitEmbed = new MessageEmbed()
+        let limitEmbed = new EmbedBuilder()
           .setTitle("😱 ┃ 現在無法取得這個音樂，請稍後再試")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -173,7 +173,7 @@ export default {
           })
           .catch(this.noop);
       } else if (e.message.includes("private")) {
-        let privateEmbed = new MessageEmbed()
+        let privateEmbed = new EmbedBuilder()
           .setTitle("😱 ┃ 這是私人影片")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -185,7 +185,7 @@ export default {
           })
           .catch(this.noop);
       } else {
-        let errorEmbed = new MessageEmbed()
+        let errorEmbed = new EmbedBuilder()
           .setTitle("😱 ┃ 發生了未知的錯誤!")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -205,7 +205,7 @@ export default {
     let embeds = [];
 
     result.forEach((video) => {
-      let videoEmbed = new MessageEmbed()
+      let videoEmbed = new EmbedBuilder()
         .setTitle(`🎶 ┃ ${video.title}`)
         .setDescription(
           `頻道: ${
@@ -222,22 +222,22 @@ export default {
       embeds.push(videoEmbed);
     });
 
-    let previousBtn = new MessageButton()
+    let previousBtn = new ButtonBuilder()
       .setCustomId("previous")
       .setEmoji("◀️")
       .setStyle(ButtonStyle.Primary)
       .setDisabled(true);
-    let nextBtn = new MessageButton()
+    let nextBtn = new ButtonBuilder()
       .setCustomId("next")
       .setEmoji("▶️")
       .setStyle(ButtonStyle.Primary);
-    let chooseBtn = new MessageButton()
+    let chooseBtn = new ButtonBuilder()
       .setCustomId("choose")
       .setEmoji("✅")
       .setStyle(ButtonStyle.Primary);
 
     if (embeds.length - 1 === 0) nextBtn.setDisabled(true);
-    let buttons = new MessageActionRow().setComponents(
+    let buttons = new ActionRowBuilder().setComponents(
       previousBtn,
       chooseBtn,
       nextBtn,
@@ -280,7 +280,7 @@ export default {
             previousBtn.setDisabled(false);
             nextBtn.setDisabled(false);
           }
-          buttons = new MessageActionRow().setComponents(
+          buttons = new ActionRowBuilder().setComponents(
             previousBtn,
             chooseBtn,
             nextBtn,
@@ -302,7 +302,7 @@ export default {
             previousBtn.setDisabled(false);
             nextBtn.setDisabled(false);
           }
-          buttons = new MessageActionRow().setComponents(
+          buttons = new ActionRowBuilder().setComponents(
             previousBtn,
             chooseBtn,
             nextBtn,
@@ -316,7 +316,7 @@ export default {
         }
         case "choose": {
           collector.stop("choosen");
-          let choosenEmbed = new MessageEmbed()
+          let choosenEmbed = new EmbedBuilder()
             .setTitle(
               `🔍 ${result[currentPage].title} 已經被加入播放清單中`,
             )
@@ -333,7 +333,7 @@ export default {
 
     collector.on("end", (_collected, reason) => {
       if (reason !== "choosen") {
-        let expireEmbed = new MessageEmbed()
+        let expireEmbed = new EmbedBuilder()
           .setTitle("😐 搜尋已取消")
           .setColor(color.danger);
         interaction.editReply({

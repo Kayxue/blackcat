@@ -1,5 +1,5 @@
 import {
-  MessageEmbed,
+  EmbedBuilder,
   ApplicationCommandOptionType,
 } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
@@ -40,7 +40,7 @@ export default {
     }
     let number = interaction.options.getInteger("song");
     if (number <= 0) {
-      let invaildEmbed = new MessageEmbed()
+      let invaildEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 歌曲編號不能小於或等於0!")
         .setColor(danger);
       return interaction
@@ -49,7 +49,7 @@ export default {
         })
         .catch(() => {});
     } else if (number <= 2) {
-      let invaildEmbed = new MessageEmbed()
+      let invaildEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 歌曲編號不能是1或是2!")
         .setColor(danger);
       return interaction
@@ -58,7 +58,7 @@ export default {
         })
         .catch(() => {});
     } else if (number > player.songs.length) {
-      let invaildEmbed = new MessageEmbed()
+      let invaildEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 歌曲編號不能大約序列長度")
         .setColor(danger);
       return interaction

@@ -2,7 +2,7 @@ import PlayerManager from "../audio/PlayerManager.js";
 import Canvas from "@napi-rs/canvas";
 import imageSize from "image-size";
 import { request } from "undici";
-import { MessageEmbed, MessageAttachment } from "discord.js";
+import { EmbedBuilder, Attachment } from "discord.js";
 import { blurple } from "../color.js";
 import { join, resolve } from "node:path";
 
@@ -163,12 +163,12 @@ export default {
     );
     let buffer = canvas.toBuffer("image/png");
 
-    let attachment = new MessageAttachment(
+    let attachment = new Attachment(
       buffer,
       `${interaction.guildId}.png`,
     );
 
-    let nowEmbed = new MessageEmbed()
+    let nowEmbed = new EmbedBuilder()
       .setTitle("🎧 ┃ 正在播放")
       .setDescription(`[${data.title}](${data.url})`)
       .setThumbnail(data.thumbnail)

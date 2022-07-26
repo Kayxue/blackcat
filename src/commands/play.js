@@ -1,5 +1,5 @@
 import {
-  MessageEmbed,
+  EmbedBuilder,
   ApplicationCommandOptionType,
 } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
@@ -21,7 +21,7 @@ export default {
   },
   run: async function (interaction) {
     if (!interaction.member.voice?.channel) {
-      let joinVCEmbed = new MessageEmbed()
+      let joinVCEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(danger);
       return interaction

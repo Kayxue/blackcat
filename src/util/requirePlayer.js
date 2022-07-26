@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { warning } from "../color.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
@@ -20,8 +20,8 @@ export default async function requirePlayer(interaction, callback) {
       interaction.client,
       interaction.guild.id,
     );
-    if (!interaction.guild.me.voice.channel && player) {
-      let corruptedEmbed = new MessageEmbed()
+    if (!interaction.guild.members.me.voice.channel && player) {
+      let corruptedEmbed = new EmbedBuilder()
         .setTitle("😔 播放器已損毀，我們正在嘗試建立一個新的")
         .setColor(warning);
       try {

@@ -1,5 +1,5 @@
 import {
-  MessageEmbed,
+  EmbedBuilder,
   ApplicationCommandOptionType,
 } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
@@ -22,7 +22,7 @@ export default {
   },
   run: function (interaction) {
     if (interaction.client.config.optimizeQuality) {
-      let optimizeEmbed = new MessageEmbed()
+      let optimizeEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 為了優化音樂品質，音量已停用")
         .setDescription(
           "如果你還是想要修改音量，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/blackcat)",
@@ -60,14 +60,14 @@ export default {
       }
 
       player.volume = interaction.options.getInteger("volume") / 100;
-      let volumeEmbed = new MessageEmbed()
+      let volumeEmbed = new EmbedBuilder()
         .setTitle(`🔊 設定音量至 ┃ ${player.volume * 100}%`)
         .setColor(success);
       return interaction.reply({
         embeds: [volumeEmbed],
       });
     } else {
-      let volumeEmbed = new MessageEmbed()
+      let volumeEmbed = new EmbedBuilder()
         .setTitle(`🔊 目前音量 ┃ ${player.volume * 100}%`)
         .setColor(blurple);
       return interaction.reply({

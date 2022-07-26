@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import { danger } from "../color.js";
 
@@ -16,14 +16,14 @@ export default {
       if (!player) return; // Guild is not playing music
 
       setTimeout(() => {
-        let voiceChannel = newState.guild.me.voice.channel;
+        let voiceChannel = newState.guild.members.me.voice.channel;
         if (!voiceChannel) return; // Bot has been kicked out by user, let player do it's work
 
         let members = voiceChannel.members.filter(
           (member) => !member.user.bot,
         );
         if (members.size <= 0) {
-          let leaveEmbed = new MessageEmbed()
+          let leaveEmbed = new EmbedBuilder()
             .setTitle("👋 ┃ 語音頻道已經沒人了，所以我停止了音樂")
             .setColor(danger);
           player.textChannel

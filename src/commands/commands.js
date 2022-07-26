@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { blurple } from "../color.js";
 
 export default {
@@ -12,7 +12,7 @@ export default {
     let formatted = commands.map(
       (i) => `\`${i.data.name}\`: **${i.data.description}**`,
     );
-    let commandsEmbed = new MessageEmbed()
+    let commandsEmbed = new EmbedBuilder()
       .setTitle("🗒️ ┃ 指令清單")
       .setDescription(formatted.join("\n"))
       .setColor(blurple);

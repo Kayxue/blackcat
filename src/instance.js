@@ -10,8 +10,8 @@ import configReslover from "./util/configReslover.js";
 const config = await configReslover();
 const client = new Discord.Client({
   intents: [
-    Discord.Intents.FLAGS.GUILDS,
-    Discord.Intents.FLAGS.GUILD_VOICE_STATES,
+    Discord.IntentsBitField.Flags.Guilds,
+    Discord.IntentsBitField.Flags.GuildVoiceStates,
   ],
   allowedMentions: {
     parse: ["users"],

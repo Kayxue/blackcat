@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { danger } from "../color.js";
 import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
@@ -23,7 +23,7 @@ export default {
       if (!allowModify(interaction)) return joinVC(interaction);
     }
     if (!player.paused) {
-      let pausedEmbed = new MessageEmbed()
+      let pausedEmbed = new EmbedBuilder()
         .setTitle("▶️ ┃ 音樂已經在播放了")
         .setDescription("輸入`/pause`來暫停音樂")
         .setColor(danger);

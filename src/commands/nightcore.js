@@ -2,7 +2,7 @@ import PlayerManager from "../audio/PlayerManager.js";
 import allowModify from "../util/allowModify.js";
 import joinVC from "../util/joinVC.js";
 import {
-  MessageEmbed,
+  EmbedBuilder,
   ApplicationCommandOptionType,
 } from "discord.js";
 import { danger } from "../color.js";
@@ -23,7 +23,7 @@ export default {
   },
   run: async function (interaction) {
     if (interaction.client.config.optimizeQuality) {
-      let optimizeEmbed = new MessageEmbed()
+      let optimizeEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 為了優化音樂品質，Nightcore已停用")
         .setDescription(
           "如果你還是想要啟用Nightcore音效，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/blackcat)",
@@ -37,7 +37,7 @@ export default {
     }
 
     if (!interaction.member.voice?.channel) {
-      let joinVCEmbed = new MessageEmbed()
+      let joinVCEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(danger);
       return interaction
@@ -75,7 +75,7 @@ export default {
       player.play(url, interaction, false, true);
     } else if (!url && player.songs.length === 0) {
       player.nightcore(interaction);
-      // let noURLEmbed = new MessageEmbed()
+      // let noURLEmbed = new EmbedBuilder()
       //   .setColor(danger)
       //   .setTitle("❌ ┃ 請輸入網址來使用Nightcore模式播放音樂");
       // interaction

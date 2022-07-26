@@ -78,7 +78,7 @@ export default class Player {
       });
     } catch (e) {
       log.error(e.message, e);
-      let errorEmbed = new Discord.MessageEmbed()
+      let errorEmbed = new Discord.EmbedBuilder()
         .setTitle("🙁 ┃ 加入語音頻道時發生錯誤")
         .setDescription(
           "加入語音頻道時發生了一些錯誤...\n" +
@@ -98,7 +98,7 @@ export default class Player {
       try {
         this.setSpeaker();
       } catch (e) {
-        let notSpeakerEmbed = new Discord.MessageEmbed()
+        let notSpeakerEmbed = new Discord.EmbedBuilder()
           .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
           .setColor(colors.danger);
         this._channel
@@ -143,7 +143,7 @@ export default class Player {
           log.warn(
             `${this._guildId}:${this._channelId} 無法重新連線`,
           );
-          let disconnecteEmbed = new Discord.MessageEmbed()
+          let disconnecteEmbed = new Discord.EmbedBuilder()
             .setTitle("😕 ┃ 我的語音連接斷開了")
             .setColor(colors.danger);
           this._channel
@@ -178,8 +178,8 @@ export default class Player {
 
   async setSpeaker() {
     await entersState(this._connection, VoiceConnectionStatus.Ready);
-    this._guild.me.voice.setSuppressed(false).catch(() => {
-      let notSpeakerEmbed = new Discord.MessageEmbed()
+    this._guild.members.me.voice.setSuppressed(false).catch(() => {
+      let notSpeakerEmbed = new Discord.EmbedBuilder()
         .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
         .setColor(colors.danger);
       this._channel
@@ -201,7 +201,7 @@ export default class Player {
       isFull = null,
       isPlaylist = false;
 
-    let searchEmbed = new Discord.MessageEmbed()
+    let searchEmbed = new Discord.EmbedBuilder()
       .setTitle(`🔍 ┃ 正在搜尋 **${track}**`)
       .setColor(colors.success);
     if (!fromSearch) {
@@ -246,7 +246,7 @@ export default class Player {
       } catch (e) {
         return this.handelYoutubeError(e);
       }
-      let playlistEmbed = new Discord.MessageEmbed()
+      let playlistEmbed = new Discord.EmbedBuilder()
         .setTitle(
           `🔍 ┃ 已加入整個播放清單，共有 **${videos.length}** 首歌曲`,
         )
@@ -293,7 +293,7 @@ export default class Player {
       this.playStream();
     } else {
       this._songs.push(...parsedData);
-      let addedEmbed = new Discord.MessageEmbed()
+      let addedEmbed = new Discord.EmbedBuilder()
         .setTitle(`✅ ┃ 成功加入${parsedData.length}首歌曲至播放清單`)
         .setDescription(
           `播放清單內目前有 ${this._songs.length} 首歌曲`,
@@ -314,7 +314,7 @@ export default class Player {
 
   skip(interaction) {
     if (!this._audio?.metadata) {
-      let nomusicEmbed = new Discord.MessageEmbed()
+      let nomusicEmbed = new Discord.EmbedBuilder()
         .setTitle("❌️ ┃ 沒有音樂正在播放")
         .setColor(colors.danger);
       return interaction
@@ -324,7 +324,7 @@ export default class Player {
         .catch(this.noop);
     }
 
-    let skipEmbed = new Discord.MessageEmbed()
+    let skipEmbed = new Discord.EmbedBuilder()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
     if (this._paused) this._player.unpause();
@@ -338,7 +338,7 @@ export default class Player {
   }
 
   pause(interaction) {
-    let pauseEmbed = new Discord.MessageEmbed()
+    let pauseEmbed = new Discord.EmbedBuilder()
       .setTitle("⏸️ ┃ 暫停音樂")
       .setColor(colors.success);
     this._paused = true;
@@ -352,7 +352,7 @@ export default class Player {
   }
 
   unpause(interaction) {
-    let unpauseEmbed = new Discord.MessageEmbed()
+    let unpauseEmbed = new Discord.EmbedBuilder()
       .setTitle("▶️ ┃ 繼續播放音樂")
       .setColor(colors.success);
     this._paused = false;
@@ -380,7 +380,7 @@ export default class Player {
       shuffled[randomIndex] = temporaryValue;
     }
 
-    let shuffleEmbed = new Discord.MessageEmbed()
+    let shuffleEmbed = new Discord.EmbedBuilder()
       .setTitle("🔀 ┃ 重新排序音樂")
       .setColor(colors.success);
     this._songs = shuffled;
@@ -392,7 +392,7 @@ export default class Player {
   }
 
   async stop(interaction, force = false) {
-    let stopEmbed = new Discord.MessageEmbed()
+    let stopEmbed = new Discord.EmbedBuilder()
       .setTitle("⏹️ ┃ 停止播放音樂")
       .setColor(colors.success);
     if (!force) {
@@ -409,7 +409,7 @@ export default class Player {
   }
 
   loop(interaction) {
-    let loopEmbed = new Discord.MessageEmbed().setColor(
+    let loopEmbed = new Discord.EmbedBuilder().setColor(
       colors.success,
     );
     if (!this._loop) {
@@ -429,7 +429,7 @@ export default class Player {
   }
 
   repeat(interaction) {
-    let repeatEmbed = new Discord.MessageEmbed()
+    let repeatEmbed = new Discord.EmbedBuilder()
       .setTitle("🔂 ┃ 重複播放目前的歌曲")
       .setColor(colors.success);
     if (!this._repeat) {
@@ -449,7 +449,7 @@ export default class Player {
   }
 
   nightcore(interaction) {
-    let nightcoreEmbed = new Discord.MessageEmbed().setColor(
+    let nightcoreEmbed = new Discord.EmbedBuilder().setColor(
       colors.success,
     );
     if (!this._nightcore) {
@@ -470,7 +470,7 @@ export default class Player {
   }
 
   playnext(interaction, index) {
-    let playnextEmbed = new Discord.MessageEmbed()
+    let playnextEmbed = new Discord.EmbedBuilder()
       .setTitle(
         `⚡ ┃ ${
           this._songs[index - 1].title
@@ -663,7 +663,7 @@ export default class Player {
     });
     this._player.play(this._audio);
 
-    let playingEmbed = new Discord.MessageEmbed()
+    let playingEmbed = new Discord.EmbedBuilder()
       .setTitle(
         `🕒 正在準備播放 ${this._songs[0]?.title ?? "未知的歌曲"}...`,
       )
@@ -687,34 +687,34 @@ export default class Player {
   }
 
   async updateNoticeEmbed() {
-    let musicButton = new Discord.MessageButton()
+    let musicButton = new Discord.ButtonBuilder()
       .setCustomId("pause")
       .setEmoji(
         this._paused
           ? "<:play:827734196243398668>"
           : "<:pause:827737900359745586>",
       )
-      .setStyle(Discord.MessageButtonStyle.PRIMARY);
-    let skipButton = new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary);
+    let skipButton = new Discord.ButtonBuilder()
       .setCustomId("skip")
       .setEmoji("<:skip:827734282318905355>")
       .setStyle(Discord.ButtonStyle.Primary);
-    let stopButton = new Discord.MessageButton()
+    let stopButton = new Discord.ButtonBuilder()
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
       .setStyle(Discord.ButtonStyle.Danger);
 
     let volDownButton, volUpButton, hintButton;
     if (!this._optimize) {
-      volDownButton = new Discord.MessageButton()
+      volDownButton = new Discord.ButtonBuilder()
         .setCustomId("voldown")
         .setEmoji("<:vol_down:827734683340111913>")
         .setStyle(Discord.ButtonStyle.Success);
-      volUpButton = new Discord.MessageButton()
+      volUpButton = new Discord.ButtonBuilder()
         .setCustomId("volup")
         .setEmoji("<:vol_up:827734772889157722>")
         .setStyle(Discord.ButtonStyle.Success);
-      hintButton = new Discord.MessageButton()
+      hintButton = new Discord.ButtonBuilder()
         .setCustomId("mute")
         .setEmoji("<:mute:827734384606052392>")
         .setStyle(Discord.ButtonStyle.Success);
@@ -730,14 +730,14 @@ export default class Player {
     }
 
     let rowTwo;
-    let rowOne = new Discord.MessageActionRow().addComponents(
+    let rowOne = new Discord.ActionRowBuilder().addComponents(
       musicButton,
       skipButton,
       stopButton,
     );
     if (!this._optimize) {
       // eslint-disable-next-line no-unused-vars
-      rowTwo = new Discord.MessageActionRow().addComponents(
+      rowTwo = new Discord.ActionRowBuilder().addComponents(
         volDownButton,
         volUpButton,
         hintButton,
@@ -888,12 +888,11 @@ export default class Player {
     );
     let buffer = canvas.toBuffer("image/png");
 
-    let attachment = new Discord.MessageAttachment(
-      buffer,
-      `${this._guildId}.png`,
-    );
+    let attachment = new Discord.AttachmentBuilder(buffer, {
+      name: `${this._guildId}.png`,
+    });
 
-    let playingEmbed = new Discord.MessageEmbed()
+    let playingEmbed = new Discord.EmbedBuilder()
       .setDescription(
         `🎵 ┃ 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`,
       )
@@ -903,23 +902,45 @@ export default class Player {
 
     if (!this._optimize) {
       if (this._muted)
-        playingEmbed.addField("🔇 ┃ 靜音", "開啟", true);
+        playingEmbed.addFields([
+          {
+            name: "🔇 ┃ 靜音",
+            value: "開啟",
+            inline: true,
+          },
+        ]);
       else
-        playingEmbed.addField(
-          "🔊 ┃ 音量",
-          `${this._volume * 100}%`,
-          true,
-        );
+        playingEmbed.addFields([
+          {
+            name: "🔊 ┃ 音量",
+            value: `${this._volume * 100}%`,
+            inline: true,
+          },
+        ]);
     }
     if (this._loop)
-      playingEmbed.addField("🔁 ┃ 循環播放", "開啟", true);
+      playingEmbed.addFields([
+        {
+          name: "🔁 ┃ 循環播放",
+          value: "開啟",
+          inline: true,
+        },
+      ]);
     if (this._repeat)
-      playingEmbed.addField("🔂 ┃ 重複播放", "開啟", true);
-    playingEmbed.addField(
-      "👥 ┃ 點歌者",
-      this._audio.metadata.queuer,
-      true,
-    );
+      playingEmbed.addFields([
+        {
+          name: "🔂 ┃ 重複播放",
+          value: "開啟",
+          inline: true,
+        },
+      ]);
+    playingEmbed.addFields([
+      {
+        name: "👥 ┃ 點歌者",
+        value: this._audio.metadata.queuer,
+        inline: true,
+      },
+    ]);
 
     let components = [rowOne];
     if (!this._optimize) components.push(rowTwo);
@@ -989,7 +1010,7 @@ export default class Player {
 
   handelYoutubeError(e) {
     if (e.message.includes("confirm your age")) {
-      let invaildEmbed = new Discord.MessageEmbed()
+      let invaildEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 我沒辦法取得你想播放的音樂，因為需要登入帳號")
         .setDescription(
           "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
@@ -1001,7 +1022,7 @@ export default class Player {
         })
         .catch(this.noop);
     } else if (e.message.includes("429")) {
-      let limitEmbed = new Discord.MessageEmbed()
+      let limitEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 現在無法取得這個音樂，請稍後再試")
         .setDescription(
           "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -1013,7 +1034,7 @@ export default class Player {
         })
         .catch(this.noop);
     } else if (e.message.includes("private")) {
-      let privateEmbed = new Discord.MessageEmbed()
+      let privateEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 這是私人影片")
         .setDescription(
           "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -1025,7 +1046,7 @@ export default class Player {
         })
         .catch(this.noop);
     } else {
-      let errorEmbed = new Discord.MessageEmbed()
+      let errorEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 發生了未知的錯誤!")
         .setDescription(
           "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -1077,7 +1098,7 @@ export default class Player {
     this._raw = null;
 
     if (this._songs.length === 0) {
-      let endEmbed = new Discord.MessageEmbed()
+      let endEmbed = new Discord.EmbedBuilder()
         .setTitle("👌 ┃ 序列裡的歌曲播放完畢")
         .setColor(colors.success);
       if (!this._guildDeleted) {
@@ -1165,8 +1186,8 @@ export default class Player {
         interaction.reply("❌ ┃ 發生了一些錯誤");
         return;
     }
-    let clickEmbed = new Discord.MessageEmbed()
-      .addField(replyMessage, "\u200b")
+    let clickEmbed = new Discord.EmbedBuilder()
+      .addFields([{ name: replyMessage, value: "\u200b" }])
       .setFooter({
         text: interaction.user.username,
         iconURL: interaction.user.avatarURL({
