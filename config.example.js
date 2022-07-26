@@ -1,5 +1,5 @@
 export default {
-  token: "BOT_TOKEN" || process.env.TOKEN,
+  token: process.env.TOKEN || "BOT_TOKEN",
   // 範例: MTdqrd0vGDV1dcF0QPjom6OB.NQxUhj.I4JjFHIympR3mVF3UiUbbD5VVbi
   // 如果要從環境變數使用，請輸入:
   // process.env.<變數名稱>
