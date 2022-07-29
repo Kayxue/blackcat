@@ -103,8 +103,6 @@
     -e COOKIE="YouTube Cookie"
     -e DEV_GUILD="測試伺服器ID" \
     -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
-    -e ENABLE_API="是否啟用API(true/false)" \
-    -e API_PORT="API埠號" \
     --name blackcat wolfyuan/blackcat
   ```
 
@@ -119,8 +117,6 @@
     -e COOKIE="YouTube Cookie"
     -e DEV_GUILD="測試伺服器ID" \
     -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
-    -e ENABLE_API="是否啟用API(true/false)" \
-    -e API_PORT="API埠號" \
     --name blackcat blackcat:latest
   ```
 
