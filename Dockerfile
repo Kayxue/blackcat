@@ -1,8 +1,7 @@
-FROM node:lts-alpine
+FROM node:current
 
-RUN apk add --no-cache python3 make gcc g++ git libtool autoconf automake cmake bash && \
-  addgroup -S catrunner && \
-  adduser -S catrunner -G catrunner
+RUN apt update && apt install -qqy python3 make gcc g++ git libtool autoconf automake cmake bash && \
+  useradd catrunner
 
 ENV HUSKY=0
 ARG IN_DOCKER=1
@@ -15,7 +14,7 @@ USER catrunner
 RUN yarn install
 
 USER root
-RUN apk del python3 make gcc g++ git libtool autoconf automake cmake
+RUN apt remove -qqy python3 make gcc g++ git libtool autoconf automake cmake
 USER catrunner
 
 ENTRYPOINT ["node", "src/index.js"]
