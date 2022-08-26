@@ -10,6 +10,8 @@ import {
   InteractionCollector,
   ApplicationCommandOptionType,
   ButtonStyle,
+  ComponentType,
+  InteractionType,
 } from "discord.js";
 
 export default {
@@ -116,7 +118,7 @@ export default {
             .setTitle("🎶 ┃ 已將歌曲加入播放序列中")
             .setDescription(`歌曲網址: ${query}`)
             .setColor(color.success);
-          selected.reply({ embeds: [playEmbed] });
+          interaction.editReply({ embeds: [playEmbed] });
           return;
         }
       }
@@ -255,10 +257,10 @@ export default {
     }
 
     let collector = new InteractionCollector(interaction.client, {
-      interactionType: "MESSAGE_COMPONENT",
+      interactionType: InteractionType.MessageComponent,
       idle: 15_000,
       message: searchMessage,
-      componentType: "BUTTON",
+      componentType: ComponentType.Button,
     });
 
     collector.on("collect", (collected) => {
@@ -272,9 +274,9 @@ export default {
       switch (collected.customId) {
         case "previous": {
           currentPage -= 1;
-          if (currentPage <= 1) {
+          if (currentPage <= 0) {
             previousBtn.setDisabled(true);
-            currentPage = 1;
+            currentPage = 0;
             nextBtn.setDisabled(false);
           } else {
             previousBtn.setDisabled(false);

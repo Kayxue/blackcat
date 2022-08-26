@@ -676,7 +676,7 @@ export default class Player {
       .catch(this.noop);
     this._buttonCollector =
       this._noticeMessage?.createMessageComponentCollector({
-        componentType: "BUTTON",
+        componentType: Discord.ComponentType.Button,
       });
 
     this.updateNoticeEmbed();

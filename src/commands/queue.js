@@ -6,6 +6,7 @@ import {
   ActionRowBuilder,
   InteractionCollector,
   ButtonStyle,
+  ComponentType,
 } from "discord.js";
 
 export default {
@@ -99,7 +100,7 @@ export default {
     }
 
     let collector = new InteractionCollector(interaction.client, {
-      componentType: "BUTTON",
+      componentType: ComponentType.Button,
       interactionType: "MESSAGE_COMPONENT",
       idle: 15_000,
       message: queueMessage,
