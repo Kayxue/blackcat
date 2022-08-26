@@ -698,7 +698,7 @@ export default class Player {
     let skipButton = new Discord.ButtonBuilder()
       .setCustomId("skip")
       .setEmoji("<:skip:827734282318905355>")
-      .setStyle(Discord.ButtonStyle.Primary);
+      .setStyle(Discord.ButtonStyle.Secondary);
     let stopButton = new Discord.ButtonBuilder()
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
@@ -709,15 +709,15 @@ export default class Player {
       volDownButton = new Discord.ButtonBuilder()
         .setCustomId("voldown")
         .setEmoji("<:vol_down:827734683340111913>")
-        .setStyle(Discord.ButtonStyle.Success);
+        .setStyle(Discord.ButtonStyle.Primary);
       volUpButton = new Discord.ButtonBuilder()
         .setCustomId("volup")
         .setEmoji("<:vol_up:827734772889157722>")
-        .setStyle(Discord.ButtonStyle.Success);
+        .setStyle(Discord.ButtonStyle.Primary);
       hintButton = new Discord.ButtonBuilder()
         .setCustomId("mute")
         .setEmoji("<:mute:827734384606052392>")
-        .setStyle(Discord.ButtonStyle.Success);
+        .setStyle(Discord.ButtonStyle.Primary);
     }
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
