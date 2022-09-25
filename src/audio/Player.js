@@ -708,16 +708,16 @@ export default class Player {
     if (!this._optimize) {
       volDownButton = new Discord.ButtonBuilder()
         .setCustomId("voldown")
-        .setEmoji("<:vol_down:827734683340111913>")
-        .setStyle(Discord.ButtonStyle.Primary);
+        .setEmoji("<:vol_down_new:1023467938092679168>")
+        .setStyle(Discord.ButtonStyle.Success);
       volUpButton = new Discord.ButtonBuilder()
         .setCustomId("volup")
-        .setEmoji("<:vol_up:827734772889157722>")
-        .setStyle(Discord.ButtonStyle.Primary);
+        .setEmoji("<:vol_up_new:1023467867942948934>")
+        .setStyle(Discord.ButtonStyle.Success);
       hintButton = new Discord.ButtonBuilder()
         .setCustomId("mute")
-        .setEmoji("<:mute:827734384606052392>")
-        .setStyle(Discord.ButtonStyle.Primary);
+        .setEmoji("<:mute_new:1023467776653926450>")
+        .setStyle(Discord.ButtonStyle.Success);
     }
 
     if (this._songs.length <= 1) skipButton.setDisabled(true);
