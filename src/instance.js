@@ -37,6 +37,10 @@ client.players = new Map();
 client.config = config;
 client.logger = log;
 
+if (config.enableDev) {
+  client.on("debug", log.debug);
+}
+
 let commandFiles = fs
   .readdirSync("./src/commands/")
   .filter((file) => file.endsWith(".js"));

@@ -11,8 +11,12 @@ const manager = new Cluster.Manager("./src/instance.js", {
   token: config.token,
 });
 
+if (config.enableDev) {
+  manager.on("debug", log.debug);
+}
+
 manager.on("shardCreate", (shard) => {
-  log.info(`已啟動分片 ${shard.id}`);
+  log.info(`已啟動分片 ${shard.id}`, "分片");
 });
 
 manager.spawn();

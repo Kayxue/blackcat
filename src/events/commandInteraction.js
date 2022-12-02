@@ -87,7 +87,7 @@ export default {
           .catch(() => {});
       }
 
-      log.error(error.message, error);
+      log.error(error.message, error, "接收");
     }
   },
 };

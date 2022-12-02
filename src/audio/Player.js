@@ -77,7 +77,7 @@ export default class Player {
         adapterCreator: this._guild.voiceAdapterCreator,
       });
     } catch (e) {
-      log.error(e.message, e);
+      log.error(e.message, e, "音樂: 啟動");
       let errorEmbed = new Discord.EmbedBuilder()
         .setTitle("🙁 ┃ 加入語音頻道時發生錯誤")
         .setDescription(
@@ -117,12 +117,18 @@ export default class Player {
     this._connection.subscribe(this._player);
 
     this._connection.on(VoiceConnectionStatus.Ready, () => {
-      log.info(`${this._guildId}:${this._channelId} 已進入預備狀態`);
+      log.info(
+        `${this._guildId}:${this._channelId} 已進入預備狀態`,
+        "音樂: 連結",
+      );
     });
     this._connection.on(
       VoiceConnectionStatus.Disconnected,
       async () => {
-        log.warn(`${this._guildId}:${this._channelId} 語音斷開連結`);
+        log.warn(
+          `${this._guildId}:${this._channelId} 語音斷開連結`,
+          "音樂: 連結",
+        );
         try {
           await Promise.race([
             entersState(
@@ -138,10 +144,12 @@ export default class Player {
           ]);
           log.info(
             `${this._guildId}:${this._channelId} 重新連接成功`,
+            "音樂: 連結",
           );
         } catch (error) {
           log.warn(
             `${this._guildId}:${this._channelId} 無法重新連線`,
+            "音樂: 連結",
           );
           let disconnecteEmbed = new Discord.EmbedBuilder()
             .setTitle("😕 ┃ 我的語音連接斷開了")
@@ -158,17 +166,20 @@ export default class Player {
     this._player.once(AudioPlayerStatus.Playing, () => {
       log.info(
         `${this._guildId}:${this._channelId} 音樂播放器進入播放狀態`,
+        "音樂: 播放",
       );
     });
     this._player.on(AudioPlayerStatus.Idle, () => {
       log.info(
         `${this._guildId}:${this._channelId} 音樂播放器進入閒置狀態`,
+        "音樂: 播放",
       );
       this.handelIdle();
     });
     this._player.on(AudioPlayerStatus.Buffering, () => {
       log.info(
         `${this._guildId}:${this._channelId} 音樂播放器進入緩衝狀態`,
+        "音樂: 播放",
       );
     });
 
@@ -1058,7 +1069,7 @@ export default class Player {
         })
         .catch(this.noop);
     }
-    log.error(e.message, e);
+    log.error(e.message, e, "音樂");
   }
 
   handelIdle() {

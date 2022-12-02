@@ -9,33 +9,36 @@ export default async function () {
       let invaild = false;
 
       if (typeof config.token !== "string") {
-        log.error("`token`不是一個字串");
+        log.error("`token`不是一個字串", "設定");
         invaild = true;
       }
       if (
         typeof config.cookie !== "string" &&
         typeof config.cookie !== "undefined"
       ) {
-        log.error("`cookie`不是一個字串");
+        log.error("`cookie`不是一個字串", "設定");
         invaild = true;
       }
       if (
         typeof config.devGuild !== "string" &&
         config.enableDev === true
       ) {
-        log.error("`devGuild`不是一個字串(ID)，且`enableDev`為true");
+        log.error(
+          "`devGuild`不是一個字串(ID)，且`enableDev`為true",
+          "設定",
+        );
         invaild = true;
       }
 
       if (invaild) {
-        log.error("設定出現錯誤，程式正在自動關閉");
+        log.error("設定出現錯誤，程式正在自動關閉", "設定");
         process.exit(1);
       } else {
-        log.info("成功讀取設定");
+        log.info("成功讀取設定", "設定");
         reslove(config);
       }
     } else {
-      log.warn("找不到設定檔，正在從環境變數讀取");
+      log.warn("找不到設定檔，正在從環境變數讀取", "設定");
       let config = {
         token: process.env.TOKEN,
         cookie: process.env.COOKIE,
@@ -47,29 +50,32 @@ export default async function () {
       let invaild = false;
 
       if (typeof config.token !== "string") {
-        log.error("`TOKEN`不是一個字串");
+        log.error("`TOKEN`不是一個字串", "設定");
         invaild = true;
       }
       if (
         typeof config.cookie !== "string" &&
         typeof config.cookie !== "undefined"
       ) {
-        log.error("`COOKIE`不是一個字串");
+        log.error("`COOKIE`不是一個字串", "設定");
         invaild = true;
       }
       if (
         typeof config.devGuild !== "string" &&
         config.enableDev === true
       ) {
-        log.error("`DEV_GUILD`不是一個字串(ID)，且`enableDev`為true");
+        log.error(
+          "`DEV_GUILD`不是一個字串(ID)，且`enableDev`為true",
+          "設定",
+        );
         invaild = true;
       }
 
       if (invaild) {
-        log.error("設定出現錯誤，程式正在自動關閉");
+        log.error("設定出現錯誤，程式正在自動關閉", "設定");
         process.exit(1);
       } else {
-        log.info("成功讀取設定");
+        log.info("成功讀取設定", "設定");
         reslove(config);
       }
     }

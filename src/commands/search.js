@@ -199,7 +199,7 @@ export default {
           })
           .catch(this.noop);
       }
-      log.error(e.message, e);
+      log.error(e.message, e, "指令: 搜尋");
 
       return;
     }

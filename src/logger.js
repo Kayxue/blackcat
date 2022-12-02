@@ -1,19 +1,39 @@
 import chalk from "chalk";
 import getDateString from "./util/getDateString.js";
 
-function info(msg) {
-  console.log(getDateString() + " " + chalk.blue("資訊") + " " + msg);
-}
-
-function warn(msg) {
+function info(msg, sender) {
   console.log(
-    getDateString() + " " + chalk.yellowBright("警告") + " " + msg,
+    getDateString() +
+      " " +
+      chalk.green(sender ?? "未知") +
+      " " +
+      chalk.blue("資訊") +
+      " " +
+      msg,
   );
 }
 
-function error(msg, error) {
+function warn(msg, sender) {
+  console.log(
+    getDateString() +
+      " " +
+      chalk.green(sender ?? "未知") +
+      " " +
+      chalk.yellowBright("警告") +
+      " " +
+      msg,
+  );
+}
+
+function error(msg, error, sender) {
   console.error(
-    getDateString() + " " + chalk.red("錯誤") + " " + msg,
+    getDateString() +
+      " " +
+      chalk.green(sender ?? "未知") +
+      " " +
+      chalk.red("錯誤") +
+      " " +
+      msg,
   );
   if (error) {
     let spilted = error.stack.split("\n"),
@@ -27,9 +47,14 @@ function error(msg, error) {
   }
 }
 
-export { info, warn, error };
+function debug(msg) {
+  console.log(chalk.dim(msg));
+}
+
+export { info, warn, error, debug };
 export default {
   info,
   warn,
   error,
+  debug,
 };
