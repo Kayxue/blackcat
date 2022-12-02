@@ -8,7 +8,7 @@ export default {
     description: "查看機器人",
   },
   run: function (interaction) {
-    let pingEmbed = new EmbedBuilder()
+    const pingEmbed = new EmbedBuilder()
       .setTitle("🏓 ┃ Ping!")
       .addFields([
         {
@@ -25,7 +25,7 @@ export default {
         },
       ])
       .setColor(blurple);
-    let player = getSendingPlayer(
+    const player = getSendingPlayer(
       interaction.client,
       interaction.guild.id,
     );

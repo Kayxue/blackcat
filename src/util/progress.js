@@ -1,7 +1,7 @@
 export default function (total, part) {
-  let size = 13;
-  let line = "─";
-  let slider = "🔵";
+  const size = 13;
+  const line = "─";
+  const slider = "🔵";
 
   if (part > total) {
     const bar = line.repeat(size + 1) + slider;

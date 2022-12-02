@@ -29,7 +29,7 @@ export default {
   },
   run: async function (interaction) {
     if (!interaction.member.voice?.channel) {
-      let joinVCEmbed = new EmbedBuilder()
+      const joinVCEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(color.danger);
       return interaction.reply({
@@ -37,8 +37,9 @@ export default {
       });
     }
 
-    if (!interaction.member.voice.channel.joinable)
+    if (!interaction.member.voice.channel.joinable) {
       return interaction.reply("❌ ┃ 我無法連線至語音頻道!");
+    }
 
     const query = interaction.options.getString("query");
     let player;
@@ -55,15 +56,16 @@ export default {
         interaction.client,
         interaction.guild.id,
       );
-      if (!allowModify(interaction))
+      if (!allowModify(interaction)) {
         return interaction.reply("❌ ┃ 你必須跟我在同一個頻道");
+      }
     }
 
     if (
       play.yt_validate(query) === "video" &&
       query.startsWith("https://")
     ) {
-      let videoEmbed = new EmbedBuilder()
+      const videoEmbed = new EmbedBuilder()
         .setTitle(
           `🤔 ┃ ${interaction.user.username}，您是不是要播放這個影片?`,
         )
@@ -75,17 +77,17 @@ export default {
         })
         .setColor(color.warning);
 
-      let yesBtn = new ButtonBuilder()
+      const yesBtn = new ButtonBuilder()
         .setEmoji("✅")
         .setLabel("播放這個歌曲")
         .setStyle(ButtonStyle.Success)
         .setCustomId("yes");
-      let noBtn = new ButtonBuilder()
+      const noBtn = new ButtonBuilder()
         .setEmoji("❌")
         .setLabel("不要播放這個歌曲")
         .setStyle(ButtonStyle.Success)
         .setCustomId("no");
-      let actionRow = new ActionRowBuilder().addComponents(
+      const actionRow = new ActionRowBuilder().addComponents(
         yesBtn,
         noBtn,
       );
@@ -114,7 +116,7 @@ export default {
       if (selected) {
         if (selected.customId === "yes") {
           player.play(query, interaction, true);
-          let playEmbed = new EmbedBuilder()
+          const playEmbed = new EmbedBuilder()
             .setTitle("🎶 ┃ 已將歌曲加入播放序列中")
             .setDescription(`歌曲網址: ${query}`)
             .setColor(color.success);
@@ -124,7 +126,7 @@ export default {
       }
     }
 
-    let searchEmbed = new EmbedBuilder()
+    const searchEmbed = new EmbedBuilder()
       .setTitle(`🔍 ┃ 正在搜尋 **${query}**`)
       .setColor(color.success);
     if (interaction.isRepliable()) {
@@ -149,7 +151,7 @@ export default {
       });
     } catch (e) {
       if (e.message.includes("confirm your age")) {
-        let invaildEmbed = new EmbedBuilder()
+        const invaildEmbed = new EmbedBuilder()
           .setTitle(
             "😱 ┃ 我沒辦法取得你想播放的音樂，因為需要登入帳號",
           )
@@ -163,7 +165,7 @@ export default {
           })
           .catch(this.noop);
       } else if (e.message.includes("429")) {
-        let limitEmbed = new EmbedBuilder()
+        const limitEmbed = new EmbedBuilder()
           .setTitle("😱 ┃ 現在無法取得這個音樂，請稍後再試")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -175,7 +177,7 @@ export default {
           })
           .catch(this.noop);
       } else if (e.message.includes("private")) {
-        let privateEmbed = new EmbedBuilder()
+        const privateEmbed = new EmbedBuilder()
           .setTitle("😱 ┃ 這是私人影片")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -187,7 +189,7 @@ export default {
           })
           .catch(this.noop);
       } else {
-        let errorEmbed = new EmbedBuilder()
+        const errorEmbed = new EmbedBuilder()
           .setTitle("😱 ┃ 發生了未知的錯誤!")
           .setDescription(
             "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -204,10 +206,10 @@ export default {
       return;
     }
 
-    let embeds = [];
+    const embeds = [];
 
     result.forEach((video) => {
-      let videoEmbed = new EmbedBuilder()
+      const videoEmbed = new EmbedBuilder()
         .setTitle(`🎶 ┃ ${video.title}`)
         .setDescription(
           `頻道: ${
@@ -224,16 +226,16 @@ export default {
       embeds.push(videoEmbed);
     });
 
-    let previousBtn = new ButtonBuilder()
+    const previousBtn = new ButtonBuilder()
       .setCustomId("previous")
       .setEmoji("◀️")
       .setStyle(ButtonStyle.Primary)
       .setDisabled(true);
-    let nextBtn = new ButtonBuilder()
+    const nextBtn = new ButtonBuilder()
       .setCustomId("next")
       .setEmoji("▶️")
       .setStyle(ButtonStyle.Primary);
-    let chooseBtn = new ButtonBuilder()
+    const chooseBtn = new ButtonBuilder()
       .setCustomId("choose")
       .setEmoji("✅")
       .setStyle(ButtonStyle.Primary);
@@ -245,8 +247,8 @@ export default {
       nextBtn,
     );
 
-    let searchMessage,
-      currentPage = 0;
+    let searchMessage;
+    let currentPage = 0;
     try {
       searchMessage = await interaction.editReply({
         embeds: [embeds[currentPage]],
@@ -256,7 +258,7 @@ export default {
       return;
     }
 
-    let collector = new InteractionCollector(interaction.client, {
+    const collector = new InteractionCollector(interaction.client, {
       interactionType: InteractionType.MessageComponent,
       idle: 15_000,
       message: searchMessage,
@@ -318,7 +320,7 @@ export default {
         }
         case "choose": {
           collector.stop("choosen");
-          let choosenEmbed = new EmbedBuilder()
+          const choosenEmbed = new EmbedBuilder()
             .setTitle(
               `🔍 ${result[currentPage].title} 已經被加入播放清單中`,
             )
@@ -335,7 +337,7 @@ export default {
 
     collector.on("end", (_collected, reason) => {
       if (reason !== "choosen") {
-        let expireEmbed = new EmbedBuilder()
+        const expireEmbed = new EmbedBuilder()
           .setTitle("😐 搜尋已取消")
           .setColor(color.danger);
         interaction.editReply({

@@ -23,7 +23,7 @@ export default {
   },
   run: async function (interaction) {
     if (interaction.client.config.optimizeQuality) {
-      let optimizeEmbed = new EmbedBuilder()
+      const optimizeEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 為了優化音樂品質，Nightcore已停用")
         .setDescription(
           "如果你還是想要啟用Nightcore音效，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/blackcat)",
@@ -37,7 +37,7 @@ export default {
     }
 
     if (!interaction.member.voice?.channel) {
-      let joinVCEmbed = new EmbedBuilder()
+      const joinVCEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(danger);
       return interaction
@@ -47,11 +47,12 @@ export default {
         .catch(() => {});
     }
 
-    let url = interaction.options.getString("name");
-    if (!interaction.member.voice.channel.joinable)
+    const url = interaction.options.getString("name");
+    if (!interaction.member.voice.channel.joinable) {
       return interaction
         .reply("❌ ┃ 我無法連線至語音頻道!")
         .catch(() => {});
+    }
 
     let player;
     if (

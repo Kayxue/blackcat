@@ -21,7 +21,7 @@ export default async function requirePlayer(interaction, callback) {
       interaction.guild.id,
     );
     if (!interaction.guild.members.me.voice.channel && player) {
-      let corruptedEmbed = new EmbedBuilder()
+      const corruptedEmbed = new EmbedBuilder()
         .setTitle("😔 播放器已損毀，我們正在嘗試建立一個新的")
         .setColor(warning);
       try {

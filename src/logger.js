@@ -36,9 +36,9 @@ function error(msg, error, sender) {
       msg,
   );
   if (error) {
-    let spilted = error.stack.split("\n"),
-      prefixed = [];
-    for (let line of spilted) {
+    const spilted = error.stack.split("\n");
+    const prefixed = [];
+    for (const line of spilted) {
       prefixed.push(
         getDateString() + " " + chalk.yellow("偵錯") + " " + line,
       );

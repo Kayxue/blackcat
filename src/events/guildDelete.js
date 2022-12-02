@@ -5,7 +5,7 @@ export default {
   once: false,
   run: (client, guild) => {
     if (PlayerManager.getSendingPlayer(client, guild.id)) {
-      let player = PlayerManager.getSendingPlayer(client, guild.id);
+      const player = PlayerManager.getSendingPlayer(client, guild.id);
       player.stop(null, true);
     }
   },

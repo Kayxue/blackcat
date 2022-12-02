@@ -29,7 +29,7 @@ export default {
       );
     }
 
-    let data = player.nowplaying;
+    const data = player.nowplaying;
 
     Canvas.GlobalFonts.registerFromPath(
       join(resolve(), "src", "assets", "notosansTC.otf"),
@@ -39,30 +39,30 @@ export default {
       join(resolve(), "src", "assets", "joypixels.ttf"),
       "joypixels",
     );
-    let canvas = new Canvas.Canvas(960, 300);
-    let ctx = canvas.getContext("2d");
+    const canvas = new Canvas.Canvas(960, 300);
+    const ctx = canvas.getContext("2d");
     let bg;
     try {
-      let { body } = await request(
+      const { body } = await request(
         `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`,
       );
       bg = new Canvas.Image();
       bg.src = Buffer.from(await body.arrayBuffer());
     } catch (e) {
-      let { body } = await request(
+      const { body } = await request(
         "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
       );
       bg = new Canvas.Image();
       bg.src = Buffer.from(await body.arrayBuffer());
     }
-    let percentage =
+    const percentage =
       Math.round((player.playTime / data.duraction) * 100) / 100;
     ctx.fillStyle = "#15202b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    let bgData = await imageSize(bg.src);
-    let percent = bg.width / 200;
-    let bgHeight = bgData.height / percent;
-    let bgWidth = bgData.width / percent;
+    const bgData = await imageSize(bg.src);
+    const percent = bg.width / 200;
+    const bgHeight = bgData.height / percent;
+    const bgWidth = bgData.width / percent;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(30 + 5, 25);
@@ -86,7 +86,7 @@ export default {
     ctx.font = "25px noto";
     ctx.fillStyle = "#ffffff";
     ctx.fillText("正在播放:", 250, 50);
-    ctx.font = `50px noto, joypixels`;
+    ctx.font = "50px noto, joypixels";
     let text = data.title;
     let textLength = 25;
     while (
@@ -141,7 +141,7 @@ export default {
     ctx.restore();
     ctx.fillStyle = "#ffffff";
     ctx.font = "20px noto,joypixels";
-    let enabledMode = [];
+    const enabledMode = [];
 
     if (!interaction.client.config.optimizeQuality) {
       if (player.muted) enabledMode.push("🔇 靜音");
@@ -161,14 +161,14 @@ export default {
       50,
       250,
     );
-    let buffer = canvas.toBuffer("image/png");
+    const buffer = canvas.toBuffer("image/png");
 
-    let attachment = new Attachment(
+    const attachment = new Attachment(
       buffer,
       `${interaction.guildId}.png`,
     );
 
-    let nowEmbed = new EmbedBuilder()
+    const nowEmbed = new EmbedBuilder()
       .setTitle("🎧 ┃ 正在播放")
       .setDescription(`[${data.title}](${data.url})`)
       .setThumbnail(data.thumbnail)

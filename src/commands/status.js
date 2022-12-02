@@ -8,33 +8,33 @@ export default {
     description: "查看機器人的狀態",
   },
   run: async function (interaction) {
-    let seconds = Math.floor(interaction.client.uptime / 1000);
+    const seconds = Math.floor(interaction.client.uptime / 1000);
     let minutes = Math.floor(seconds / 60);
     let hours = Math.floor(minutes / 60);
-    let days = Math.floor(hours / 24);
+    const days = Math.floor(hours / 24);
 
-    let memUsage = process.memoryUsage();
+    const memUsage = process.memoryUsage();
 
     minutes %= 60;
     hours %= 24;
 
-    let guilds = await interaction.client.cluster.broadcastEval(
+    const guilds = await interaction.client.cluster.broadcastEval(
       "this.guilds.cache.size",
     );
-    let players = await interaction.client.cluster.broadcastEval(
+    const players = await interaction.client.cluster.broadcastEval(
       "this.players.size",
     );
 
-    let allGuilds = guilds.reduce(
+    const allGuilds = guilds.reduce(
       (acc, guildCount) => acc + guildCount,
       0,
     );
-    let allPlayers = players.reduce(
+    const allPlayers = players.reduce(
       (acc, playerCount) => acc + playerCount,
       0,
     );
 
-    let statusEmbed = new EmbedBuilder()
+    const statusEmbed = new EmbedBuilder()
       .setTitle("❓ ┃ 機器人狀態")
       .addFields([
         {

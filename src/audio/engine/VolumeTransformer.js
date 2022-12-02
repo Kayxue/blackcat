@@ -18,6 +18,7 @@ class VolumeTransformer extends Transform {
   _readInt(_buffer, index) {
     return index;
   }
+
   _writeInt(_buffer, _int, index) {
     return index;
   }

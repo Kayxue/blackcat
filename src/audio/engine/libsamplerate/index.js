@@ -3,7 +3,7 @@ const SampleRateStream = require("bindings")(
   "node-libsamplerate",
 ).SampleRateStream;
 
-let defaultOpts = {
+const defaultOpts = {
   type: 2,
   channels: 2,
   fromRate: 48000,
@@ -15,10 +15,12 @@ let defaultOpts = {
 class SampleRate extends Transform {
   constructor(opts) {
     opts = opts || defaultOpts;
-    if (!(opts.fromDepth == 16 || opts.fromDepth == 32))
+    if (!(opts.fromDepth == 16 || opts.fromDepth == 32)) {
       throw new Error("Invalid source bit depth");
-    if (!(opts.toDepth == 16 || opts.toDepth == 32))
+    }
+    if (!(opts.toDepth == 16 || opts.toDepth == 32)) {
       throw new Error("Invalid target bit depth");
+    }
     super(opts);
     this._samplerate = new SampleRateStream(opts);
   }

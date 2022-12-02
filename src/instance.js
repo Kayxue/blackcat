@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-dotenv.config();
 
 import Discord from "discord.js";
 import Cluster from "discord-hybrid-sharding";
@@ -7,6 +6,7 @@ import fs from "node:fs";
 
 import log from "./logger.js";
 import configReslover from "./util/configReslover.js";
+dotenv.config();
 
 const config = await configReslover();
 const client = new Discord.Client({
@@ -41,11 +41,11 @@ if (config.enableDev) {
   client.on("debug", log.debug);
 }
 
-let commandFiles = fs
+const commandFiles = fs
   .readdirSync("./src/commands/")
   .filter((file) => file.endsWith(".js"));
 commandFiles.forEach(async (cmd) => {
-  let command = (await import(`./commands/${cmd}`)).default;
+  const command = (await import(`./commands/${cmd}`)).default;
   client.commands.set(command.data.name, command);
 });
 

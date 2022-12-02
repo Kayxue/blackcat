@@ -21,7 +21,7 @@ export default {
   },
   run: async function (interaction) {
     if (!interaction.member.voice?.channel) {
-      let joinVCEmbed = new EmbedBuilder()
+      const joinVCEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 你必須先在語音頻道內")
         .setColor(danger);
       return interaction
@@ -31,10 +31,11 @@ export default {
         .catch(() => {});
     }
 
-    if (!interaction.member.voice.channel.joinable)
+    if (!interaction.member.voice.channel.joinable) {
       return interaction
         .reply("❌ ┃ 我無法連線至語音頻道!")
         .catch(() => {});
+    }
 
     const url = interaction.options.getString("name");
     let player;
@@ -51,10 +52,11 @@ export default {
         interaction.client,
         interaction.guild.id,
       );
-      if (!allowModify(interaction))
+      if (!allowModify(interaction)) {
         return interaction
           .reply("❌ ┃ 你必須跟我在同一個頻道")
           .catch(() => {});
+      }
     }
     await interaction.deferReply().catch(() => {});
     player.play(url, interaction);

@@ -23,7 +23,7 @@ export default {
       if (!allowModify(interaction)) return joinVC(interaction);
     }
     if (!player.paused) {
-      let pausedEmbed = new EmbedBuilder()
+      const pausedEmbed = new EmbedBuilder()
         .setTitle("▶️ ┃ 音樂已經在播放了")
         .setDescription("輸入`/pause`來暫停音樂")
         .setColor(danger);

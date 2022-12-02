@@ -9,21 +9,21 @@ export default {
     try {
       if (!oldState.channel) return; // User join new voice channel
 
-      let player = PlayerManager.getSendingPlayer(
+      const player = PlayerManager.getSendingPlayer(
         client,
         oldState.guild.id ?? newState.guild.id,
       );
       if (!player) return; // Guild is not playing music
 
       setTimeout(() => {
-        let voiceChannel = newState.guild.members.me.voice.channel;
+        const voiceChannel = newState.guild.members.me.voice.channel;
         if (!voiceChannel) return; // Bot has been kicked out by user, let player do it's work
 
-        let members = voiceChannel.members.filter(
+        const members = voiceChannel.members.filter(
           (member) => !member.user.bot,
         );
         if (members.size <= 0) {
-          let leaveEmbed = new EmbedBuilder()
+          const leaveEmbed = new EmbedBuilder()
             .setTitle("👋 ┃ 語音頻道已經沒人了，所以我停止了音樂")
             .setColor(danger);
           player.textChannel

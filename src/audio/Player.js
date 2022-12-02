@@ -78,7 +78,7 @@ export default class Player {
       });
     } catch (e) {
       log.error(e.message, e, "音樂: 啟動");
-      let errorEmbed = new Discord.EmbedBuilder()
+      const errorEmbed = new Discord.EmbedBuilder()
         .setTitle("🙁 ┃ 加入語音頻道時發生錯誤")
         .setDescription(
           "加入語音頻道時發生了一些錯誤...\n" +
@@ -98,7 +98,7 @@ export default class Player {
       try {
         this.setSpeaker();
       } catch (e) {
-        let notSpeakerEmbed = new Discord.EmbedBuilder()
+        const notSpeakerEmbed = new Discord.EmbedBuilder()
           .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
           .setColor(colors.danger);
         this._channel
@@ -151,7 +151,7 @@ export default class Player {
             `${this._guildId}:${this._channelId} 無法重新連線`,
             "音樂: 連結",
           );
-          let disconnecteEmbed = new Discord.EmbedBuilder()
+          const disconnecteEmbed = new Discord.EmbedBuilder()
             .setTitle("😕 ┃ 我的語音連接斷開了")
             .setColor(colors.danger);
           this._channel
@@ -190,7 +190,7 @@ export default class Player {
   async setSpeaker() {
     await entersState(this._connection, VoiceConnectionStatus.Ready);
     this._guild.members.me.voice.setSuppressed(false).catch(() => {
-      let notSpeakerEmbed = new Discord.EmbedBuilder()
+      const notSpeakerEmbed = new Discord.EmbedBuilder()
         .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
         .setColor(colors.danger);
       this._channel
@@ -207,12 +207,12 @@ export default class Player {
     fromSearch = false,
     fromNightcore = false,
   ) {
-    let rawData = null,
-      parsedData = null,
-      isFull = null,
-      isPlaylist = false;
+    let rawData = null;
+    let parsedData = null;
+    let isFull = null;
+    let isPlaylist = false;
 
-    let searchEmbed = new Discord.EmbedBuilder()
+    const searchEmbed = new Discord.EmbedBuilder()
       .setTitle(`🔍 ┃ 正在搜尋 **${track}**`)
       .setColor(colors.success);
     if (!fromSearch) {
@@ -228,7 +228,7 @@ export default class Player {
       !track.startsWith("https")
     ) {
       try {
-        let result = await play.search(track, {
+        const result = await play.search(track, {
           limit: 1,
         });
         rawData = await play.video_info(result[0]?.url);
@@ -250,14 +250,14 @@ export default class Player {
       let videos;
       isPlaylist = true;
       try {
-        let playlist = await play.playlist_info(track, {
+        const playlist = await play.playlist_info(track, {
           incomplete: true,
         });
         videos = await playlist.all_videos();
       } catch (e) {
         return this.handelYoutubeError(e);
       }
-      let playlistEmbed = new Discord.EmbedBuilder()
+      const playlistEmbed = new Discord.EmbedBuilder()
         .setTitle(
           `🔍 ┃ 已加入整個播放清單，共有 **${videos.length}** 首歌曲`,
         )
@@ -283,7 +283,7 @@ export default class Player {
         });
       });
     }
-    if (!isPlaylist)
+    if (!isPlaylist) {
       parsedData = [
         {
           title: rawData.video_details.title,
@@ -296,6 +296,7 @@ export default class Player {
           isFull,
         },
       ];
+    }
 
     if (fromNightcore) this._nightcore = true;
 
@@ -304,7 +305,7 @@ export default class Player {
       this.playStream();
     } else {
       this._songs.push(...parsedData);
-      let addedEmbed = new Discord.EmbedBuilder()
+      const addedEmbed = new Discord.EmbedBuilder()
         .setTitle(`✅ ┃ 成功加入${parsedData.length}首歌曲至播放清單`)
         .setDescription(
           `播放清單內目前有 ${this._songs.length} 首歌曲`,
@@ -325,7 +326,7 @@ export default class Player {
 
   skip(interaction) {
     if (!this._audio?.metadata) {
-      let nomusicEmbed = new Discord.EmbedBuilder()
+      const nomusicEmbed = new Discord.EmbedBuilder()
         .setTitle("❌️ ┃ 沒有音樂正在播放")
         .setColor(colors.danger);
       return interaction
@@ -335,7 +336,7 @@ export default class Player {
         .catch(this.noop);
     }
 
-    let skipEmbed = new Discord.EmbedBuilder()
+    const skipEmbed = new Discord.EmbedBuilder()
       .setTitle(`⏭️ ┃ 跳過歌曲 **${this._audio.metadata.title}**`)
       .setColor(colors.success);
     if (this._paused) this._player.unpause();
@@ -349,7 +350,7 @@ export default class Player {
   }
 
   pause(interaction) {
-    let pauseEmbed = new Discord.EmbedBuilder()
+    const pauseEmbed = new Discord.EmbedBuilder()
       .setTitle("⏸️ ┃ 暫停音樂")
       .setColor(colors.success);
     this._paused = true;
@@ -363,7 +364,7 @@ export default class Player {
   }
 
   unpause(interaction) {
-    let unpauseEmbed = new Discord.EmbedBuilder()
+    const unpauseEmbed = new Discord.EmbedBuilder()
       .setTitle("▶️ ┃ 繼續播放音樂")
       .setColor(colors.success);
     this._paused = false;
@@ -377,10 +378,10 @@ export default class Player {
   }
 
   shuffle(interaction) {
-    let shuffled = [].concat(this._songs);
-    let currentIndex = this._songs.length,
-      temporaryValue,
-      randomIndex;
+    const shuffled = [].concat(this._songs);
+    let currentIndex = this._songs.length;
+    let temporaryValue;
+    let randomIndex;
 
     while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -391,7 +392,7 @@ export default class Player {
       shuffled[randomIndex] = temporaryValue;
     }
 
-    let shuffleEmbed = new Discord.EmbedBuilder()
+    const shuffleEmbed = new Discord.EmbedBuilder()
       .setTitle("🔀 ┃ 重新排序音樂")
       .setColor(colors.success);
     this._songs = shuffled;
@@ -403,7 +404,7 @@ export default class Player {
   }
 
   async stop(interaction, force = false) {
-    let stopEmbed = new Discord.EmbedBuilder()
+    const stopEmbed = new Discord.EmbedBuilder()
       .setTitle("⏹️ ┃ 停止播放音樂")
       .setColor(colors.success);
     if (!force) {
@@ -420,7 +421,7 @@ export default class Player {
   }
 
   loop(interaction) {
-    let loopEmbed = new Discord.EmbedBuilder().setColor(
+    const loopEmbed = new Discord.EmbedBuilder().setColor(
       colors.success,
     );
     if (!this._loop) {
@@ -440,7 +441,7 @@ export default class Player {
   }
 
   repeat(interaction) {
-    let repeatEmbed = new Discord.EmbedBuilder()
+    const repeatEmbed = new Discord.EmbedBuilder()
       .setTitle("🔂 ┃ 重複播放目前的歌曲")
       .setColor(colors.success);
     if (!this._repeat) {
@@ -460,7 +461,7 @@ export default class Player {
   }
 
   nightcore(interaction) {
-    let nightcoreEmbed = new Discord.EmbedBuilder().setColor(
+    const nightcoreEmbed = new Discord.EmbedBuilder().setColor(
       colors.success,
     );
     if (!this._nightcore) {
@@ -481,7 +482,7 @@ export default class Player {
   }
 
   playnext(interaction, index) {
-    let playnextEmbed = new Discord.EmbedBuilder()
+    const playnextEmbed = new Discord.EmbedBuilder()
       .setTitle(
         `⚡ ┃ ${
           this._songs[index - 1].title
@@ -538,7 +539,7 @@ export default class Player {
         this._engines.volumeTransform = new VolumeTransformer({
           volume: this._volume,
         });
-        if (this._nightcore)
+        if (this._nightcore) {
           this._engines.libsamplerate = new SampleRate({
             type: SampleRate.SRC_SINC_FASTEST,
             channels: 2,
@@ -547,6 +548,7 @@ export default class Player {
             toRate: 48000 / 1.15,
             toDepth: 16,
           });
+        }
         this._engines.opusEncoder = new prism.opus.Encoder({
           channels: 2,
           frameSize: 960,
@@ -578,7 +580,7 @@ export default class Player {
         this._engines.volumeTransform = new VolumeTransformer({
           volume: this._volume,
         });
-        if (this._nightcore)
+        if (this._nightcore) {
           this._engines.libsamplerate = new SampleRate({
             type: SampleRate.SRC_SINC_FASTEST,
             channels: 2,
@@ -587,6 +589,7 @@ export default class Player {
             toRate: 48000 / 1.15,
             toDepth: 16,
           });
+        }
         this._engines.opusEncoder = new prism.opus.Encoder({
           channels: 2,
           frameSize: 960,
@@ -674,7 +677,7 @@ export default class Player {
     });
     this._player.play(this._audio);
 
-    let playingEmbed = new Discord.EmbedBuilder()
+    const playingEmbed = new Discord.EmbedBuilder()
       .setTitle(
         `🕒 正在準備播放 ${this._songs[0]?.title ?? "未知的歌曲"}...`,
       )
@@ -698,7 +701,7 @@ export default class Player {
   }
 
   async updateNoticeEmbed() {
-    let musicButton = new Discord.ButtonBuilder()
+    const musicButton = new Discord.ButtonBuilder()
       .setCustomId("pause")
       .setEmoji(
         this._paused
@@ -706,11 +709,11 @@ export default class Player {
           : "<:pause:827737900359745586>",
       )
       .setStyle(Discord.ButtonStyle.Primary);
-    let skipButton = new Discord.ButtonBuilder()
+    const skipButton = new Discord.ButtonBuilder()
       .setCustomId("skip")
       .setEmoji("<:skip:827734282318905355>")
       .setStyle(Discord.ButtonStyle.Secondary);
-    let stopButton = new Discord.ButtonBuilder()
+    const stopButton = new Discord.ButtonBuilder()
       .setCustomId("stop")
       .setEmoji("<:stop:827734840891015189>")
       .setStyle(Discord.ButtonStyle.Danger);
@@ -734,14 +737,16 @@ export default class Player {
     if (this._songs.length <= 1) skipButton.setDisabled(true);
 
     if (!this._optimize) {
-      if (this._volume >= 1 || this._muted)
+      if (this._volume >= 1 || this._muted) {
         volUpButton.setDisabled(true);
-      if (this._volume <= 0 || this._muted)
+      }
+      if (this._volume <= 0 || this._muted) {
         volDownButton.setDisabled(true);
+      }
     }
 
     let rowTwo;
-    let rowOne = new Discord.ActionRowBuilder().addComponents(
+    const rowOne = new Discord.ActionRowBuilder().addComponents(
       musicButton,
       skipButton,
       stopButton,
@@ -755,7 +760,7 @@ export default class Player {
       );
     }
 
-    if (!this._audio?.metadata?.title) return; //Ignore if title is missing
+    if (!this._audio?.metadata?.title) return; // Ignore if title is missing
 
     // Image process
     Canvas.GlobalFonts.registerFromPath(
@@ -767,31 +772,31 @@ export default class Player {
       "joypixels",
     );
 
-    let canvas = new Canvas.Canvas(960, 300);
-    let ctx = canvas.getContext("2d");
+    const canvas = new Canvas.Canvas(960, 300);
+    const ctx = canvas.getContext("2d");
     let bg;
     try {
-      let { body } = await request(
+      const { body } = await request(
         `https://i3.ytimg.com/vi/${this._audio.metadata.id}/maxresdefault.jpg`,
       );
       bg = new Canvas.Image();
       bg.src = Buffer.from(await body.arrayBuffer());
     } catch (e) {
-      let { body } = await request(
+      const { body } = await request(
         "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
       );
       bg = new Canvas.Image();
       bg.src = Buffer.from(await body.arrayBuffer());
     }
-    let percentage =
+    const percentage =
       Math.round((this.playTime / this.nowplaying.duraction) * 100) /
       100;
     ctx.fillStyle = "#15202b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    let bgData = await imageSize(bg.src);
-    let percent = bgData.width / 200;
-    let bgHeight = bgData.height / percent;
-    let bgWidth = bgData.width / percent;
+    const bgData = await imageSize(bg.src);
+    const percent = bgData.width / 200;
+    const bgHeight = bgData.height / percent;
+    const bgWidth = bgData.width / percent;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(30 + 5, 25);
@@ -876,7 +881,7 @@ export default class Player {
     ctx.restore();
     ctx.fillStyle = "#ffffff";
     ctx.font = "20px noto,joypixels";
-    let enabledMode = [];
+    const enabledMode = [];
 
     if (!this._optimize) {
       if (this._muted) enabledMode.push("🔇 靜音");
@@ -887,9 +892,9 @@ export default class Player {
     enabledMode.push(`👥 點歌者: ${this._audio.metadata.queuer}`);
     let playtime = new Date(this.playTime * 1000).toISOString();
     if (this.nowplaying.duraction <= 0) playtime = "直播";
-    else if (this.nowplaying.duraction < 3600)
+    else if (this.nowplaying.duraction < 3600) {
       playtime = playtime.substr(14, 5);
-    else playtime = playtime.substr(11, 8);
+    } else playtime = playtime.substr(11, 8);
     ctx.fillText(
       `${playtime}/${
         this._audio.metadata.duractionParsed
@@ -897,13 +902,13 @@ export default class Player {
       50,
       250,
     );
-    let buffer = canvas.toBuffer("image/png");
+    const buffer = canvas.toBuffer("image/png");
 
-    let attachment = new Discord.AttachmentBuilder(buffer, {
+    const attachment = new Discord.AttachmentBuilder(buffer, {
       name: `${this._guildId}.png`,
     });
 
-    let playingEmbed = new Discord.EmbedBuilder()
+    const playingEmbed = new Discord.EmbedBuilder()
       .setDescription(
         `🎵 ┃ 目前正在播放 [${this._audio.metadata.title}](${this._audio.metadata.url})`,
       )
@@ -912,7 +917,7 @@ export default class Player {
       .setColor(colors.success);
 
     if (!this._optimize) {
-      if (this._muted)
+      if (this._muted) {
         playingEmbed.addFields([
           {
             name: "🔇 ┃ 靜音",
@@ -920,7 +925,7 @@ export default class Player {
             inline: true,
           },
         ]);
-      else
+      } else {
         playingEmbed.addFields([
           {
             name: "🔊 ┃ 音量",
@@ -928,8 +933,9 @@ export default class Player {
             inline: true,
           },
         ]);
+      }
     }
-    if (this._loop)
+    if (this._loop) {
       playingEmbed.addFields([
         {
           name: "🔁 ┃ 循環播放",
@@ -937,7 +943,8 @@ export default class Player {
           inline: true,
         },
       ]);
-    if (this._repeat)
+    }
+    if (this._repeat) {
       playingEmbed.addFields([
         {
           name: "🔂 ┃ 重複播放",
@@ -945,6 +952,7 @@ export default class Player {
           inline: true,
         },
       ]);
+    }
     playingEmbed.addFields([
       {
         name: "👥 ┃ 點歌者",
@@ -953,7 +961,7 @@ export default class Player {
       },
     ]);
 
-    let components = [rowOne];
+    const components = [rowOne];
     if (!this._optimize) components.push(rowTwo);
 
     await this._noticeMessage
@@ -1021,7 +1029,7 @@ export default class Player {
 
   handelYoutubeError(e) {
     if (e.message.includes("confirm your age")) {
-      let invaildEmbed = new Discord.EmbedBuilder()
+      const invaildEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 我沒辦法取得你想播放的音樂，因為需要登入帳號")
         .setDescription(
           "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
@@ -1033,7 +1041,7 @@ export default class Player {
         })
         .catch(this.noop);
     } else if (e.message.includes("429")) {
-      let limitEmbed = new Discord.EmbedBuilder()
+      const limitEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 現在無法取得這個音樂，請稍後再試")
         .setDescription(
           "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -1045,7 +1053,7 @@ export default class Player {
         })
         .catch(this.noop);
     } else if (e.message.includes("private")) {
-      let privateEmbed = new Discord.EmbedBuilder()
+      const privateEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 這是私人影片")
         .setDescription(
           "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -1057,7 +1065,7 @@ export default class Player {
         })
         .catch(this.noop);
     } else {
-      let errorEmbed = new Discord.EmbedBuilder()
+      const errorEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 發生了未知的錯誤!")
         .setDescription(
           "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
@@ -1073,10 +1081,11 @@ export default class Player {
   }
 
   handelIdle() {
-    if (!this._stopped)
+    if (!this._stopped) {
       this._noticeMessage?.delete().catch(this.noop);
+    }
 
-    let playedSong = this._songs.shift();
+    const playedSong = this._songs.shift();
     if (this._loop && playedSong) this._songs.push(playedSong);
     if (this._repeat && playedSong) this._songs.unshift(playedSong);
     this._noticeMessage?.delete().catch(() => {});
@@ -1109,7 +1118,7 @@ export default class Player {
     this._raw = null;
 
     if (this._songs.length === 0) {
-      let endEmbed = new Discord.EmbedBuilder()
+      const endEmbed = new Discord.EmbedBuilder()
         .setTitle("👌 ┃ 序列裡的歌曲播放完畢")
         .setColor(colors.success);
       if (!this._guildDeleted) {
@@ -1141,8 +1150,8 @@ export default class Player {
         .catch(this.noop);
     }
 
-    let replyMessage = "",
-      isUpdateRequired = true;
+    let replyMessage = "";
+    let isUpdateRequired = true;
     switch (interaction.customId) {
       case "pause":
         if (this._paused) {
@@ -1197,7 +1206,7 @@ export default class Player {
         interaction.reply("❌ ┃ 發生了一些錯誤");
         return;
     }
-    let clickEmbed = new Discord.EmbedBuilder()
+    const clickEmbed = new Discord.EmbedBuilder()
       .addFields([{ name: replyMessage, value: "\u200b" }])
       .setFooter({
         text: interaction.user.username,

@@ -33,23 +33,23 @@ export default {
     }
 
     if (player.songs.length === 0) {
-      let emptyEmbed = new EmbedBuilder()
+      const emptyEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 播放序列為空")
         .setColor(danger);
       return interaction
         .reply({ embeds: [emptyEmbed] })
         .catch(() => {});
     }
-    let songs = player.songs.slice(0);
+    const songs = player.songs.slice(0);
 
-    let parsedSongs = [],
-      embeds = [],
-      currentPage = 0;
+    const parsedSongs = [];
+    const embeds = [];
+    let currentPage = 0;
     while (songs.length) {
       parsedSongs.push(songs.splice(0, 10));
     }
     parsedSongs.forEach((songList, pageIndex) => {
-      let embedPage = new EmbedBuilder()
+      const embedPage = new EmbedBuilder()
         .setTitle(
           `🎵 ┃ 音樂序列 <第${pageIndex + 1}/${
             parsedSongs.length
@@ -68,16 +68,16 @@ export default {
       });
       embeds.push(embedPage);
     });
-    let previousBtn = new ButtonBuilder()
+    const previousBtn = new ButtonBuilder()
       .setCustomId("previous")
       .setEmoji("◀️")
       .setStyle(ButtonStyle.Primary)
       .setDisabled(true);
-    let nextBtn = new ButtonBuilder()
+    const nextBtn = new ButtonBuilder()
       .setCustomId("next")
       .setEmoji("▶️")
       .setStyle(ButtonStyle.Primary);
-    let closeBtn = new ButtonBuilder()
+    const closeBtn = new ButtonBuilder()
       .setCustomId("close")
       .setEmoji("❎")
       .setStyle(ButtonStyle.Danger);
@@ -99,7 +99,7 @@ export default {
       return;
     }
 
-    let collector = new InteractionCollector(interaction.client, {
+    const collector = new InteractionCollector(interaction.client, {
       componentType: ComponentType.Button,
       interactionType: "MESSAGE_COMPONENT",
       idle: 15_000,
@@ -164,7 +164,7 @@ export default {
       }
     });
     collector.on("end", () => {
-      let endEmbed = new EmbedBuilder()
+      const endEmbed = new EmbedBuilder()
         .setTitle("💤 ┃ 已關閉")
         .setColor(danger);
       interaction

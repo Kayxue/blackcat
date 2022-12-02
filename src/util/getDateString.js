@@ -1,23 +1,23 @@
 import chalk from "chalk";
 
 export default function getDateString() {
-  let month =
+  const month =
     (new Date().getMonth() + 1).toString().length === 1
       ? `0${new Date().getMonth() + 1}`
       : new Date().getMonth() + 1;
-  let date =
+  const date =
     new Date().getDate().toString().length === 1
       ? `0${new Date().getDate()}`
       : new Date().getDate();
-  let hours =
+  const hours =
     new Date().getHours().toString().length === 1
       ? `0${new Date().getHours()}`
       : new Date().getHours();
-  let minutes =
+  const minutes =
     new Date().getMinutes().toString().length === 1
       ? `0${new Date().getMinutes()}`
       : new Date().getMinutes();
-  let seconds =
+  const seconds =
     new Date().getSeconds().toString().length === 1
       ? `0${new Date().getSeconds()}`
       : new Date().getSeconds();
