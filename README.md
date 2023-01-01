@@ -2,7 +2,7 @@
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white&color=5865F2) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/blackcatbot/blackcat?color=F44A6A&label=CodeFactor&logo=codefactor&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/blackcatbot/blackcat/Build%20and%20Push?color=2088FF&label=Docker&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/blackcatbot/blackcat/Code%20Scanning?color=2088FF&label=CodeQL&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/blackcatbot/blackcat/Lint%20&%20Format%20code?color=2088FF&label=Linter&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/blackcatbot/blackcat?color=F44A6A&label=CodeFactor&logo=codefactor&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/blackcat/ci.yml?color=2088FF&label=CI&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/blackcat/push.yml?color=2088FF&label=Release&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square)
 
 ## 🗒️ 功能
 
