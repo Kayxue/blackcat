@@ -14,9 +14,9 @@ jobs:
     name: Run CI on node in ${{ matrix.platform }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@latest
+        uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@latest
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: yarn
@@ -32,7 +32,7 @@ jobs:
     needs: [test-lockfile]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@latest
+        uses: actions/checkout@v3
       - name: Update lockfile
         run: |
           git submodule update --recursive --init
@@ -50,9 +50,9 @@ jobs:
     if: always()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@latest
+        uses: actions/checkout@v3
       - name: Set up Node.js
-        uses: actions/setup-node@latest
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "yarn"
@@ -77,23 +77,23 @@ jobs:
     needs: [test-lockfile]
     steps:
       - name: Checkout
-        uses: actions/checkout@latest
+        uses: actions/checkout@v3
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@latest
+        uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@latest
+        uses: docker/setup-buildx-action@v2
       - name: Get commit SHA
         run: echo "GITHUB_SHA_SHORT=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
       - name: Pull submodules
         run: git submodule update --recursive --init
       - name: Login to Docker Hub
-        uses: docker/login-action@latest
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@latest
+        uses: docker/build-push-action@v3
         with:
           context: .
           platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
