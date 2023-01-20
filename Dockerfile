@@ -11,7 +11,7 @@ COPY --chown=catrunner:catrunner . /home/catrunner/
 WORKDIR /home/catrunner/
 
 USER catrunner
-RUN yarn install
+RUN echo "network-timeout 600000"> ~/.yarnrc && yarn install
 
 USER root
 RUN apt remove -qqy python3 make gcc g++ git libtool autoconf automake cmake
