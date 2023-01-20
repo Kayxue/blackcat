@@ -791,48 +791,41 @@ export default class Player {
     const percentage =
       Math.round((this.playTime / this.nowplaying.duraction) * 100) /
       100;
-    ctx.fillStyle = "#15202b";
+    ctx.fillStyle = "#2f3136";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     const bgData = await imageSize(bg.src);
     const percent = bgData.width / 200;
     const bgHeight = bgData.height / percent;
     const bgWidth = bgData.width / percent;
     ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(30 + 5, 25);
-    ctx.lineTo(30 + bgWidth - 5, 25);
-    ctx.quadraticCurveTo(30 + bgWidth, 25, 30 + bgWidth, 25 + 5);
-    ctx.lineTo(30 + bgWidth, 25 + bgHeight - 5);
-    ctx.quadraticCurveTo(
-      30 + bgWidth,
-      25 + bgHeight,
-      30 + bgWidth - 5,
-      25 + bgHeight,
-    );
-    ctx.lineTo(30 + 5, 25 + bgHeight);
-    ctx.quadraticCurveTo(30, 25 + bgHeight, 30, 25 + bgHeight - 5);
-    ctx.lineTo(30, 25 + 5);
-    ctx.quadraticCurveTo(30, 25, 30 + 5, 25);
-    ctx.closePath();
-    ctx.clip();
-    ctx.drawImage(bg, 30, 25, bgWidth, bgHeight);
+    ctx.drawImage(bg, 50, 40, bgWidth, bgHeight);
     ctx.restore();
     ctx.font = "25px noto";
     ctx.fillStyle = "#ffffff";
-    ctx.fillText("正在播放:", 250, 50);
+    ctx.fillText("正在播放:", bgWidth + 90, 70);
     ctx.font = '50px "noto","joypixels';
     let text = this._audio.metadata.title;
-    let textLength = 25;
+    let textLength = text.length;
     while (
       ctx.measureText(`${text.substring(0, textLength)}...`).width >
-      canvas.width - 250
+      canvas.width - 320
     ) {
       textLength -= 1;
     }
     if (text.length > textLength) {
       text = text.substring(0, textLength) + "...";
     }
-    ctx.fillText(text, 250, 110);
+    ctx.fillText(text, bgWidth + 90, 145);
+
+    // Line between image and text
+    ctx.strokeStyle = "transparent";
+    ctx.fillStyle = "#5f636d";
+    ctx.beginPath();
+    ctx.roundRect(bgWidth + 65, 45, 7, 95, 3.5);
+    ctx.closePath();
+    ctx.fill();
+
+    // Progress line background
     ctx.save();
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
@@ -848,6 +841,8 @@ export default class Player {
     ctx.closePath();
     ctx.fill();
     ctx.restore();
+
+    // Progress bar forground
     ctx.save();
     ctx.fillStyle = "#EF4444";
     ctx.beginPath();
@@ -879,6 +874,7 @@ export default class Player {
     ctx.closePath();
     ctx.fill();
     ctx.restore();
+
     ctx.fillStyle = "#ffffff";
     ctx.font = "20px noto,joypixels";
     const enabledMode = [];
