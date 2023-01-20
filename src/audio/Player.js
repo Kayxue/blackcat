@@ -726,11 +726,11 @@ export default class Player {
         .setStyle(Discord.ButtonStyle.Success);
       volUpButton = new Discord.ButtonBuilder()
         .setCustomId("volup")
-        .setEmoji("<:vol_up_new:1023467867942948934>")
+        .setEmoji("<:vol_up_new:1023467776653926450>")
         .setStyle(Discord.ButtonStyle.Success);
       hintButton = new Discord.ButtonBuilder()
         .setCustomId("mute")
-        .setEmoji("<:mute_new:1023467776653926450>")
+        .setEmoji("<:mute_new:1023467867942948934>")
         .setStyle(Discord.ButtonStyle.Success);
     }
 
