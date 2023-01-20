@@ -821,59 +821,29 @@ export default class Player {
     ctx.strokeStyle = "transparent";
     ctx.fillStyle = "#5f636d";
     ctx.beginPath();
-    ctx.roundRect(bgWidth + 65, 45, 7, 95, 3.5);
+    ctx.roundRect(bgWidth + 65, 45, 7, 99, 3.5);
     ctx.closePath();
     ctx.fill();
 
     // Progress line background
-    ctx.save();
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.moveTo(20 + 5, 200);
-    ctx.lineTo(50 + 860 - 5, 200);
-    ctx.quadraticCurveTo(50 + 860, 200, 50 + 860, 200 + 5);
-    ctx.lineTo(50 + 860, 200 + 10 - 5);
-    ctx.quadraticCurveTo(50 + 860, 200 + 10, 50 + 860 - 5, 200 + 10);
-    ctx.lineTo(50 + 5, 200 + 10);
-    ctx.quadraticCurveTo(50, 200 + 10, 50, 200 + 10 - 5);
-    ctx.lineTo(50, 200 + 5);
-    ctx.quadraticCurveTo(50, 200, 50 + 5, 200);
+    ctx.roundRect(50, 200, 860, 10, 5);
     ctx.closePath();
     ctx.fill();
-    ctx.restore();
 
-    // Progress bar forground
-    ctx.save();
-    ctx.fillStyle = "#EF4444";
+    // Progress bar foreground
+    ctx.fillStyle = "#04ECF0";
     ctx.beginPath();
-    ctx.moveTo(50 + 5, 200);
-    ctx.lineTo(
-      50 + (!isFinite(percentage) ? 1 : percentage) * 860 - 10,
+    ctx.roundRect(
+      50,
       200,
+      (!isFinite(percentage) ? 1 : percentage) * 860,
+      10,
+      5,
     );
-    ctx.quadraticCurveTo(
-      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
-      200,
-      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
-      200 + 5,
-    );
-    ctx.lineTo(
-      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
-      200 + 10 - 5,
-    );
-    ctx.quadraticCurveTo(
-      50 + (!isFinite(percentage) ? 1 : percentage) * 860,
-      200 + 10,
-      50 + (!isFinite(percentage) ? 1 : percentage) * 860 - 5,
-      200 + 10,
-    );
-    ctx.lineTo(50 + 5, 200 + 10);
-    ctx.quadraticCurveTo(50, 200 + 10, 50, 200 + 10 - 5);
-    ctx.lineTo(50, 200 + 5);
-    ctx.quadraticCurveTo(50, 200, 50 + 5, 200);
     ctx.closePath();
     ctx.fill();
-    ctx.restore();
 
     ctx.fillStyle = "#ffffff";
     ctx.font = "20px noto,joypixels";
