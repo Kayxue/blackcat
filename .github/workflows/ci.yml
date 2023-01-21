@@ -11,7 +11,7 @@ permissions:
 jobs:
   test-lockfile:
     runs-on: "ubuntu-latest"
-    name: Run CI on node in ${{ matrix.platform }}
+    name: Test if lockfile need to be updated
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
