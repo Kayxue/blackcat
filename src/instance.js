@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 import Discord from "discord.js";
-import Cluster from "discord-hybrid-sharding";
+import { ClusterClient, getInfo } from "discord-hybrid-sharding";
 import fs from "node:fs";
 
 import log from "./logger.js";
@@ -27,10 +27,10 @@ const client = new Discord.Client({
       },
     ],
   },
-  shards: Cluster.data.SHARD_LIST,
-  shardCount: Cluster.data.TOTAL_SHARDS,
+  shards: getInfo().SHARD_LIST,
+  shardCount: getInfo().TOTAL_SHARDS,
 });
-client.cluster = new Cluster.Client(client);
+client.cluster = new ClusterClient(client);
 
 client.commands = new Discord.Collection();
 client.players = new Map();
