@@ -1,5 +1,5 @@
 export default function checkVideo(rawURL) {
-  let domains = new Set([
+  const domains = new Set([
     "youtube.com",
     "www.youtube.com",
     "m.youtube.com",
@@ -7,13 +7,13 @@ export default function checkVideo(rawURL) {
     "gaming.youtube.com",
   ]);
 
-  let parsed = new URL(rawURL);
-  let regex =
+  const parsed = new URL(rawURL);
+  const regex =
     /^https?:\/\/(youtu\.be\/|(www\.)?youtube\.com\/(embed|v|shorts)\/)/;
 
   let urlID = parsed.searchParams.get("v");
   if (regex.test(rawURL) && !urlID) {
-    let pathName = parsed.pathname.split("/");
+    const pathName = parsed.pathname.split("/");
     urlID = parsed.host === "youtu.be" ? pathName[1] : pathName[2];
   } else if (parsed.hostname && !domains.has(parsed.hostname)) {
     return false;
@@ -23,7 +23,7 @@ export default function checkVideo(rawURL) {
     !urlID ||
     (parsed.searchParams.has("list") &&
       !parsed.searchParams.has("index"))
-  )
+  ) {
     return false;
-  else return true;
+  } else return true;
 }
