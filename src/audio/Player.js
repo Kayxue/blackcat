@@ -821,7 +821,7 @@ export default class Player {
     ctx.strokeStyle = "transparent";
     ctx.fillStyle = "#5f636d";
     ctx.beginPath();
-    ctx.roundRect(bgWidth + 65, 45, 7, 99, 3.5);
+    ctx.roundRect(bgWidth + 65, 47, 7, 99, 3.5);
     ctx.closePath();
     ctx.fill();
 
