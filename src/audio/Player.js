@@ -302,6 +302,24 @@ export default class Player {
     if (this._songs.length === 0) {
       this._songs.push(...parsedData);
       this.playStream();
+    } else if (parsedData.length === 1) {
+      this._songs.push(...parsedData);
+      const addedEmbed = new Discord.EmbedBuilder()
+        .setTitle(`✅ ┃ 成功加入 ${parsedData[0].title} 至播放清單`)
+        .setDescription(
+          `播放清單內目前有 ${this._songs.length} 首歌曲`,
+        )
+        .setColor(colors.success);
+      if (!fromSearch) {
+        interaction
+          .followUp({
+            embeds: [addedEmbed],
+          })
+          .catch(this.noop);
+      }
+
+      this.updateNoticeEmbed();
+      parsedData = null;
     } else {
       this._songs.push(...parsedData);
       const addedEmbed = new Discord.EmbedBuilder()
