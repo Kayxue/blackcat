@@ -17,6 +17,8 @@ import SampleRate from "./engine/libsamplerate/index.js";
 import VolumeTransformer from "./engine/VolumeTransformer.js";
 import allowModify from "../util/allowModify.js";
 import moveArray from "../util/moveArray.js";
+import checkURL from "../util/checkUrl.js";
+import checkVideo from "../util/checkVideo.js";
 import log from "../logger.js";
 import colors from "../color.js";
 import { request } from "undici";
@@ -223,10 +225,7 @@ export default class Player {
         .catch(this.noop);
     }
 
-    if (
-      play.yt_validate(track) !== "video" &&
-      !track.startsWith("https")
-    ) {
+    if (!checkURL(track)) {
       try {
         const result = await play.search(track, {
           limit: 1,
@@ -239,7 +238,7 @@ export default class Player {
       } catch (e) {
         return this.handelYoutubeError(e);
       }
-    } else if (play.yt_validate(track) === "video") {
+    } else if (checkVideo(track)) {
       try {
         rawData = await play.video_info(track);
         isFull = true;
@@ -997,9 +996,6 @@ export default class Player {
     if (e.message.includes("confirm your age")) {
       const invaildEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 我沒辦法取得你想播放的音樂，因為需要登入帳號")
-        .setDescription(
-          "錯誤訊息:\n" + "```js" + `${e.message}\n` + "```",
-        )
         .setColor(colors.danger);
       this._channel
         .send({
@@ -1009,9 +1005,6 @@ export default class Player {
     } else if (e.message.includes("429")) {
       const limitEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 現在無法取得這個音樂，請稍後再試")
-        .setDescription(
-          "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
-        )
         .setColor(colors.danger);
       this._channel
         .send({
@@ -1021,13 +1014,30 @@ export default class Player {
     } else if (e.message.includes("private")) {
       const privateEmbed = new Discord.EmbedBuilder()
         .setTitle("😱 ┃ 這是私人影片")
-        .setDescription(
-          "錯誤訊息:\n" + "```js\n" + `${e.message}\n` + "```",
-        )
         .setColor(colors.danger);
       this._channel
         .send({
           embeds: [privateEmbed],
+        })
+        .catch(this.noop);
+    } else if (
+      e.message.includes("This is not a YouTube Watch URL")
+    ) {
+      const invaildVideoEmbed = new Discord.EmbedBuilder()
+        .setTitle("😱 ┃ 這不是 YouTube 影片網址")
+        .setColor(colors.danger);
+      this._channel
+        .send({
+          embeds: [invaildVideoEmbed],
+        })
+        .catch(this.noop);
+    } else if (e.message.includes("This is not a Playlist URL")) {
+      const invaildPlaylistEmbed = new Discord.EmbedBuilder()
+        .setTitle("😱 ┃ 這不是 YouTube 播放清單網址")
+        .setColor(colors.danger);
+      this._channel
+        .send({
+          embeds: [invaildPlaylistEmbed],
         })
         .catch(this.noop);
     } else {
