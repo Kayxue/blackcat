@@ -69,7 +69,7 @@
   ```
 
 - 💠 部屬到 Heroku
-  
+
   **注意： Heroku 於 2022/11/28 已停止提供免費託管服務，您必需使用付費方案才能在 Heroku 繼續運行黑貓**
 
   [![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/blackcat-cdn/main/button.svg)](https://heroku.com/deploy?template=https://github.com/blackcatbot/blackcat)
