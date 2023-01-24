@@ -15,49 +15,29 @@
 ## 💽 技術
 
 - 使用 Node.js Addon API (NAPI)嵌入 C, C++程式碼來處理音訊
-- 只有播放直播影片時才會啟用 FFmpeg 解碼器
+- 僅部分情形才會使用 FFmpeg 解碼器
 
 ## 📥 安裝
 
-[![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/blackcat-cdn/main/button.svg)](https://heroku.com/deploy?template=https://github.com/blackcatbot/blackcat)
+- 🐳 使用已建立好的 Docker 映像檔
 
-- 部屬到 Heroku
-
-  1. 點擊上方的部屬到 Heroku 按鈕
-
-  2. 就是這麼簡單！請繼續照著螢幕的指示操作！
-
-- 在 Linux 上安裝
-
-  1. 複製程式碼
+  1. 拉取 Docker 映像檔
 
   ```sh
-  git clone https://github.com/blackcatbot/blackcat
+  docker pull wolfyuan/blackcat
   ```
 
-  或是使用[`gh`](https://cli.github.com)
+  2. 啟動機器人
 
   ```sh
-  gh repo clone blackcatbot/blackcat
+  docker run -d -e TOKEN="機器人Token" \
+    -e COOKIE="YouTube Cookie"
+    -e DEV_GUILD="測試伺服器ID" \
+    -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
+    --name blackcat wolfyuan/blackcat
   ```
 
-  2. 安裝所需套件
-
-  ```sh
-  npm install yarn -g #如果還沒有安裝Yarn
-  yarn install
-
-  sudo apt-get install cmake # Nightcore 引擎編譯時需要
-  ```
-
-  3. 填寫`config.example.js`並重新命名成`config.js`
-  4. 啟動機器人
-
-  ```sh
-  yarn start
-  ```
-
-- 在 Windows 上安裝
+- 🖥️ 在 Windows 上安裝
 
   1. 複製程式碼
 
@@ -88,22 +68,44 @@
   yarn start
   ```
 
-- 使用已建立好的 Docker 映像檔
+- 💠 部屬到 Heroku
+  
+  **注意： Heroku 於 2022/11/28 已停止提供免費託管服務，您必需使用付費方案才能在 Heroku 繼續運行黑貓**
 
-  1. 拉取 Docker 映像檔
+  [![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/blackcat-cdn/main/button.svg)](https://heroku.com/deploy?template=https://github.com/blackcatbot/blackcat)
+
+  1. 點擊上方的部屬到 Heroku 按鈕
+
+  2. 就是這麼簡單！請繼續照著螢幕的指示操作！
+
+- 🐧 在 Linux 上安裝
+
+  1. 複製程式碼
 
   ```sh
-  docker pull wolfyuan/blackcat
+  git clone https://github.com/blackcatbot/blackcat
   ```
 
-  2. 啟動機器人
+  或是使用[`gh`](https://cli.github.com)
 
   ```sh
-  docker run -d -e TOKEN="機器人Token" \
-    -e COOKIE="YouTube Cookie"
-    -e DEV_GUILD="測試伺服器ID" \
-    -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
-    --name blackcat wolfyuan/blackcat
+  gh repo clone blackcatbot/blackcat
+  ```
+
+  2. 安裝所需套件
+
+  ```sh
+  npm install yarn -g #如果還沒有安裝Yarn
+  yarn install
+
+  sudo apt-get install cmake # Nightcore 引擎編譯時需要
+  ```
+
+  3. 填寫`config.example.js`並重新命名成`config.js`
+  4. 啟動機器人
+
+  ```sh
+  yarn start
   ```
 
 - 🐋 自行建立 Docker 映像檔
