@@ -22,9 +22,8 @@ export default function checkVideo(rawURL) {
   if (
     !urlID ||
     (parsed.searchParams.has("list") &&
-      !parsed.searchParams.has(
-        "index" && !parsed.searchParams.has("start_radio"),
-      ))
+      !parsed.searchParams.has("index") &&
+      !parsed.searchParams.has("start_radio"))
   )
     return false;
   else return true;
