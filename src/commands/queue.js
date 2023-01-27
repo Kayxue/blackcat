@@ -7,6 +7,7 @@ import {
   InteractionCollector,
   ButtonStyle,
   ComponentType,
+  InteractionType,
 } from "discord.js";
 
 export default {
@@ -94,6 +95,7 @@ export default {
       queueMessage = await interaction.reply({
         embeds: [embeds[currentPage]],
         components: [buttons],
+        fetchReply: true,
       });
     } catch (e) {
       return;
@@ -101,7 +103,7 @@ export default {
 
     const collector = new InteractionCollector(interaction.client, {
       componentType: ComponentType.Button,
-      interactionType: "MESSAGE_COMPONENT",
+      interactionType: InteractionType.MessageComponent,
       idle: 15_000,
       message: queueMessage,
     });
