@@ -278,6 +278,7 @@ export default class Player {
           thumbnail: video.thumbnails.pop().url,
           queuer: interaction.user.username,
           id: play.extractID(video.url),
+          dB: null,
           isFull: false,
         });
       });
@@ -291,6 +292,7 @@ export default class Player {
           duractionParsed: rawData.video_details.durationRaw,
           thumbnail: rawData.video_details.thumbnails.pop().url,
           queuer: interaction.user.username,
+          dB: rawData.format.find((i) => !!i.loudnessDb).loudnessDb,
           id: rawData.video_details.id,
           isFull,
         },
@@ -532,6 +534,7 @@ export default class Player {
         thumbnail: rawData.video_details.thumbnails.pop().url,
         queuer: this._songs[0].queuer,
         id: play.extractID(this._songs[0].url),
+        dB: rawData.format.find((i) => !!i.loudnessDb).loudnessDb,
         isFull: true,
       };
 
