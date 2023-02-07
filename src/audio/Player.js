@@ -511,13 +511,13 @@ export default class Player {
     );
     if (!this._bassboost) {
       this._bassboost = true;
-      bassboostEmbed.setTitle("🌌 ┃ Nightcore!");
+      bassboostEmbed.setTitle("🥳 ┃ 低音加強!");
       bassboostEmbed.setDescription(
-        "變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用",
+        "變更會在下一首歌曲套用  注意: 低音加強只會在非直播的音樂中作用，且有可能會出現爆音等情形",
       );
     } else {
       this._bassboost = false;
-      bassboostEmbed.setTitle("🌅 ┃ 已關閉Nightcore音效");
+      bassboostEmbed.setTitle("🌅 ┃ 已關閉低音加強");
     }
     interaction
       .reply({
