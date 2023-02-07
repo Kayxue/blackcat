@@ -21,6 +21,7 @@ import checkURL from "../util/checkUrl.js";
 import checkVideo from "../util/checkVideo.js";
 import log from "../logger.js";
 import colors from "../color.js";
+import { EqualizerStream } from "@discord-player/equalizer";
 import { request } from "undici";
 import { join, resolve } from "node:path";
 
@@ -40,6 +41,7 @@ export default class Player {
     this._loop = false;
     this._repeat = false;
     this._nightcore = false;
+    this._bassboost = false;
     this._guildDeleted = false;
     this._stopped = false;
     this._volume = 0.7;
@@ -55,6 +57,7 @@ export default class Player {
       ffmpeg: null,
       volumeTransform: null,
       libsamplerate: null,
+      equalizer: null,
     };
     this._encoded = null;
     this._raw = null;
@@ -208,6 +211,7 @@ export default class Player {
     interaction,
     fromSearch = false,
     fromNightcore = false,
+    fromBassBoost = false,
   ) {
     let rawData = null;
     let parsedData = null;
@@ -300,6 +304,7 @@ export default class Player {
     }
 
     if (fromNightcore) this._nightcore = true;
+    if (fromBassBoost) this._bassboost = true;
 
     if (this._songs.length === 0) {
       this._songs.push(...parsedData);
@@ -500,6 +505,27 @@ export default class Player {
       .catch(this.noop);
   }
 
+  bassboost(interaction) {
+    const bassboostEmbed = new Discord.EmbedBuilder().setColor(
+      colors.success,
+    );
+    if (!this._bassboost) {
+      this._bassboost = true;
+      bassboostEmbed.setTitle("🌌 ┃ Nightcore!");
+      bassboostEmbed.setDescription(
+        "變更會在下一首歌曲套用  注意: Nightcore音效只會在非直播的音樂中作用",
+      );
+    } else {
+      this._bassboost = false;
+      bassboostEmbed.setTitle("🌅 ┃ 已關閉Nightcore音效");
+    }
+    interaction
+      .reply({
+        embeds: [bassboostEmbed],
+      })
+      .catch(this.noop);
+  }
+
   playnext(interaction, index) {
     const playnextEmbed = new Discord.EmbedBuilder()
       .setTitle(
@@ -569,18 +595,41 @@ export default class Player {
             toDepth: 16,
           });
         }
+        if (this._bassboost) {
+          this._engines.equalizer = new EqualizerStream();
+          this._engines.equalizer.setEQ([
+            { band: 0, gain: 0.25 },
+            { band: 1, gain: 0.2 },
+            { band: 2, gain: 0.15 },
+            // Add some treble here to avoid it sounds way too "bass"
+            { band: 13, gain: 0.2 },
+            { band: 14, gain: 0.25 },
+          ]);
+        }
         this._engines.opusEncoder = new prism.opus.Encoder({
           channels: 2,
           frameSize: 960,
           rate: 48000,
         });
       }
-      if (this._nightcore && this._engines.libsamplerate) {
-        this._encoded = this._raw.stream
+      if (this._nightcore || this._bassboost) {
+        let piped = this._raw.stream
           .pipe(this._engines.opusDecoder)
-          .pipe(this._engines.volumeTransform)
-          .pipe(this._engines.libsamplerate)
-          .pipe(this._engines.opusEncoder);
+          .pipe(this._engines.volumeTransform);
+        if (this._nightcore && this._bassboost) {
+          this._encoded = piped
+            .pipe(this._engines.libsamplerate)
+            .pipe(this._engines.equalizer)
+            .pipe(this._engines.opusEncoder);
+        } else if (this._nightcore) {
+          this._encoded = piped
+            .pipe(this._engines.libsamplerate)
+            .pipe(this._engines.opusEncoder);
+        } else if (this._bassboost)
+          this._encoded = piped
+            .pipe(this._engines.equalizer)
+            .pipe(this._engines.opusEncoder);
+        else this._encoded = piped.pipe(this._engines.opusEncoder);
       } else if (!this._optimize) {
         this._encoded = this._raw.stream
           .pipe(this._engines.opusDecoder)
@@ -616,13 +665,25 @@ export default class Player {
           rate: 48000,
         });
       }
-      if (this._nightcore && this._engines.libsamplerate) {
-        this._encoded = this._raw.stream
+      if (this._nightcore || this._bassboost) {
+        let piped = this._raw.stream
           .pipe(this._engines.webmDemuxer)
           .pipe(this._engines.opusDecoder)
-          .pipe(this._engines.volumeTransform)
-          .pipe(this._engines.libsamplerate)
-          .pipe(this._engines.opusEncoder);
+          .pipe(this._engines.volumeTransform);
+        if (this._nightcore && this._bassboost) {
+          this._encoded = piped
+            .pipe(this._engines.libsamplerate)
+            .pipe(this._engines.equalizer)
+            .pipe(this._engines.opusEncoder);
+        } else if (this._nightcore) {
+          this._encoded = piped
+            .pipe(this._engines.libsamplerate)
+            .pipe(this._engines.opusEncoder);
+        } else if (this._bassboost)
+          this._encoded = piped
+            .pipe(this._engines.equalizer)
+            .pipe(this._engines.opusEncoder);
+        else this._encoded = piped.pipe(this._engines.opusEncoder);
       } else if (!this._optimize) {
         this._encoded = this._raw.stream
           .pipe(this._engines.webmDemuxer)

@@ -12,6 +12,11 @@
     http-response-object "^3.0.1"
     parse-cache-control "^1.0.1"
 
+"@discord-player/equalizer@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@discord-player/equalizer/-/equalizer-0.1.4.tgz#4b9c3e8a3c1e169eef48e7899b6a252cd4eb426a"
+  integrity sha512-y87Mwj+38v8sRGfC/jSRykiQhpMV7yUI8Rq+xvczG6u/wBX1bkY53H5RjUZx4of2MLMNnMd9CF+z65E56Ps8DA==
+
 "@discordjs/builders@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@discordjs/builders/-/builders-1.4.0.tgz#b951b5e6ce4e459cd06174ce50dbd51c254c1d47"
