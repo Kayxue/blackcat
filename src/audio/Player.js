@@ -26,30 +26,131 @@ import { request } from "undici";
 import { join, resolve } from "node:path";
 
 export default class Player {
+  /**
+   *
+   * @param {Discord.MessageInteraction} interaction
+   * @param {Discord.Guild} guild
+   * @param {Discord.VoiceBasedChannel} voice
+   */
   constructor(interaction, guild, voice) {
+    /**
+     * @type {Discord.Client}
+     */
     this._client = interaction.client;
+
+    /**
+     * @type {Discord.TextBasedChannel}
+     */
     this._channel = interaction.channel;
+
+    /**
+     * @type {Discord.Guild}
+     */
     this._guild = guild;
+
+    /**
+     * @type {Discord.Snowflake}
+     */
     this._guildId = guild.id;
+
+    /**
+     * @type {Discord.VoiceBasedChannel}
+     */
     this._voiceChannel = voice;
+
+    /**
+     * @type {Discord.Snowflake}
+     */
     this._channelId = voice.id;
+
+    /**
+     * @type {AudioPlayer}
+     */
+    this._player = null;
+
+    /**
+     * @type {VoiceConnection}
+     */
+    this._connection = null;
+
+    /**
+     * @type {Boolean}
+     */
     this._optimize = interaction.client.config.optimizeQuality;
 
+    /**
+     * @type {Boolean}
+     */
     this._init = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._paused = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._muted = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._loop = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._repeat = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._nightcore = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._bassboost = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._guildDeleted = false;
+
+    /**
+     * @type {Boolean}
+     */
     this._stopped = false;
+
+    /**
+     * @type {Number}
+     */
     this._volume = 0.7;
+
+    /**
+     * @type {Discord.Message}
+     */
     this._noticeMessage = null;
+
+    /**
+     * @type {Discord.InteractionCollector|null}
+     */
     this._buttonCollector = null;
+
+    /**
+     * @type {{title: String, url: String, duraction: Number, duractionParsed: Number, thumbnail: String, queuer: String, id: String, dB: null|Number, isFull = Boolean}}
+     */
     this._nowplaying = null;
+
+    /**
+     * @type {Array.<{title: String, url: String, duraction: Number, duractionParsed: Number, thumbnail: String, queuer: String, id: String, dB: null|Number, isFull = Boolean}>}
+     */
     this._songs = [];
 
+    /**
+     * @type {Array.<{opusDecoder: prism.opus.Decoder, opusEncoder: prism.opus.Encoder, webmDemuxer: prism.vorbis.WebmDemuxer, ffmpeg: prism.FFmpeg, volumeTransform: prism.VolumeTransformer, libsamplerate: SampleRate, equalizer: EqualizerStream}>}
+     */
     this._engines = {
       opusDecoder: null,
       opusEncoder: null,
@@ -59,7 +160,15 @@ export default class Player {
       libsamplerate: null,
       equalizer: null,
     };
+
+    /**
+     * @type {null|ReadableStream}
+     */
     this._encoded = null;
+
+    /**
+     * @type {null|ReadableStream}
+     */
     this._raw = null;
 
     if (interaction.client.config.cookie) {
@@ -206,6 +315,15 @@ export default class Player {
     });
   }
 
+  /**
+   *
+   * @param {String} track
+   * @param {Discord.MessageInteraction} interaction
+   * @param {Boolean} fromSearch
+   * @param {Boolean} fromNightcore
+   * @param {Boolean} fromBassBoost
+   * @returns
+   */
   async play(
     track,
     interaction,
