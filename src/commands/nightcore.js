@@ -26,7 +26,7 @@ export default {
       const optimizeEmbed = new EmbedBuilder()
         .setTitle("❌ ┃ 為了優化音樂品質，Nightcore已停用")
         .setDescription(
-          "如果你還是想要啟用Nightcore音效，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/blackcat)",
+          "如果你還是想要啟用Nightcore音效，請嘗試[自己建立一個黑貓](https://github.com/blackcatbot/bot)",
         )
         .setColor(danger);
       return interaction

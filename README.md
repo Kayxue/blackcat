@@ -2,7 +2,7 @@
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white&color=5865F2) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/blackcatbot/blackcat?color=F44A6A&label=CodeFactor&logo=codefactor&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/blackcat/ci.yml?color=2088FF&label=CI&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/blackcat/push.yml?color=2088FF&label=Release&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/blackcatbot/bot?color=F44A6A&label=CodeFactor&logo=codefactor&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/bot/ci.yml?color=2088FF&label=CI&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/bot/push.yml?color=2088FF&label=Release&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square)
 
 ## 🗒️ 功能
 
@@ -72,7 +72,7 @@
 
   **注意： Heroku 於 2022/11/28 已停止提供免費託管服務，您必需使用付費方案才能在 Heroku 繼續運行黑貓**
 
-  [![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/blackcat-cdn/main/button.svg)](https://heroku.com/deploy?template=https://github.com/blackcatbot/blackcat)
+  [![部屬到Heroku](https://raw.githubusercontent.com/blackcatbot/bot-cdn/main/button.svg)](https://heroku.com/deploy?template=https://github.com/blackcatbot/bot)
 
   1. 點擊上方的部屬到 Heroku 按鈕
 
@@ -83,13 +83,13 @@
   1. 複製程式碼
 
   ```sh
-  git clone https://github.com/blackcatbot/blackcat
+  git clone https://github.com/blackcatbot/bot
   ```
 
   或是使用[`gh`](https://cli.github.com)
 
   ```sh
-  gh repo clone blackcatbot/blackcat
+  gh repo clone blackcatbot/bot
   ```
 
   2. 安裝所需套件

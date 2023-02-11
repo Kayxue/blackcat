@@ -21,12 +21,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackcatbot/blackcat.git"
+    "url": "git+https://github.com/blackcatbot/bot.git"
   },
   "author": "wolf-yuan-6115",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/blackcatbot/blackcat/issues"
+    "url": "https://github.com/blackcatbot/bot/issues"
   },
   "homepage": "https://catmusic.ml",
   "dependencies": {

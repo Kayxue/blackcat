@@ -210,7 +210,7 @@ export default class Player {
 
     if (this._voiceChannel.type === "GUILD_STAGE_VOICE") {
       try {
-        this.setSpeaker();
+        await this.setSpeaker();
       } catch (e) {
         const notSpeakerEmbed = new Discord.EmbedBuilder()
           .setTitle("🙁 ┃ 我無法變成演講者，可能會無法聽到音樂")
@@ -982,7 +982,7 @@ export default class Player {
       bg.src = Buffer.from(await body.arrayBuffer());
     } catch (e) {
       const { body } = await request(
-        "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
+        "https://raw.githubusercontent.com/blackcatbot/bot-app/main/public/unknown.png",
       );
       bg = new Canvas.Image();
       bg.src = Buffer.from(await body.arrayBuffer());

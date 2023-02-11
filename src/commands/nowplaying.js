@@ -50,7 +50,7 @@ export default {
       bg.src = Buffer.from(await body.arrayBuffer());
     } catch (e) {
       const { body } = await request(
-        "https://raw.githubusercontent.com/blackcatbot/blackcat-app/main/public/unknown.png",
+        "https://raw.githubusercontent.com/blackcatbot/bot-app/main/public/unknown.png",
       );
       bg = new Canvas.Image();
       bg.src = Buffer.from(await body.arrayBuffer());
@@ -59,7 +59,7 @@ export default {
       Math.round((player.playTime / data.duraction) * 100) / 100;
     ctx.fillStyle = "#15202b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const bgData = await imageSize(bg.src);
+    const bgData = imageSize(bg.src);
     const percent = bg.width / 200;
     const bgHeight = bgData.height / percent;
     const bgWidth = bgData.width / percent;
