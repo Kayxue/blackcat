@@ -1,83 +1,40 @@
 import fs from "node:fs";
 import log from "../logger.js";
 
-export default async function () {
+export default async function() {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (reslove) => {
+    let tokenRegex = /[\w-]{24}\.[\w-]{6}\.[\w-]{27}/;
+    let fileConfig = {};
+    let invaild = false;
+    
     if (fs.existsSync("./config.js")) {
-      let config = await (await import("../../config.js")).default;
-      let invaild = false;
+      fileConfig = await (await import("../../config.js")).default;
+    }
 
-      if (typeof config.token !== "string") {
-        log.error("`token`不是一個字串", "設定");
-        invaild = true;
-      }
-      if (
-        typeof config.cookie !== "string" &&
-        typeof config.cookie !== "undefined"
-      ) {
-        log.error("`cookie`不是一個字串", "設定");
-        invaild = true;
-      }
-      if (
-        typeof config.devGuild !== "string" &&
-        config.enableDev === true
-      ) {
-        log.error(
-          "`devGuild`不是一個字串(ID)，且`enableDev`為true",
-          "設定",
-        );
-        invaild = true;
-      }
+    let config = {
+      token: fileConfig.token ?? process.env.TOKEN,
+      debug: fileConfig.debug ?? process.env.DEBUG,
+      cookie: fileConfig.cookie ?? process.env.COOKIE
+    }
 
-      if (invaild) {
-        log.error("設定出現錯誤，程式正在自動關閉", "設定");
-        process.exit(1);
-      } else {
-        log.info("成功讀取設定", "設定");
-        reslove(config);
-      }
+    if (tokenRegex.test(config.token)) {
+      log.error("`token`無效", "設定");
+      invaild = true;
+    }
+    if (config.debug.toLowerCase() !== "true" && config.debug.toLowerCase() !== "false") {
+      log.error("`debug`不是一個布林值", "設定");
+      invalid = true;
     } else {
-      log.warn("找不到設定檔，正在從環境變數讀取", "設定");
-      let config = {
-        token: process.env.TOKEN,
-        cookie: process.env.COOKIE,
-        devGuild: process.env.DEV_GUILD,
-        enableDev: process.env.ENABLE_DEV === "true",
-        optimizeQuality: process.env.OPTIMIZE_QUALITY === "true",
-      };
+      config.debug = (config.debug.toLowerCase() === "true");
+    }
 
-      let invaild = false;
-
-      if (typeof config.token !== "string") {
-        log.error("`TOKEN`不是一個字串", "設定");
-        invaild = true;
-      }
-      if (
-        typeof config.cookie !== "string" &&
-        typeof config.cookie !== "undefined"
-      ) {
-        log.error("`COOKIE`不是一個字串", "設定");
-        invaild = true;
-      }
-      if (
-        typeof config.devGuild !== "string" &&
-        config.enableDev === true
-      ) {
-        log.error(
-          "`DEV_GUILD`不是一個字串(ID)，且`enableDev`為true",
-          "設定",
-        );
-        invaild = true;
-      }
-
-      if (invaild) {
-        log.error("設定出現錯誤，程式正在自動關閉", "設定");
-        process.exit(1);
-      } else {
-        log.info("成功讀取設定", "設定");
-        reslove(config);
-      }
+    if (invaild) {
+      log.error("設定出現錯誤，程式正在關閉", "設定");
+      process.exit(1);
+    } else {
+      log.info("成功讀取設定", "設定");
+      reslove(config);
     }
   });
 }
