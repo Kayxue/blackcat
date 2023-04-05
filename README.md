@@ -128,9 +128,8 @@
 | :-: | :-: | :-- | :-: |
 | `token` | `TOKEN` | Discord 機器人登入 Token | `string` |
 | `cookie` | `COOKIE` | 播放器在發送請求至 YouTube 時使用的 Cookie | `string?` |
-| `devGuild` | `DEV_GUILD` | 開發時使用的斜線指令伺服器 | `string?` |
-| `enableDev` | `ENABLE_DEV` | 是否啟用開發模式 | `boolean` |
 | `optimizeQuality` | `OPTIMIZE_QUALITY` | 是否啟用音樂優化模式(如果為`true`，將會停用音量及 nightcore 音效) | `boolean` |
+| `debug` | `DEBUG` | 啟用偵錯模式 | `boolean` |
 
 ## 🙏 貢獻者
 

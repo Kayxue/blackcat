@@ -11,7 +11,7 @@ const manager = new ClusterManager("./src/instance.js", {
   token: config.token,
 });
 
-if (config.enableDev) {
+if (config.debug) {
   manager.on("debug", log.debug);
 }
 

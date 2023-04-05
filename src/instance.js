@@ -37,7 +37,7 @@ client.players = new Map();
 client.config = config;
 client.logger = log;
 
-if (config.enableDev) {
+if (config.debug) {
   client.on("debug", log.debug);
 }
 
