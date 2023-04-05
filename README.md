@@ -1,5 +1,9 @@
 <h1 align="center">Black cat</h1>
 
+---
+
+<h3 align="center">多功能 Discord 音樂機器人</h3>
+
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white&color=5865F2) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/blackcatbot/bot?color=F44A6A&label=CodeFactor&logo=codefactor&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/bot/ci.yml?color=2088FF&label=CI&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blackcatbot/bot/push.yml?color=2088FF&label=Release&logo=GitHub%20actions&logoColor=FFFFFF&style=flat-square)
@@ -30,11 +34,7 @@
   2. 啟動機器人
 
   ```sh
-  docker run -d -e TOKEN="機器人Token" \
-    -e COOKIE="YouTube Cookie"
-    -e DEV_GUILD="測試伺服器ID" \
-    -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
-    --name blackcat wolfyuan/blackcat
+  docker run -d -e TOKEN="機器人Token" --name blackcat wolfyuan/blackcat
   ```
 
 - 🖥️ 在 Windows 上安裝
@@ -115,11 +115,7 @@
   ```
   2. 啟動機器人
   ```sh
-  docker run -d -e TOKEN="機器人Token" \
-    -e COOKIE="YouTube Cookie"
-    -e DEV_GUILD="測試伺服器ID" \
-    -e ENABLE_DEV="是否啟用開發者模式(true/false)" \
-    --name blackcat blackcat:latest
+  docker run -d -e TOKEN="機器人Token" --name blackcat blackcat:latest
   ```
 
 ## ⚙️ 設定檔

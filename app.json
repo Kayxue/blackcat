@@ -1,9 +1,9 @@
 {
   "name": "Black cat 黑貓音樂機器人",
-  "description": "Discord 第一名的音樂機器人，現在可以在Heroku上自行運行!",
-  "website": "https://catmusic.ml",
+  "description": "多功能 Discord 音樂機器人",
+  "website": "https://github.com/blackcatbot",
   "repository": "https://github.com/blackcatbot/bot",
-  "logo": "https://catmusic.ml/favicon.png",
+  "logo": "https://raw.githubusercontent.com/blackcatbot/blackcat-web/main/public/favicon.png",
   "keywords": [
     "黑貓",
     "Discord",
