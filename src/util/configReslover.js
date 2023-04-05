@@ -22,8 +22,8 @@ export default async function () {
       invaild = true;
     }
     if (
-      config.debug.toLowerCase() !== "true" &&
-      config.debug.toLowerCase() !== "false"
+      config.debug.toString().toLowerCase() !== "true" &&
+      config.debug.toString().toLowerCase() !== "false"
     ) {
       log.error("`debug`不是一個布林值", undefined, "設定");
       invalid = true;
