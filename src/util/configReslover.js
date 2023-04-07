@@ -28,7 +28,7 @@ export default async function () {
       log.error("`debug`不是一個布林值", undefined, "設定");
       invalid = true;
     } else {
-      config.debug = config.debug.toLowerCase() === "true";
+      config.debug = config.debug.toString().toLowerCase() === "true";
     }
 
     if (invaild) {
